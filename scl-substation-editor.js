@@ -565,12 +565,12 @@ let LNodeEditor = class LNodeEditor extends s {
         return (_a = this.element.getAttribute('iedName') === 'None') !== null && _a !== void 0 ? _a : false;
     }
     render() {
-        return x `<action-icon
+        return x `<oscd-action-icon
       label="${this.header}"
       ?secondary=${this.missingIedReference}
       ?highlighted=${this.missingIedReference}
     >
-    </action-icon>`;
+    </oscd-action-icon>`;
     }
 };
 __decorate([
@@ -1111,7 +1111,7 @@ let EqSubFunctionEditor = class EqSubFunctionEditor extends s {
         ></eq-sub-function-editor>`)}`;
     }
     render() {
-        return x `<action-pane label="${this.header}" icon="functions" secondary>
+        return x `<oscd-action-pane label="${this.header}" icon="functions" secondary>
       ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
       ${this.renderLNodes()}${this.renderEqSubFunctions()}</action-pane
     >`;
@@ -1185,7 +1185,7 @@ let EqFunctionEditor = class EqFunctionEditor extends s {
         ></eq-sub-function-editor>`)}`;
     }
     render() {
-        return x `<action-pane
+        return x `<oscd-action-pane
       label="${this.header}"
       icon="functions"
       secondary
@@ -1268,12 +1268,12 @@ let GeneralEquipmentEditor = class GeneralEquipmentEditor extends s {
     }
     render() {
         if (this.showfunctions)
-            return x `<action-pane label=${this.header}>
+            return x `<oscd-action-pane label=${this.header}>
         ${this.renderLNodes()} ${this.renderEqFunctions()}
-      </action-pane>`;
-        return x `<action-icon label=${this.header}>
+      </oscd-action-pane>`;
+        return x `<oscd-action-icon label=${this.header}>
       <mwc-icon slot="icon">${generalConductingEquipmentIcon}</mwc-icon>
-    </action-icon>`;
+    </oscd-action-icon>`;
     }
 };
 GeneralEquipmentEditor.styles = i$3 `
@@ -1344,7 +1344,7 @@ let SubFunctionEditor = class SubFunctionEditor extends s {
         ></sub-function-editor>`)}`;
     }
     render() {
-        return x `<action-pane label="${this.header}" icon="functions" secondary>
+        return x `<oscd-action-pane label="${this.header}" icon="functions" secondary>
       ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
       ${this.renderLNodes()}${this.renderSubFunctions()}</action-pane
     >`;
@@ -1418,7 +1418,7 @@ let FunctionEditor = class FunctionEditor extends s {
         ></sub-function-editor>`)}`;
     }
     render() {
-        return x `<action-pane
+        return x `<oscd-action-pane
       label="${this.header}"
       icon="functions"
       secondary
@@ -1502,9 +1502,9 @@ let SubEquipmentEditor = class SubEquipmentEditor extends s {
             : x ``;
     }
     render() {
-        return x `<action-pane label="${this.label}">
+        return x `<oscd-action-pane label="${this.label}">
       ${this.renderLNodes()} ${this.renderEqFunctions()}
-    </action-pane> `;
+    </oscd-action-pane> `;
     }
 };
 SubEquipmentEditor.styles = i$3 `
@@ -1584,10 +1584,10 @@ let TapChangerEditor = class TapChangerEditor extends s {
         ></sub-equipment-editor>`)}`;
     }
     render() {
-        return x `<action-pane label=${this.header}>
+        return x `<oscd-action-pane label=${this.header}>
       ${this.renderLNodes()} ${this.renderEqFunctions()}
       ${this.renderSubEquipments()}
-    </action-pane>`;
+    </oscd-action-pane>`;
     }
 };
 TapChangerEditor.styles = i$3 `
@@ -1677,10 +1677,10 @@ let TransformerWindingEditor = class TransformerWindingEditor extends s {
             : x ``;
     }
     render() {
-        return x `<action-pane label="${this.label}">
+        return x `<oscd-action-pane label="${this.label}">
       ${this.renderLNodes()} ${this.renderEqFunctions()}
       ${this.renderTapChanger()}
-    </action-pane> `;
+    </oscd-action-pane> `;
     }
 };
 TransformerWindingEditor.styles = i$3 `
@@ -1789,12 +1789,12 @@ let PowerTransformerEditor = class PowerTransformerEditor extends s {
     }
     render() {
         if (this.showfunctions)
-            return x `<action-pane label="${this.name}">
+            return x `<oscd-action-pane label="${this.name}">
         ${this.renderContentPane()} ${this.renderLNodes()}
         ${this.renderEqFunctions()} ${this.renderSubEquipments()}
         ${this.renderTransformerWinding()}
-      </action-pane> `;
-        return x `<action-icon label="${this.name}"
+      </oscd-action-pane> `;
+        return x `<oscd-action-icon label="${this.name}"
       >${this.renderContentIcon()}</action-icon
     > `;
     }
@@ -1886,11 +1886,11 @@ let ConductingEquipmentEditor = class ConductingEquipmentEditor extends s {
     }
     render() {
         if (this.showfunctions)
-            return x `<action-pane label="${this.name}"
+            return x `<oscd-action-pane label="${this.name}"
         >${this.renderContentPane()}${this.renderLNodes()}${this.renderEqFunctions()}${this.renderSubEquipments()}</action-pane
         ></action-pane
       >`;
-        return x `<action-icon label="${this.name}"
+        return x `<oscd-action-icon label="${this.name}"
       >${this.renderContentIcon()}</action-icon
     >`;
     }
@@ -1966,7 +1966,7 @@ let BayEditor = class BayEditor extends s {
         ></function-editor>`)}`;
     }
     render() {
-        return x `<action-pane label="${this.header}">
+        return x `<oscd-action-pane label="${this.header}">
       ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
       ${this.renderLNodes()}${this.renderFunctions()}
       <div
@@ -1988,7 +1988,7 @@ let BayEditor = class BayEditor extends s {
               ?showfunctions=${this.showfunctions}
             ></conducting-equipment-editor>`)}
       </div>
-    </action-pane> `;
+    </oscd-action-pane> `;
     }
 };
 BayEditor.styles = i$3 `
@@ -2096,7 +2096,7 @@ let VoltageLevelEditor = class VoltageLevelEditor extends s {
     }
     render() {
         var _a, _b;
-        return x `<action-pane label="${this.header}">
+        return x `<oscd-action-pane label="${this.header}">
       ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
       ${this.renderLNodes()}${this.renderFunctions()}
       ${this.renderPowerTransformerContainer()}
@@ -2108,7 +2108,7 @@ let VoltageLevelEditor = class VoltageLevelEditor extends s {
             ?showfunctions=${this.showfunctions}
           ></bay-editor>`)}
       </div>
-    </action-pane>`;
+    </oscd-action-pane>`;
     }
 };
 VoltageLevelEditor.styles = i$3 `
@@ -2208,7 +2208,7 @@ let SubstationEditor = class SubstationEditor extends s {
             : x ``;
     }
     render() {
-        return x `<action-pane label="${this.header}">
+        return x `<oscd-action-pane label="${this.header}">
       ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
       ${this.renderLNodes()}${this.renderFunctions()}
       ${this.renderPowerTransformerContainer()}
