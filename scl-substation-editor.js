@@ -1,5 +1,3 @@
-import '@openscd/mwc-icon';
-
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -3776,21 +3774,41 @@ let ZerolinePane = class ZerolinePane extends s {
             : x ``;
     }
     render() {
-        return x ` <nav>
-        <abbr title="Show Function Structure">
-          <mwc-icon-button-toggle
-            ?on=${shouldShowFunctions()}
-            @click=${() => this.toggleShowFunctions()}
-            id="showfunctions"
-            onIcon="layers"
-            offIcon="layers_clear"
-          ></mwc-icon-button-toggle>
-        </abbr>
-      </nav>
+        return x `<h1>
+        <nav>
+          <abbr title="Show Function Structure">
+            <mwc-icon-button-toggle
+              ?on=${shouldShowFunctions()}
+              @click=${() => this.toggleShowFunctions()}
+              id="showfunctions"
+              onIcon="layers"
+              offIcon="layers_clear"
+            ></mwc-icon-button-toggle>
+          </abbr>
+        </nav>
+      </h1>
       ${this.renderSubstation()}${this.renderLines()}${this.renderProcesses()}`;
     }
 };
 ZerolinePane.styles = i$5 `
+    h1 {
+      color: var(--mdc-theme-on-surface);
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      margin: 0px;
+      line-height: 48px;
+      padding-left: 0.3em;
+      transition: background-color 150ms linear;
+    }
+
+    h1 > nav,
+    h1 > abbr > mwc-icon-button {
+      float: right;
+    }
+
     section {
       padding: 8px 12px 16px;
       display: grid;
