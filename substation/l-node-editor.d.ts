@@ -1,4 +1,5 @@
 import { LitElement, TemplateResult } from 'lit';
+import '@openscd/mwc-icon';
 import '@openscd/oscd-action-icon';
 export declare function getLNodeIcon(lNode: Element): TemplateResult;
 /** Pane rendering `LNode` element with its children */
