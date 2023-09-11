@@ -12,3 +12,4 @@ export declare class LNodeEditor extends LitElement {
     private get missingIedReference();
     render(): TemplateResult;
 }
+export declare function renderLNodes(parent: Element, editCount: number, showfunctions: boolean): TemplateResult;

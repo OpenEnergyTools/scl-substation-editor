@@ -1994,78 +1994,198 @@ const furtherPowerSystemEquipmentLogicalNode = b `<svg viewBox="0 0 24 24">
     <path fill="currentColor" d="M9,7H15V9L11,15H15V17H9V15L13,9H9V7M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" />
 </svg>`;
 
-const lnClassIcons = {
-    L: systemLogicalNode,
-    A: automationLogicalNode,
-    C: controlLogicalNode,
-    F: functionalLogicalNode,
-    G: generalLogicalNode,
-    I: interfacingLogicalNode,
-    K: nonElectricalLogicalNode,
-    M: measurementLogicalNode,
-    P: protectionLogicalNode,
-    Q: qualityLogicalNode,
-    R: protectionRelatedLogicalNode,
-    S: supervisionLogicalNode,
-    T: transformerLogicalNode,
-    X: switchgearLogicalNode,
-    Y: powerTransformerLogicalNode,
-    Z: furtherPowerSystemEquipmentLogicalNode,
-};
-function getLNodeIcon(lNode) {
-    var _a, _b, _c;
-    const lnClassGroup = (_b = (_a = lNode.getAttribute('lnClass')) === null || _a === void 0 ? void 0 : _a.charAt(0)) !== null && _b !== void 0 ? _b : '';
-    return (_c = lnClassIcons[lnClassGroup]) !== null && _c !== void 0 ? _c : systemLogicalNode;
-}
-/** Pane rendering `LNode` element with its children */
-let LNodeEditor = class LNodeEditor extends s {
-    get header() {
-        var _a;
-        const prefix = (_a = this.element.getAttribute('prefix')) !== null && _a !== void 0 ? _a : '';
-        const lnClass = this.element.getAttribute('lnClass');
-        const lnInst = this.element.getAttribute('lnInst');
-        const header = `${prefix} ${lnClass} ${lnInst}`;
-        return typeof header === 'string' ? header : '';
+/** Pane rendering `EqSubFunction` element with its children */
+let EqSubFunctionEditor = class EqSubFunctionEditor extends s {
+    constructor() {
+        super(...arguments);
+        this.editCount = -1;
+        this.showfunctions = false;
     }
-    get missingIedReference() {
-        var _a;
-        return (_a = this.element.getAttribute('iedName') === 'None') !== null && _a !== void 0 ? _a : false;
+    get header() {
+        const name = this.element.getAttribute('name');
+        const desc = this.element.getAttribute('desc');
+        const type = this.element.getAttribute('type');
+        return `${name}${desc ? ` - ${desc}` : ''}${type ? ` (${type})` : ''}`;
     }
     render() {
-        return x `<oscd-action-icon
+        return x `<oscd-action-pane
       label="${this.header}"
-      ?secondary=${this.missingIedReference}
-      ?highlighted=${this.missingIedReference}
-      ><mwc-icon slot="icon">${getLNodeIcon(this.element)}</mwc-icon>
+      icon="functions"
+      secondary
+    >
+      ${renderGeneralEquipment(this.element, this.editCount, this.showfunctions)}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderEqSubFunctions(this.element, this.editCount, this.showfunctions)}
+    </oscd-action-pane>`;
+    }
+};
+EqSubFunctionEditor.styles = i$5 `
+    abbr {
+      text-decoration: none;
+      border-bottom: none;
+    }
+
+    .container.lnode {
+      display: grid;
+      grid-gap: 12px;
+      padding: 8px 12px 16px;
+      box-sizing: border-box;
+      grid-template-columns: repeat(auto-fit, minmax(64px, auto));
+    }
+  `;
+__decorate([
+    n$2({ attribute: false })
+], EqSubFunctionEditor.prototype, "doc", void 0);
+__decorate([
+    n$2({ type: Number })
+], EqSubFunctionEditor.prototype, "editCount", void 0);
+__decorate([
+    n$2({ attribute: false })
+], EqSubFunctionEditor.prototype, "element", void 0);
+__decorate([
+    n$2({ type: Boolean })
+], EqSubFunctionEditor.prototype, "showfunctions", void 0);
+__decorate([
+    t$1()
+], EqSubFunctionEditor.prototype, "header", null);
+EqSubFunctionEditor = __decorate([
+    e$4('eq-sub-function-editor')
+], EqSubFunctionEditor);
+function renderEqSubFunctions(parent, editCount, showfunctions) {
+    const eqSubFunctions = getChildElementsByTagName(parent, 'EqSubFunction');
+    return x ` ${eqSubFunctions.map(eqSubFunction => x `<eq-sub-function-editor
+        .element=${eqSubFunction}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></eq-sub-function-editor>`)}`;
+}
+
+/** Pane rendering `EqFunction` element with its children */
+let EqFunctionEditor = class EqFunctionEditor extends s {
+    constructor() {
+        super(...arguments);
+        this.editCount = -1;
+        this.showfunctions = false;
+    }
+    get header() {
+        const name = this.element.getAttribute('name');
+        const desc = this.element.getAttribute('desc');
+        const type = this.element.getAttribute('type');
+        return `${name}${desc ? ` - ${desc}` : ''}${type ? ` (${type})` : ''}`;
+    }
+    render() {
+        return x `<oscd-action-pane
+      label="${this.header}"
+      icon="functions"
+      secondary
+      highlighted
+    >
+      ${renderGeneralEquipment(this.element, this.editCount, this.showfunctions)}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderEqSubFunctions(this.element, this.editCount, this.showfunctions)}
+    </oscd-action-pane>`;
+    }
+};
+EqFunctionEditor.styles = i$5 `
+    abbr {
+      text-decoration: none;
+      border-bottom: none;
+    }
+
+    .container.lnode {
+      display: grid;
+      grid-gap: 12px;
+      padding: 8px 12px 16px;
+      box-sizing: border-box;
+      grid-template-columns: repeat(auto-fit, minmax(64px, auto));
+    }
+  `;
+__decorate([
+    n$2({ attribute: false })
+], EqFunctionEditor.prototype, "doc", void 0);
+__decorate([
+    n$2({ type: Number })
+], EqFunctionEditor.prototype, "editCount", void 0);
+__decorate([
+    n$2({ attribute: false })
+], EqFunctionEditor.prototype, "element", void 0);
+__decorate([
+    n$2({ type: Boolean })
+], EqFunctionEditor.prototype, "showfunctions", void 0);
+__decorate([
+    t$1()
+], EqFunctionEditor.prototype, "header", null);
+EqFunctionEditor = __decorate([
+    e$4('eq-function-editor')
+], EqFunctionEditor);
+function renderEqFunctions(parent, editCount, showfunctions) {
+    if (showfunctions)
+        return x ``;
+    const eqFunctions = getChildElementsByTagName(parent, 'EqFunction');
+    return x ` ${eqFunctions.map(eqFunction => x `<eq-function-editor
+        .element=${eqFunction}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></eq-function-editor>`)}`;
+}
+
+let GeneralEquipmentEditor = class GeneralEquipmentEditor extends s {
+    constructor() {
+        super(...arguments);
+        this.editCount = -1;
+        /** Whether `Function` and `SubFunction` are rendered */
+        this.showfunctions = false;
+    }
+    get header() {
+        var _a;
+        const name = (_a = this.element.getAttribute('name')) !== null && _a !== void 0 ? _a : '';
+        const desc = this.element.getAttribute('desc');
+        if (!this.showfunctions)
+            return `${name}`;
+        return `${name} ${desc ? `—  ${desc}` : ''}`;
+    }
+    render() {
+        if (this.showfunctions)
+            return x `<oscd-action-pane label=${this.header}>
+        ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+        ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
+      </oscd-action-pane>`;
+        return x `<oscd-action-icon label=${this.header}>
+      <mwc-icon slot="icon">${generalConductingEquipmentIcon}</mwc-icon>
     </oscd-action-icon>`;
     }
 };
-__decorate([
-    n$2({ attribute: false })
-], LNodeEditor.prototype, "doc", void 0);
-__decorate([
-    n$2({ attribute: false })
-], LNodeEditor.prototype, "element", void 0);
-__decorate([
-    t$1()
-], LNodeEditor.prototype, "header", null);
-__decorate([
-    t$1()
-], LNodeEditor.prototype, "missingIedReference", null);
-__decorate([
-    t$1()
-], LNodeEditor.prototype, "render", null);
-LNodeEditor = __decorate([
-    e$4('l-node-editor')
-], LNodeEditor);
+GeneralEquipmentEditor.styles = i$5 `
+    abbr {
+      text-decoration: none;
+      border-bottom: none;
+    }
 
-function getChildElementsByTagName(element, tag) {
-    if (!element || !tag)
-        return [];
-    return Array.from(element.children).filter(child => child.tagName === tag);
-}
-function renderGeneralEquipment(doc, element, showfunctions) {
-    const generalEquipment = getChildElementsByTagName(element, 'GeneralEquipment');
+    .container.lnode {
+      display: grid;
+      grid-gap: 12px;
+      padding: 8px 12px 16px;
+      box-sizing: border-box;
+      grid-template-columns: repeat(auto-fit, minmax(64px, auto));
+    }
+  `;
+__decorate([
+    n$2({ type: Number })
+], GeneralEquipmentEditor.prototype, "editCount", void 0);
+__decorate([
+    n$2({ attribute: false })
+], GeneralEquipmentEditor.prototype, "element", void 0);
+__decorate([
+    n$2({ type: Boolean })
+], GeneralEquipmentEditor.prototype, "showfunctions", void 0);
+__decorate([
+    t$1()
+], GeneralEquipmentEditor.prototype, "header", null);
+GeneralEquipmentEditor = __decorate([
+    e$4('general-equipment-editor')
+], GeneralEquipmentEditor);
+function renderGeneralEquipment(parent, editCount, showfunctions) {
+    const generalEquipment = getChildElementsByTagName(parent, 'GeneralEquipment');
     return generalEquipment.length
         ? x ` <div
         class="${o$1({
@@ -2074,12 +2194,18 @@ function renderGeneralEquipment(doc, element, showfunctions) {
         })}"
       >
         ${generalEquipment.map(gEquipment => x `<general-equipment-editor
-              .doc=${doc}
+              .editCount=${editCount}
               .element=${gEquipment}
               ?showfunctions=${showfunctions}
             ></general-equipment-editor>`)}
       </div>`
         : x ``;
+}
+
+function getChildElementsByTagName(element, tag) {
+    if (!element || !tag)
+        return [];
+    return Array.from(element.children).filter(child => child.tagName === tag);
 }
 /** Common `CSS` styles used by substation subeditors */
 const styles = i$5 `
@@ -2130,7 +2256,7 @@ const styles = i$5 `
     margin-top: 16px;
   }
 
-  powertransformer-editor[showfunctions] {
+  power-transformer-editor[showfunctions] {
     margin: 4px 8px 16px;
   }
 
@@ -2544,206 +2670,111 @@ function getIcon(condEq) {
     return (_a = typeIcons[typeStr(condEq)]) !== null && _a !== void 0 ? _a : generalConductingEquipmentIcon;
 }
 
-/** Pane rendering `EqSubFunction` element with its children */
-let EqSubFunctionEditor = class EqSubFunctionEditor extends s {
-    constructor() {
-        super(...arguments);
-        this.editCount = -1;
-        this.showfunctions = false;
-    }
-    get header() {
-        const name = this.element.getAttribute('name');
-        const desc = this.element.getAttribute('desc');
-        const type = this.element.getAttribute('type');
-        return `${name}${desc ? ` - ${desc}` : ''}${type ? ` (${type})` : ''}`;
-    }
-    renderLNodes() {
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderEqSubFunctions() {
-        const eqSubFunctions = getChildElementsByTagName(this.element, 'EqSubFunction');
-        return x ` ${eqSubFunctions.map(eqSubFunction => x `<eq-sub-function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${eqSubFunction}
-        ></eq-sub-function-editor>`)}`;
-    }
-    render() {
-        return x `<oscd-action-pane label="${this.header}" icon="functions" secondary>
-      ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
-      ${this.renderLNodes()}${this.renderEqSubFunctions()}</action-pane
-    >`;
-    }
+const lnClassIcons = {
+    L: systemLogicalNode,
+    A: automationLogicalNode,
+    C: controlLogicalNode,
+    F: functionalLogicalNode,
+    G: generalLogicalNode,
+    I: interfacingLogicalNode,
+    K: nonElectricalLogicalNode,
+    M: measurementLogicalNode,
+    P: protectionLogicalNode,
+    Q: qualityLogicalNode,
+    R: protectionRelatedLogicalNode,
+    S: supervisionLogicalNode,
+    T: transformerLogicalNode,
+    X: switchgearLogicalNode,
+    Y: powerTransformerLogicalNode,
+    Z: furtherPowerSystemEquipmentLogicalNode,
 };
-EqSubFunctionEditor.styles = i$5 `
-    abbr {
-      text-decoration: none;
-      border-bottom: none;
-    }
-
-    .container.lnode {
-      display: grid;
-      grid-gap: 12px;
-      padding: 8px 12px 16px;
-      box-sizing: border-box;
-      grid-template-columns: repeat(auto-fit, minmax(64px, auto));
-    }
-  `;
-__decorate([
-    n$2({ attribute: false })
-], EqSubFunctionEditor.prototype, "doc", void 0);
-__decorate([
-    n$2({ type: Number })
-], EqSubFunctionEditor.prototype, "editCount", void 0);
-__decorate([
-    n$2({ attribute: false })
-], EqSubFunctionEditor.prototype, "element", void 0);
-__decorate([
-    n$2({ type: Boolean })
-], EqSubFunctionEditor.prototype, "showfunctions", void 0);
-__decorate([
-    t$1()
-], EqSubFunctionEditor.prototype, "header", null);
-EqSubFunctionEditor = __decorate([
-    e$4('eq-sub-function-editor')
-], EqSubFunctionEditor);
-
-/** Pane rendering `EqFunction` element with its children */
-let EqFunctionEditor = class EqFunctionEditor extends s {
-    constructor() {
-        super(...arguments);
-        this.editCount = -1;
-        this.showfunctions = false;
-    }
-    get header() {
-        const name = this.element.getAttribute('name');
-        const desc = this.element.getAttribute('desc');
-        const type = this.element.getAttribute('type');
-        return `${name}${desc ? ` - ${desc}` : ''}${type ? ` (${type})` : ''}`;
-    }
-    renderLNodes() {
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderEqSubFunctions() {
-        const eqSubFunctions = getChildElementsByTagName(this.element, 'EqSubFunction');
-        return x ` ${eqSubFunctions.map(eqSubFunction => x `<eq-sub-function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${eqSubFunction}
-          ?showfunctions=${this.showfunctions}
-        ></eq-sub-function-editor>`)}`;
-    }
-    render() {
-        return x `<oscd-action-pane
-      label="${this.header}"
-      icon="functions"
-      secondary
-      highlighted
-    >
-      ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
-      ${this.renderLNodes()}${this.renderEqSubFunctions()}</action-pane
-    >`;
-    }
-};
-EqFunctionEditor.styles = i$5 `
-    abbr {
-      text-decoration: none;
-      border-bottom: none;
-    }
-
-    .container.lnode {
-      display: grid;
-      grid-gap: 12px;
-      padding: 8px 12px 16px;
-      box-sizing: border-box;
-      grid-template-columns: repeat(auto-fit, minmax(64px, auto));
-    }
-  `;
-__decorate([
-    n$2({ attribute: false })
-], EqFunctionEditor.prototype, "doc", void 0);
-__decorate([
-    n$2({ type: Number })
-], EqFunctionEditor.prototype, "editCount", void 0);
-__decorate([
-    n$2({ attribute: false })
-], EqFunctionEditor.prototype, "element", void 0);
-__decorate([
-    n$2({ type: Boolean })
-], EqFunctionEditor.prototype, "showfunctions", void 0);
-__decorate([
-    t$1()
-], EqFunctionEditor.prototype, "header", null);
-EqFunctionEditor = __decorate([
-    e$4('eq-function-editor')
-], EqFunctionEditor);
-
-let GeneralEquipmentEditor = class GeneralEquipmentEditor extends s {
-    constructor() {
-        super(...arguments);
-        this.editCount = -1;
-        /** Whether `Function` and `SubFunction` are rendered */
-        this.showfunctions = false;
-    }
+function getLNodeIcon(lNode) {
+    var _a, _b, _c;
+    const lnClassGroup = (_b = (_a = lNode.getAttribute('lnClass')) === null || _a === void 0 ? void 0 : _a.charAt(0)) !== null && _b !== void 0 ? _b : '';
+    return (_c = lnClassIcons[lnClassGroup]) !== null && _c !== void 0 ? _c : systemLogicalNode;
+}
+/** Pane rendering `LNode` element with its children */
+let LNodeEditor = class LNodeEditor extends s {
     get header() {
         var _a;
-        const name = (_a = this.element.getAttribute('name')) !== null && _a !== void 0 ? _a : '';
-        const desc = this.element.getAttribute('desc');
-        if (!this.showfunctions)
-            return `${name}`;
-        return `${name} ${desc ? `—  ${desc}` : ''}`;
+        const prefix = (_a = this.element.getAttribute('prefix')) !== null && _a !== void 0 ? _a : '';
+        const lnClass = this.element.getAttribute('lnClass');
+        const lnInst = this.element.getAttribute('lnInst');
+        const header = `${prefix} ${lnClass} ${lnInst}`;
+        return typeof header === 'string' ? header : '';
     }
-    renderLNodes() {
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderEqFunctions() {
-        const eFunctions = getChildElementsByTagName(this.element, 'EqFunction');
-        return eFunctions.length
-            ? x `${eFunctions.map(eFunction => x ` <eq-function-editor
-              .editCount=${this.editCount}
-              .doc=${this.doc}
-              .element=${eFunction}
-            ></eq-function-editor>`)}`
-            : x ``;
+    get missingIedReference() {
+        var _a;
+        return (_a = this.element.getAttribute('iedName') === 'None') !== null && _a !== void 0 ? _a : false;
     }
     render() {
-        if (this.showfunctions)
-            return x `<oscd-action-pane label=${this.header}>
-        ${this.renderLNodes()} ${this.renderEqFunctions()}
-      </oscd-action-pane>`;
-        return x `<oscd-action-icon label=${this.header}>
-      <mwc-icon slot="icon">${generalConductingEquipmentIcon}</mwc-icon>
+        return x `<oscd-action-icon
+      label="${this.header}"
+      ?secondary=${this.missingIedReference}
+      ?highlighted=${this.missingIedReference}
+      ><mwc-icon slot="icon">${getLNodeIcon(this.element)}</mwc-icon>
     </oscd-action-icon>`;
     }
 };
-GeneralEquipmentEditor.styles = i$5 `
+__decorate([
+    n$2({ attribute: false })
+], LNodeEditor.prototype, "doc", void 0);
+__decorate([
+    n$2({ attribute: false })
+], LNodeEditor.prototype, "element", void 0);
+__decorate([
+    t$1()
+], LNodeEditor.prototype, "header", null);
+__decorate([
+    t$1()
+], LNodeEditor.prototype, "missingIedReference", null);
+__decorate([
+    t$1()
+], LNodeEditor.prototype, "render", null);
+LNodeEditor = __decorate([
+    e$4('l-node-editor')
+], LNodeEditor);
+function renderLNodes(parent, editCount, showfunctions) {
+    if (!showfunctions)
+        return x ``;
+    const lNodes = getChildElementsByTagName(parent, 'LNode');
+    return lNodes.length
+        ? x `<div class="container lnode">
+        ${lNodes.map(lNode => x `<l-node-editor
+              .editCount=${editCount}
+              .element=${lNode}
+            ></l-node-editor>`)}
+      </div>`
+        : x ``;
+}
+
+/** [[`SubstationEditor`]] subeditor for a child-less `SubEquipment` element. */
+let SubEquipmentEditor = class SubEquipmentEditor extends s {
+    constructor() {
+        super(...arguments);
+        this.editCount = -1;
+    }
+    /** SubEquipment name attribute */
+    get label() {
+        const name = `${this.element.hasAttribute('name')
+            ? `${this.element.getAttribute('name')}`
+            : ''}`;
+        const description = `${this.element.hasAttribute('desc')
+            ? ` - ${this.element.getAttribute('desc')}`
+            : ''}`;
+        const phase = `${this.element.hasAttribute('phase')
+            ? ` (${this.element.getAttribute('phase')})`
+            : ''}`;
+        return `${name}${description}${phase}`;
+    }
+    render() {
+        return x `<oscd-action-pane label="${this.label}">
+      ${renderLNodes(this.element, this.editCount, false)}
+      ${renderEqFunctions(this.element, this.editCount, true)}
+    </oscd-action-pane> `;
+    }
+};
+SubEquipmentEditor.styles = i$5 `
     abbr {
       text-decoration: none;
       border-bottom: none;
@@ -2759,22 +2790,103 @@ GeneralEquipmentEditor.styles = i$5 `
   `;
 __decorate([
     n$2({ attribute: false })
-], GeneralEquipmentEditor.prototype, "doc", void 0);
+], SubEquipmentEditor.prototype, "doc", void 0);
 __decorate([
     n$2({ type: Number })
-], GeneralEquipmentEditor.prototype, "editCount", void 0);
+], SubEquipmentEditor.prototype, "editCount", void 0);
 __decorate([
     n$2({ attribute: false })
-], GeneralEquipmentEditor.prototype, "element", void 0);
+], SubEquipmentEditor.prototype, "element", void 0);
+__decorate([
+    n$2({ type: String })
+], SubEquipmentEditor.prototype, "label", null);
+SubEquipmentEditor = __decorate([
+    e$4('sub-equipment-editor')
+], SubEquipmentEditor);
+function renderSubEquipments(parent, editCount, showfunctions) {
+    if (!showfunctions)
+        return x ``;
+    const subEquipments = getChildElementsByTagName(parent, 'SubEquipment');
+    return x ` ${subEquipments.map(subEquipment => x `<sub-equipment-editor
+        .editCount=${editCount}
+        .element=${subEquipment}
+      ></sub-equipment-editor>`)}`;
+}
+
+/** [[`SubstationEditor`]] subeditor for a `ConductingEquipment` element. */
+let ConductingEquipmentEditor = class ConductingEquipmentEditor extends s {
+    constructor() {
+        super(...arguments);
+        this.editCount = -1;
+        /** Whether `EqFunction`, `SubEqFunction` and `SubEquipment` are rendered */
+        this.showfunctions = false;
+    }
+    /** ConductingEquipment name attribute */
+    get name() {
+        var _a;
+        return (_a = this.element.getAttribute('name')) !== null && _a !== void 0 ? _a : '';
+    }
+    renderContentPane() {
+        return x `<mwc-icon slot="icon" style="width:24px;height:24px"
+      >${getIcon(this.element)}</mwc-icon
+    > `;
+    }
+    renderContentIcon() {
+        return x `<mwc-icon slot="icon">${getIcon(this.element)}</mwc-icon> `;
+    }
+    render() {
+        if (this.showfunctions)
+            return x `<oscd-action-pane label="${this.name}"
+        >${this.renderContentPane()}
+        ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+        ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
+        ${renderSubEquipments(this.element, this.editCount, this.showfunctions)}
+        </oscd-action-pane
+        ></oscd-action-pane
+      >`;
+        return x `<oscd-action-icon label="${this.name}"
+      >${this.renderContentIcon()}</oscd-action-icon
+    >`;
+    }
+};
+ConductingEquipmentEditor.styles = i$5 `
+    ${styles}
+
+    :host(.moving) {
+      opacity: 0.3;
+    }
+
+    abbr {
+      text-decoration: none;
+      border-bottom: none;
+    }
+  `;
+__decorate([
+    n$2({ attribute: false })
+], ConductingEquipmentEditor.prototype, "doc", void 0);
+__decorate([
+    n$2({ type: Number })
+], ConductingEquipmentEditor.prototype, "editCount", void 0);
+__decorate([
+    n$2({ attribute: false })
+], ConductingEquipmentEditor.prototype, "element", void 0);
+__decorate([
+    n$2({ type: String })
+], ConductingEquipmentEditor.prototype, "name", null);
 __decorate([
     n$2({ type: Boolean })
-], GeneralEquipmentEditor.prototype, "showfunctions", void 0);
-__decorate([
-    t$1()
-], GeneralEquipmentEditor.prototype, "header", null);
-GeneralEquipmentEditor = __decorate([
-    e$4('general-equipment-editor')
-], GeneralEquipmentEditor);
+], ConductingEquipmentEditor.prototype, "showfunctions", void 0);
+ConductingEquipmentEditor = __decorate([
+    e$4('conducting-equipment-editor')
+], ConductingEquipmentEditor);
+function renderConductingEquipments(parent, editCount, showfunctions) {
+    const ConductingEquipments = getChildElementsByTagName(parent, 'ConductingEquipment');
+    return x ` ${ConductingEquipments.map(ConductingEquipment => x `<conducting-equipment-editor
+        .element=${ConductingEquipment}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></conducting-equipment-editor>`)}`;
+}
 
 /** Pane rendering `SubFunction` element with its children */
 let SubFunctionEditor = class SubFunctionEditor extends s {
@@ -2789,32 +2901,16 @@ let SubFunctionEditor = class SubFunctionEditor extends s {
         const type = this.element.getAttribute('type');
         return `${name}${desc ? ` - ${desc}` : ''}${type ? ` (${type})` : ''}`;
     }
-    renderLNodes() {
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderSubFunctions() {
-        const subfunctions = getChildElementsByTagName(this.element, 'SubFunction');
-        return x ` ${subfunctions.map(subFunction => x `<sub-function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${subFunction}
-          ?showfunctions=${this.showfunctions}
-        ></sub-function-editor>`)}`;
-    }
     render() {
-        return x `<oscd-action-pane label="${this.header}" icon="functions" secondary>
-      ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
-      ${this.renderLNodes()}${this.renderSubFunctions()}</action-pane
-    >`;
+        return x `<oscd-action-pane
+      label="${this.header}"
+      icon="functions"
+      secondary
+    >
+      ${renderGeneralEquipment(this.element, this.editCount, this.showfunctions)}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderSubFunctions(this.element, this.editCount, this.showfunctions)}
+    </oscd-action-pane>`;
     }
 };
 SubFunctionEditor.styles = i$5 `
@@ -2849,6 +2945,14 @@ __decorate([
 SubFunctionEditor = __decorate([
     e$4('sub-function-editor')
 ], SubFunctionEditor);
+function renderSubFunctions(parent, editCount, showfunctions) {
+    const subfunctions = getChildElementsByTagName(parent, 'SubFunction');
+    return x ` ${subfunctions.map(subFunction => x `<sub-function-editor
+        .element=${subFunction}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></sub-function-editor>`)}`;
+}
 
 /** Pane rendering `Function` element with its children */
 let FunctionEditor = class FunctionEditor extends s {
@@ -2863,35 +2967,16 @@ let FunctionEditor = class FunctionEditor extends s {
         const type = this.element.getAttribute('type');
         return `${name}${desc ? ` - ${desc}` : ''}${type ? ` (${type})` : ''}`;
     }
-    renderLNodes() {
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderSubFunctions() {
-        const subfunctions = getChildElementsByTagName(this.element, 'SubFunction');
-        return x ` ${subfunctions.map(subFunction => x `<sub-function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${subFunction}
-          ?showfunctions=${this.showfunctions}
-        ></sub-function-editor>`)}`;
-    }
     render() {
         return x `<oscd-action-pane
       label="${this.header}"
       icon="functions"
       secondary
       highlighted
-      >${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}${this.renderLNodes()}${this.renderSubFunctions()}</action-pane
-    >`;
+      >${renderGeneralEquipment(this.element, this.editCount, this.showfunctions)}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderSubFunctions(this.element, this.editCount, this.showfunctions)}
+    </oscd-action-pane>`;
     }
 };
 FunctionEditor.styles = i$5 `
@@ -2926,83 +3011,77 @@ __decorate([
 FunctionEditor = __decorate([
     e$4('function-editor')
 ], FunctionEditor);
+function renderFunctions(parent, editCount, showfunctions) {
+    if (showfunctions)
+        return x ``;
+    const functions = getChildElementsByTagName(parent, 'Function');
+    return x ` ${functions.map(fUnction => x `<function-editor
+        .element=${fUnction}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></function-editor>`)}`;
+}
 
-/** [[`SubstationEditor`]] subeditor for a child-less `SubEquipment` element. */
-let SubEquipmentEditor = class SubEquipmentEditor extends s {
+let LineEditor = class LineEditor extends s {
     constructor() {
         super(...arguments);
         this.editCount = -1;
+        /** Whether `Function` and `LNode` are rendered */
+        this.showfunctions = false;
     }
-    /** SubEquipment name attribute */
-    get label() {
-        const name = `${this.element.hasAttribute('name')
-            ? `${this.element.getAttribute('name')}`
-            : ''}`;
-        const description = `${this.element.hasAttribute('desc')
-            ? ` - ${this.element.getAttribute('desc')}`
-            : ''}`;
-        const phase = `${this.element.hasAttribute('phase')
-            ? ` (${this.element.getAttribute('phase')})`
-            : ''}`;
-        return `${name}${description}${phase}`;
-    }
-    renderLNodes() {
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderEqFunctions() {
-        const eqFunctions = getChildElementsByTagName(this.element, 'EqFunction');
-        return eqFunctions.length
-            ? x ` ${eqFunctions.map(eqFunction => x `<eq-function-editor
-              .editCount=${this.editCount}
-              .doc=${this.doc}
-              .element=${eqFunction}
-            ></eq-function-editor>`)}`
-            : x ``;
+    get header() {
+        var _a;
+        const name = (_a = this.element.getAttribute('name')) !== null && _a !== void 0 ? _a : '';
+        const desc = this.element.getAttribute('desc');
+        return `${name} ${desc ? `—${desc}` : ''}`;
     }
     render() {
-        return x `<oscd-action-pane label="${this.label}">
-      ${this.renderLNodes()} ${this.renderEqFunctions()}
-    </oscd-action-pane> `;
+        return x `<oscd-action-pane label=${this.header}>
+      ${renderConductingEquipments(this.element, this.editCount, this.showfunctions)}
+      ${renderGeneralEquipment(this.element, this.editCount, this.showfunctions)}
+      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+    </oscd-action-pane>`;
     }
 };
-SubEquipmentEditor.styles = i$5 `
+LineEditor.styles = i$5 `
+    ${styles}
+
+    :host(.moving) {
+      opacity: 0.3;
+    }
+
     abbr {
       text-decoration: none;
       border-bottom: none;
     }
-
-    .container.lnode {
-      display: grid;
-      grid-gap: 12px;
-      padding: 8px 12px 16px;
-      box-sizing: border-box;
-      grid-template-columns: repeat(auto-fit, minmax(64px, auto));
-    }
   `;
 __decorate([
     n$2({ attribute: false })
-], SubEquipmentEditor.prototype, "doc", void 0);
+], LineEditor.prototype, "doc", void 0);
 __decorate([
     n$2({ type: Number })
-], SubEquipmentEditor.prototype, "editCount", void 0);
+], LineEditor.prototype, "editCount", void 0);
 __decorate([
     n$2({ attribute: false })
-], SubEquipmentEditor.prototype, "element", void 0);
+], LineEditor.prototype, "element", void 0);
 __decorate([
-    n$2({ type: String })
-], SubEquipmentEditor.prototype, "label", null);
-SubEquipmentEditor = __decorate([
-    e$4('sub-equipment-editor')
-], SubEquipmentEditor);
+    n$2({ type: Boolean })
+], LineEditor.prototype, "showfunctions", void 0);
+__decorate([
+    t$1()
+], LineEditor.prototype, "header", null);
+LineEditor = __decorate([
+    e$4('line-editor')
+], LineEditor);
+function renderLines(parent, editCount, showfunctions) {
+    const Lines = getChildElementsByTagName(parent, 'Line');
+    return x ` ${Lines.map(Line => x `<line-editor
+        .element=${Line}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></line-editor>`)}`;
+}
 
 let TapChangerEditor = class TapChangerEditor extends s {
     constructor() {
@@ -3017,43 +3096,11 @@ let TapChangerEditor = class TapChangerEditor extends s {
         const desc = this.element.getAttribute('desc');
         return `${name} ${desc ? `—${desc}` : ''}`;
     }
-    renderLNodes() {
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderEqFunctions() {
-        if (!this.showfunctions)
-            return x ``;
-        const eqFunctions = getChildElementsByTagName(this.element, 'EqFunction');
-        return x ` ${eqFunctions.map(eqFunction => x `<eq-function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${eqFunction}
-          ?showfunctions=${this.showfunctions}
-        ></eq-function-editor>`)}`;
-    }
-    renderSubEquipments() {
-        if (!this.showfunctions)
-            return x ``;
-        const subEquipments = getChildElementsByTagName(this.element, 'SubEquipment');
-        return x ` ${subEquipments.map(subEquipment => x `<sub-equipment-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${subEquipment}
-        ></sub-equipment-editor>`)}`;
-    }
     render() {
         return x `<oscd-action-pane label=${this.header}>
-      ${this.renderLNodes()} ${this.renderEqFunctions()}
-      ${this.renderSubEquipments()}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
+      ${renderSubEquipments(this.element, this.editCount, this.showfunctions)}
     </oscd-action-pane>`;
     }
 };
@@ -3105,31 +3152,6 @@ let TransformerWindingEditor = class TransformerWindingEditor extends s {
             : ''}`;
         return `${name}${description}`;
     }
-    renderLNodes() {
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderEqFunctions() {
-        if (!this.showfunctions)
-            return x ``;
-        const eqFunctions = getChildElementsByTagName(this.element, 'EqFunction');
-        return eqFunctions.length
-            ? x ` ${eqFunctions.map(eqFunction => x `<eq-function-editor
-              .editCount=${this.editCount}
-              .doc=${this.doc}
-              .element=${eqFunction}
-              ?showfunctions=${this.showfunctions}
-            ></eq-function-editor>`)}`
-            : x ``;
-    }
     renderTapChanger() {
         if (!this.showfunctions)
             return x ``;
@@ -3145,7 +3167,8 @@ let TransformerWindingEditor = class TransformerWindingEditor extends s {
     }
     render() {
         return x `<oscd-action-pane label="${this.label}">
-      ${this.renderLNodes()} ${this.renderEqFunctions()}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
       ${this.renderTapChanger()}
     </oscd-action-pane> `;
     }
@@ -3194,39 +3217,6 @@ let PowerTransformerEditor = class PowerTransformerEditor extends s {
         var _a;
         return (_a = this.element.getAttribute('name')) !== null && _a !== void 0 ? _a : 'UNDEFINED';
     }
-    renderLNodes() {
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderEqFunctions() {
-        if (!this.showfunctions)
-            return x ``;
-        const eqFunctions = getChildElementsByTagName(this.element, 'EqFunction');
-        return x ` ${eqFunctions.map(eqFunction => x `<eq-function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${eqFunction}
-          ?showfunctions=${this.showfunctions}
-        ></eq-function-editor>`)}`;
-    }
-    renderSubEquipments() {
-        if (!this.showfunctions)
-            return x ``;
-        const subEquipments = getChildElementsByTagName(this.element, 'SubEquipment');
-        return x ` ${subEquipments.map(subEquipment => x `<sub-equipment-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${subEquipment}
-        ></sub-equipment-editor>`)}`;
-    }
     // eslint-disable-next-line class-methods-use-this
     renderContentPane() {
         return x `<mwc-icon slot="icon" style="width:24px;height:24px"
@@ -3257,12 +3247,14 @@ let PowerTransformerEditor = class PowerTransformerEditor extends s {
     render() {
         if (this.showfunctions)
             return x `<oscd-action-pane label="${this.name}">
-        ${this.renderContentPane()} ${this.renderLNodes()}
-        ${this.renderEqFunctions()} ${this.renderSubEquipments()}
+        ${this.renderContentPane()}
+        ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+        ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
+        ${renderSubEquipments(this.element, this.editCount, this.showfunctions)}
         ${this.renderTransformerWinding()}
       </oscd-action-pane> `;
         return x `<oscd-action-icon label="${this.name}"
-      >${this.renderContentIcon()}</action-icon
+      >${this.renderContentIcon()}</oscd-action-icon
     > `;
     }
 };
@@ -3294,104 +3286,25 @@ __decorate([
     n$2({ type: Boolean })
 ], PowerTransformerEditor.prototype, "showfunctions", void 0);
 PowerTransformerEditor = __decorate([
-    e$4('powertransformer-editor')
+    e$4('power-transformer-editor')
 ], PowerTransformerEditor);
-
-/** [[`SubstationEditor`]] subeditor for a `ConductingEquipment` element. */
-let ConductingEquipmentEditor = class ConductingEquipmentEditor extends s {
-    constructor() {
-        super(...arguments);
-        this.editCount = -1;
-        /** Whether `EqFunction`, `SubEqFunction` and `SubEquipment` are rendered */
-        this.showfunctions = false;
-    }
-    /** ConductingEquipment name attribute */
-    get name() {
-        var _a;
-        return (_a = this.element.getAttribute('name')) !== null && _a !== void 0 ? _a : '';
-    }
-    renderLNodes() {
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderEqFunctions() {
-        if (!this.showfunctions)
-            return x ``;
-        const eqFunctions = getChildElementsByTagName(this.element, 'EqFunction');
-        return x ` ${eqFunctions.map(eqFunction => x `<eq-function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${eqFunction}
-          ?showfunctions=${this.showfunctions}
-        ></eq-function-editor>`)}`;
-    }
-    renderSubEquipments() {
-        if (!this.showfunctions)
-            return x ``;
-        const subEquipments = getChildElementsByTagName(this.element, 'SubEquipment');
-        return x ` ${subEquipments.map(subEquipment => x `<sub-equipment-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${subEquipment}
-        ></sub-equipment-editor>`)}`;
-    }
-    renderContentPane() {
-        return x `<mwc-icon slot="icon" style="width:24px;height:24px"
-      >${getIcon(this.element)}</mwc-icon
-    > `;
-    }
-    renderContentIcon() {
-        return x `<mwc-icon slot="icon">${getIcon(this.element)}</mwc-icon> `;
-    }
-    render() {
-        if (this.showfunctions)
-            return x `<oscd-action-pane label="${this.name}"
-        >${this.renderContentPane()}${this.renderLNodes()}${this.renderEqFunctions()}${this.renderSubEquipments()}</action-pane
-        ></action-pane
-      >`;
-        return x `<oscd-action-icon label="${this.name}"
-      >${this.renderContentIcon()}</action-icon
-    >`;
-    }
-};
-ConductingEquipmentEditor.styles = i$5 `
-    ${styles}
-
-    :host(.moving) {
-      opacity: 0.3;
-    }
-
-    abbr {
-      text-decoration: none;
-      border-bottom: none;
-    }
-  `;
-__decorate([
-    n$2({ attribute: false })
-], ConductingEquipmentEditor.prototype, "doc", void 0);
-__decorate([
-    n$2({ type: Number })
-], ConductingEquipmentEditor.prototype, "editCount", void 0);
-__decorate([
-    n$2({ attribute: false })
-], ConductingEquipmentEditor.prototype, "element", void 0);
-__decorate([
-    n$2({ type: String })
-], ConductingEquipmentEditor.prototype, "name", null);
-__decorate([
-    n$2({ type: Boolean })
-], ConductingEquipmentEditor.prototype, "showfunctions", void 0);
-ConductingEquipmentEditor = __decorate([
-    e$4('conducting-equipment-editor')
-], ConductingEquipmentEditor);
+function renderPowerTransformerContainer(parent, editCount, showfunctions) {
+    const pwts = getChildElementsByTagName(parent, 'PowerTransformer');
+    return (pwts === null || pwts === void 0 ? void 0 : pwts.length)
+        ? x `<div
+        class="${o$1({
+            ptrContent: true,
+            actionicon: !showfunctions,
+        })}"
+      >
+        ${pwts.map(pwt => x `<power-transformer-editor
+              .element=${pwt}
+              .editCount=${editCount}
+              ?showfunctions=${showfunctions}
+            ></power-transformer-editor>`)}
+      </div>`
+        : x ``;
+}
 
 /** [[`SubstationEditor`]] subeditor for a `Bay` element. */
 let BayEditor = class BayEditor extends s {
@@ -3407,53 +3320,23 @@ let BayEditor = class BayEditor extends s {
         const desc = this.element.getAttribute('desc');
         return `${name} ${desc ? `- ${desc}` : ''}`;
     }
-    renderLNodes() {
-        if (!this.showfunctions)
-            return x ``;
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderFunctions() {
-        if (!this.showfunctions)
-            return x ``;
-        const functions = getChildElementsByTagName(this.element, 'Function');
-        return x ` ${functions.map(fUnction => x `<function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${fUnction}
-          ?showfunctions=${this.showfunctions}
-        ></function-editor>`)}`;
-    }
     render() {
         return x `<oscd-action-pane label="${this.header}">
-      ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
-      ${this.renderLNodes()}${this.renderFunctions()}
+      ${renderGeneralEquipment(this.element, this.editCount, this.showfunctions)}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
       <div
         class="${o$1({
             content: true,
             actionicon: !this.showfunctions,
         })}"
       >
-        ${Array.from(getChildElementsByTagName(this.element, 'PowerTransformer')).map(pwt => x `<powertransformer-editor
-              .editCount=${this.editCount}
-              .doc=${this.doc}
+        ${Array.from(getChildElementsByTagName(this.element, 'PowerTransformer')).map(pwt => x `<power-transformer-editor
               .element=${pwt}
-              ?showfunctions=${this.showfunctions}
-            ></powertransformer-editor>`)}
-        ${Array.from(getChildElementsByTagName(this.element, 'ConductingEquipment')).map(voltageLevel => x `<conducting-equipment-editor
               .editCount=${this.editCount}
-              .doc=${this.doc}
-              .element=${voltageLevel}
               ?showfunctions=${this.showfunctions}
-            ></conducting-equipment-editor>`)}
+            ></power-transformer-editor>`)}
+        ${renderConductingEquipments(this.element, this.editCount, this.showfunctions)}
       </div>
     </oscd-action-pane> `;
     }
@@ -3517,56 +3400,13 @@ let VoltageLevelEditor = class VoltageLevelEditor extends s {
         return `${name} ${desc ? `- ${desc}` : ''}
     ${this.voltage === null ? '' : `(${this.voltage})`}`;
     }
-    renderLNodes() {
-        if (!this.showfunctions)
-            return x ``;
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderFunctions() {
-        if (!this.showfunctions)
-            return x ``;
-        const functions = getChildElementsByTagName(this.element, 'Function');
-        return x ` ${functions.map(fUnction => x `<function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${fUnction}
-          ?showfunctions=${this.showfunctions}
-        ></function-editor>`)}`;
-    }
-    renderPowerTransformerContainer() {
-        var _a, _b;
-        const pwts = Array.from((_b = (_a = this.element) === null || _a === void 0 ? void 0 : _a.querySelectorAll('VoltageLevel > PowerTransformer')) !== null && _b !== void 0 ? _b : []);
-        return (pwts === null || pwts === void 0 ? void 0 : pwts.length)
-            ? x `<div
-          class="${o$1({
-                ptrContent: true,
-                actionicon: !this.showfunctions,
-            })}"
-        >
-          ${pwts.map(pwt => x `<powertransformer-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${pwt}
-                ?showfunctions=${this.showfunctions}
-              ></powertransformer-editor>`)}
-        </div>`
-            : x ``;
-    }
     render() {
         var _a, _b;
         return x `<oscd-action-pane label="${this.header}">
-      ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
-      ${this.renderLNodes()}${this.renderFunctions()}
-      ${this.renderPowerTransformerContainer()}
+      ${renderGeneralEquipment(this.element, this.editCount, this.showfunctions)}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
+      ${renderPowerTransformerContainer(this.element, this.editCount, this.showfunctions)}
       <div id="bayContainer">
         ${Array.from((_b = (_a = this.element) === null || _a === void 0 ? void 0 : _a.querySelectorAll('Bay')) !== null && _b !== void 0 ? _b : []).map(bay => x `<bay-editor
             .editCount=${this.editCount}
@@ -3630,61 +3470,18 @@ let SubstationEditor = class SubstationEditor extends s {
         const desc = this.element.getAttribute('desc');
         return `${name} ${desc ? `- ${desc}` : ''}`;
     }
-    renderLNodes() {
-        if (!this.showfunctions)
-            return x ``;
-        const lNodes = getChildElementsByTagName(this.element, 'LNode');
-        return lNodes.length
-            ? x `<div class="container lnode">
-          ${lNodes.map(lNode => x `<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`)}
-        </div>`
-            : x ``;
-    }
-    renderFunctions() {
-        if (!this.showfunctions)
-            return x ``;
-        const functions = getChildElementsByTagName(this.element, 'Function');
-        return x ` ${functions.map(fUnction => x `<function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${fUnction}
-          ?showfunctions=${this.showfunctions}
-        ></function-editor>`)}`;
-    }
-    renderPowerTransformerContainer() {
-        var _a, _b;
-        const pwts = Array.from((_b = (_a = this.element) === null || _a === void 0 ? void 0 : _a.querySelectorAll('Substation > PowerTransformer')) !== null && _b !== void 0 ? _b : []);
-        return (pwts === null || pwts === void 0 ? void 0 : pwts.length)
-            ? x `<div
-          class="${o$1({
-                ptrContent: true,
-                actionicon: !this.showfunctions,
-            })}"
-        >
-          ${pwts.map(pwt => x `<powertransformer-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${pwt}
-                ?showfunctions=${this.showfunctions}
-              ></powertransformer-editor>`)}
-        </div>`
-            : x ``;
-    }
     render() {
         return x `<oscd-action-pane label="${this.header}">
-      ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
-      ${this.renderLNodes()}${this.renderFunctions()}
-      ${this.renderPowerTransformerContainer()}
+      ${renderGeneralEquipment(this.element, this.editCount, this.showfunctions)}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
+      ${renderPowerTransformerContainer(this.element, this.editCount, this.showfunctions)}
       ${Array.from(this.element.querySelectorAll('VoltageLevel')).map(voltageLevel => x `<voltage-level-editor
             .editCount=${this.editCount}
             .doc=${this.doc}
             .element=${voltageLevel}
             ?showfunctions=${this.showfunctions}
-          ></voltage-level-editor>`)}</action-pane
+          ></voltage-level-editor>`)}</oscd-action-pane
     >`;
     }
 };
@@ -3709,6 +3506,82 @@ __decorate([
 SubstationEditor = __decorate([
     e$4('substation-editor')
 ], SubstationEditor);
+function renderSubstations(parent, editCount, showfunctions) {
+    const Substations = getChildElementsByTagName(parent, 'Substation');
+    return x ` ${Substations.map(Substation => x `<substation-editor
+        .element=${Substation}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></substation-editor>`)}`;
+}
+
+let ProcessEditor = class ProcessEditor extends s {
+    constructor() {
+        super(...arguments);
+        this.editCount = -1;
+        /** Whether `Function` and `LNode` are rendered */
+        this.showfunctions = false;
+    }
+    get header() {
+        var _a;
+        const name = (_a = this.element.getAttribute('name')) !== null && _a !== void 0 ? _a : '';
+        const desc = this.element.getAttribute('desc');
+        return `${name} ${desc ? `—${desc}` : ''}`;
+    }
+    render() {
+        return x `<oscd-action-pane label=${this.header}>
+      ${renderConductingEquipments(this.element, this.editCount, this.showfunctions)}
+      ${renderGeneralEquipment(this.element, this.editCount, this.showfunctions)}
+      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderLines(this.element, this.editCount, this.showfunctions)}
+      ${renderSubstations(this.element, this.editCount, this.showfunctions)}
+      ${renderProcesses(this.element, this.editCount, this.showfunctions)}
+    </oscd-action-pane>`;
+    }
+};
+ProcessEditor.styles = i$5 `
+    ${styles}
+
+    :host(.moving) {
+      opacity: 0.3;
+    }
+
+    abbr {
+      text-decoration: none;
+      border-bottom: none;
+    }
+  `;
+__decorate([
+    n$2({ attribute: false })
+], ProcessEditor.prototype, "doc", void 0);
+__decorate([
+    n$2({ type: Number })
+], ProcessEditor.prototype, "editCount", void 0);
+__decorate([
+    n$2({ attribute: false })
+], ProcessEditor.prototype, "element", void 0);
+__decorate([
+    n$2({ type: Boolean })
+], ProcessEditor.prototype, "showfunctions", void 0);
+__decorate([
+    t$1()
+], ProcessEditor.prototype, "header", null);
+ProcessEditor = __decorate([
+    e$4('process-editor')
+], ProcessEditor);
+function renderProcesses(parent, editCount, showfunctions) {
+    const processes = parent.querySelectorAll(':root > Process');
+    return processes.length
+        ? x `<section>
+        ${Array.from(processes).map(process => x `<process-editor
+              .element=${process}
+              .editCount=${editCount}
+              ?showfunctions=${showfunctions}
+            ></process-editor>`)}
+      </section>`
+        : x ``;
+}
 
 function shouldShowFunctions() {
     return localStorage.getItem('showfunctions') === 'on';
@@ -3730,48 +3603,17 @@ let ZerolinePane = class ZerolinePane extends s {
         this.requestUpdate();
     }
     renderSubstation() {
-        var _a, _b, _c;
+        var _a, _b;
         // eslint-disable-next-line no-nested-ternary
         return ((_a = this.doc) === null || _a === void 0 ? void 0 : _a.querySelector(':root > Substation'))
             ? x `<section>
-          ${Array.from((_b = this.doc.querySelectorAll(':root > Substation')) !== null && _b !== void 0 ? _b : []).map(substation => x `<substation-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${substation}
-                ?showfunctions=${shouldShowFunctions()}
-              ></substation-editor>`)}
+          ${renderSubstations(this.doc.querySelector('SCL'), this.editCount, shouldShowFunctions())}
         </section>`
-            : !((_c = this.doc) === null || _c === void 0 ? void 0 : _c.querySelector(':root > Line, :root > Process'))
+            : !((_b = this.doc) === null || _b === void 0 ? void 0 : _b.querySelector(':root > Line, :root > Process'))
                 ? x `<h1>
-          <span style="color: var(--oscd-base1)">Substation Missing</span>
+          <span style="color: var(--oscd-theme-base1)">Substation Missing</span>
         </h1>`
                 : x ``;
-    }
-    renderLines() {
-        var _a, _b;
-        return ((_a = this.doc) === null || _a === void 0 ? void 0 : _a.querySelector(':root > Line'))
-            ? x `<section>
-          ${Array.from((_b = this.doc.querySelectorAll('Line')) !== null && _b !== void 0 ? _b : []).map(line => x `<line-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${line}
-                ?showfunctions=${shouldShowFunctions()}
-              ></line-editor>`)}
-        </section>`
-            : x ``;
-    }
-    renderProcesses() {
-        var _a, _b;
-        return ((_a = this.doc) === null || _a === void 0 ? void 0 : _a.querySelector(':root > Process'))
-            ? x `<section>
-          ${Array.from((_b = this.doc.querySelectorAll(':root > Process')) !== null && _b !== void 0 ? _b : []).map(process => x `<process-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${process}
-                ?showfunctions=${shouldShowFunctions()}
-              ></process-editor>`)}
-        </section>`
-            : x ``;
     }
     render() {
         return x `<h1>
@@ -3787,7 +3629,13 @@ let ZerolinePane = class ZerolinePane extends s {
           </abbr>
         </nav>
       </h1>
-      ${this.renderSubstation()}${this.renderLines()}${this.renderProcesses()}`;
+      ${this.renderSubstation()}
+      ${this.doc.querySelector('SCL')
+            ? renderLines(this.doc.querySelector('SCL'), this.editCount, shouldShowFunctions())
+            : x ``}
+      ${this.doc.querySelector('SCL')
+            ? renderProcesses(this.doc.querySelector('SCL'), this.editCount, shouldShowFunctions())
+            : x ``}`;
     }
 };
 ZerolinePane.styles = i$5 `
