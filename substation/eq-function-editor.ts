@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { LitElement, TemplateResult, css, html } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { TemplateResult, css, html } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
 
 import '@openscd/oscd-action-pane';
 import { renderEqSubFunctions } from './eq-sub-function-editor.js';
@@ -8,24 +8,11 @@ import { renderGeneralEquipment } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 
 import { getChildElementsByTagName } from '../foundation.js';
+import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** Pane rendering `EqFunction` element with its children */
 @customElement('eq-function-editor')
-export class EqFunctionEditor extends LitElement {
-  /** The document being edited as provided to editor by [[`Zeroline`]]. */
-  @property({ attribute: false })
-  doc!: XMLDocument;
-
-  @property({ type: Number })
-  editCount = -1;
-
-  /** The edited `EqFunction` element */
-  @property({ attribute: false })
-  element!: Element;
-
-  @property({ type: Boolean })
-  showfunctions = false;
-
+export class EqFunctionEditor extends BaseSubstationElementEditor {
   @state()
   private get header(): string {
     const name = this.element.getAttribute('name');
@@ -41,7 +28,12 @@ export class EqFunctionEditor extends LitElement {
       icon="functions"
       secondary
       highlighted
-    >
+      ><abbr slot="action" title="Remove">
+        <mwc-icon-button
+          icon="delete"
+          @click=${() => this.removeElement()}
+        ></mwc-icon-button>
+      </abbr>
       ${renderGeneralEquipment(
         this.element,
         this.editCount,
