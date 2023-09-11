@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable import/no-extraneous-dependencies */
-import { LitElement, TemplateResult, css, html } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { TemplateResult, css, html } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
 
 import '@openscd/oscd-action-pane';
 import { renderConductingEquipments } from './conducting-equipment-editor.js';
@@ -12,24 +12,10 @@ import { renderLNodes } from './l-node-editor.js';
 import { renderSubstations } from './substation-editor.js';
 
 import { styles } from '../foundation.js';
+import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 @customElement('process-editor')
-export class ProcessEditor extends LitElement {
-  /** The document being edited as provided to editor by [[`Zeroline`]]. */
-  @property({ attribute: false })
-  doc!: XMLDocument;
-
-  @property({ type: Number })
-  editCount = -1;
-
-  /** SCL element Process */
-  @property({ attribute: false })
-  element!: Element;
-
-  /** Whether `Function` and `LNode` are rendered */
-  @property({ type: Boolean })
-  showfunctions = false;
-
+export class ProcessEditor extends BaseSubstationElementEditor {
   @state()
   get header(): string {
     const name = this.element.getAttribute('name') ?? '';
@@ -40,6 +26,12 @@ export class ProcessEditor extends LitElement {
 
   render(): TemplateResult {
     return html`<oscd-action-pane label=${this.header}>
+      <abbr slot="action" title="Remove">
+        <mwc-icon-button
+          icon="delete"
+          @click=${() => this.removeElement()}
+        ></mwc-icon-button
+      ></abbr>
       ${renderConductingEquipments(
         this.element,
         this.editCount,
@@ -80,15 +72,13 @@ export function renderProcesses(
   const processes = parent.querySelectorAll(':root > Process');
 
   return processes.length
-    ? html`<section>
-        ${Array.from(processes).map(
-          process =>
-            html`<process-editor
-              .element=${process}
-              .editCount=${editCount}
-              ?showfunctions=${showfunctions}
-            ></process-editor>`
-        )}
-      </section>`
+    ? html` ${Array.from(processes).map(
+        process =>
+          html`<process-editor
+            .element=${process}
+            .editCount=${editCount}
+            ?showfunctions=${showfunctions}
+          ></process-editor>`
+      )}`
     : html``;
 }

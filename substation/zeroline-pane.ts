@@ -35,13 +35,11 @@ export class ZerolinePane extends LitElement {
   renderSubstation(): TemplateResult {
     // eslint-disable-next-line no-nested-ternary
     return this.doc?.querySelector(':root > Substation')
-      ? html`<section>
-          ${renderSubstations(
-            this.doc.querySelector('SCL')!,
-            this.editCount,
-            shouldShowFunctions()
-          )}
-        </section>`
+      ? html` ${renderSubstations(
+          this.doc.querySelector('SCL')!,
+          this.editCount,
+          shouldShowFunctions()
+        )}`
       : !this.doc?.querySelector(':root > Line, :root > Process')
       ? html`<h1>
           <span style="color: var(--oscd-theme-base1)">Substation Missing</span>
@@ -63,21 +61,23 @@ export class ZerolinePane extends LitElement {
           </abbr>
         </nav>
       </h1>
-      ${this.renderSubstation()}
-      ${this.doc.querySelector('SCL')
-        ? renderLines(
-            this.doc.querySelector('SCL')!,
-            this.editCount,
-            shouldShowFunctions()
-          )
-        : html``}
-      ${this.doc.querySelector('SCL')
-        ? renderProcesses(
-            this.doc.querySelector('SCL')!,
-            this.editCount,
-            shouldShowFunctions()
-          )
-        : html``}`;
+      <section>
+        ${this.renderSubstation()}
+        ${this.doc.querySelector('SCL')
+          ? renderLines(
+              this.doc.querySelector('SCL')!,
+              this.editCount,
+              shouldShowFunctions()
+            )
+          : html``}
+        ${this.doc.querySelector('SCL')
+          ? renderProcesses(
+              this.doc.querySelector('SCL')!,
+              this.editCount,
+              shouldShowFunctions()
+            )
+          : html``}
+      </section>`;
   }
 
   static styles = css`

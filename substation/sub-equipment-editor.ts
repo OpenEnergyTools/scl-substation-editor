@@ -1,27 +1,18 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { LitElement, TemplateResult, css, html } from 'lit';
+import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
+import '@material/mwc-icon-button';
 import '@openscd/oscd-action-icon';
 import '@openscd/oscd-action-pane';
 import { renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
 import { getChildElementsByTagName } from '../foundation.js';
+import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** [[`SubstationEditor`]] subeditor for a child-less `SubEquipment` element. */
 @customElement('sub-equipment-editor')
-export class SubEquipmentEditor extends LitElement {
-  /** The document being edited as provided to editor by [[`Zeroline`]]. */
-  @property({ attribute: false })
-  doc!: XMLDocument;
-
-  @property({ type: Number })
-  editCount = -1;
-
-  /** SCL element SubEquipment */
-  @property({ attribute: false })
-  element!: Element;
-
+export class SubEquipmentEditor extends BaseSubstationElementEditor {
   /** SubEquipment name attribute */
   @property({ type: String })
   get label(): string {
@@ -48,6 +39,12 @@ export class SubEquipmentEditor extends LitElement {
 
   render(): TemplateResult {
     return html`<oscd-action-pane label="${this.label}">
+      <abbr slot="action" title="Remove">
+        <mwc-icon-button
+          icon="delete"
+          @click=${() => this.removeElement()}
+        ></mwc-icon-button>
+      </abbr>
       ${renderLNodes(this.element, this.editCount, false)}
       ${renderEqFunctions(this.element, this.editCount, true)}
     </oscd-action-pane> `;

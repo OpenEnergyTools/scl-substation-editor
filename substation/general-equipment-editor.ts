@@ -1,7 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { LitElement, TemplateResult, css, html } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { TemplateResult, css, html } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+
+import '@material/mwc-fab';
+import '@material/mwc-icon-button';
 
 import '@openscd/oscd-action-pane';
 import { renderLNodes } from './l-node-editor.js';
@@ -11,19 +14,10 @@ import {
   generalConductingEquipmentIcon,
   getChildElementsByTagName,
 } from '../foundation.js';
+import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 @customElement('general-equipment-editor')
-export class GeneralEquipmentEditor extends LitElement {
-  @property({ type: Number })
-  editCount = -1;
-
-  @property({ attribute: false })
-  element!: Element;
-
-  /** Whether `Function` and `SubFunction` are rendered */
-  @property({ type: Boolean })
-  showfunctions = false;
-
+export class GeneralEquipmentEditor extends BaseSubstationElementEditor {
   @state()
   get header(): string {
     const name = this.element.getAttribute('name') ?? '';
@@ -37,12 +31,24 @@ export class GeneralEquipmentEditor extends LitElement {
   render(): TemplateResult {
     if (this.showfunctions)
       return html`<oscd-action-pane label=${this.header}>
+        <abbr slot="action" title="Remove">
+          <mwc-icon-button
+            icon="delete"
+            @click=${() => this.removeElement()}
+          ></mwc-icon-button>
+        </abbr>
         ${renderLNodes(this.element, this.editCount, this.showfunctions)}
         ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
       </oscd-action-pane>`;
 
     return html`<oscd-action-icon label=${this.header}>
       <mwc-icon slot="icon">${generalConductingEquipmentIcon}</mwc-icon>
+      <mwc-fab
+        slot="action"
+        mini
+        icon="delete"
+        @click="${() => this.removeElement()}"
+      ></mwc-fab>
     </oscd-action-icon>`;
   }
 

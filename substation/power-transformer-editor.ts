@@ -1,8 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { LitElement, TemplateResult, css, html } from 'lit';
+import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
+import '@material/mwc-fab';
+import '@material/mwc-icon-button';
 import '@openscd/oscd-action-icon';
 import '@openscd/oscd-action-pane';
 import './transformer-winding-editor.js';
@@ -15,30 +17,16 @@ import {
   powerTransformerTwoWindingIcon,
   styles,
 } from '../foundation.js';
+import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** [[`SubstationEditor`]] subeditor for a child-less `PowerTransformer` element. */
 @customElement('power-transformer-editor')
-export class PowerTransformerEditor extends LitElement {
-  /** The document being edited as provided to editor by [[`Zeroline`]]. */
-  @property({ attribute: false })
-  doc!: XMLDocument;
-
-  @property({ type: Number })
-  editCount = -1;
-
-  /** SCL element PowerTransformer */
-  @property({ attribute: false })
-  element!: Element;
-
+export class PowerTransformerEditor extends BaseSubstationElementEditor {
   /** PowerTransformer name attribute */
   @property({ type: String })
   get name(): string {
     return this.element.getAttribute('name') ?? 'UNDEFINED';
   }
-
-  /** Whether `EqFunction`, `SubEqFunction` and `SubEquipment` are rendered */
-  @property({ type: Boolean })
-  showfunctions = false;
 
   // eslint-disable-next-line class-methods-use-this
   renderContentPane(): TemplateResult {
@@ -59,9 +47,8 @@ export class PowerTransformerEditor extends LitElement {
           ${transformerWindings.map(
             transformerWinding =>
               html`<transformer-winding-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
                 .element=${transformerWinding}
+                .editCount=${this.editCount}
                 ?showfunctions=${this.showfunctions}
               ></transformer-winding-editor>`
           )}
@@ -72,13 +59,24 @@ export class PowerTransformerEditor extends LitElement {
   // eslint-disable-next-line class-methods-use-this
   renderContentIcon(): TemplateResult {
     return html`<mwc-icon slot="icon"
-      >${powerTransformerTwoWindingIcon}</mwc-icon
-    > `;
+        >${powerTransformerTwoWindingIcon}</mwc-icon
+      ><mwc-fab
+        slot="action"
+        mini
+        icon="delete"
+        @click="${() => this.removeElement()}"
+      ></mwc-fab> `;
   }
 
   render(): TemplateResult {
     if (this.showfunctions)
       return html`<oscd-action-pane label="${this.name}">
+        <abbr slot="action" title="Remove">
+          <mwc-icon-button
+            icon="delete"
+            @click=${() => this.removeElement()}
+          ></mwc-icon-button>
+        </abbr>
         ${this.renderContentPane()}
         ${renderLNodes(this.element, this.editCount, this.showfunctions)}
         ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}

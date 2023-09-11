@@ -1,7 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { LitElement, TemplateResult, html } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { TemplateResult, html } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
 
+import '@material/mwc-fab';
 import '@material/mwc-icon';
 import '@openscd/oscd-action-icon';
 
@@ -24,6 +25,7 @@ import {
   transformerLogicalNode,
 } from './lnode.js';
 import { getChildElementsByTagName } from '../foundation.js';
+import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 const lnClassIcons: Partial<Record<string, TemplateResult>> = {
   L: systemLogicalNode,
@@ -51,15 +53,7 @@ export function getLNodeIcon(lNode: Element): TemplateResult {
 
 /** Pane rendering `LNode` element with its children */
 @customElement('l-node-editor')
-export class LNodeEditor extends LitElement {
-  /** The document being edited as provided to editor by [[`Zeroline`]]. */
-  @property({ attribute: false })
-  doc!: XMLDocument;
-
-  /** The edited `LNode` element */
-  @property({ attribute: false })
-  element!: Element;
-
+export class LNodeEditor extends BaseSubstationElementEditor {
   @state()
   private get header(): string {
     const prefix = this.element.getAttribute('prefix') ?? '';
@@ -82,6 +76,12 @@ export class LNodeEditor extends LitElement {
       ?secondary=${this.missingIedReference}
       ?highlighted=${this.missingIedReference}
       ><mwc-icon slot="icon">${getLNodeIcon(this.element)}</mwc-icon>
+      <mwc-fab
+        slot="action"
+        mini
+        icon="delete"
+        @click="${() => this.removeElement()}"
+      ></mwc-fab>
     </oscd-action-icon>`;
   }
 }

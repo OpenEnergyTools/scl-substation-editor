@@ -1,32 +1,20 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { LitElement, TemplateResult, css, html } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { TemplateResult, css, html } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
 
+import '@material/mwc-icon-button';
 import '@openscd/oscd-action-pane';
+
 import { renderConductingEquipments } from './conducting-equipment-editor.js';
 import { renderFunctions } from './function-editor.js';
 import { renderGeneralEquipment } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 
 import { getChildElementsByTagName, styles } from '../foundation.js';
+import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 @customElement('line-editor')
-export class LineEditor extends LitElement {
-  /** The document being edited as provided to editor by [[`Zeroline`]]. */
-  @property({ attribute: false })
-  doc!: XMLDocument;
-
-  @property({ type: Number })
-  editCount = -1;
-
-  /** SCL element Line */
-  @property({ attribute: false })
-  element!: Element;
-
-  /** Whether `Function` and `LNode` are rendered */
-  @property({ type: Boolean })
-  showfunctions = false;
-
+export class LineEditor extends BaseSubstationElementEditor {
   @state()
   get header(): string {
     const name = this.element.getAttribute('name') ?? '';
@@ -37,6 +25,12 @@ export class LineEditor extends LitElement {
 
   render(): TemplateResult {
     return html`<oscd-action-pane label=${this.header}>
+      <abbr slot="action" title="Remove">
+        <mwc-icon-button
+          icon="delete"
+          @click=${() => this.removeElement()}
+        ></mwc-icon-button>
+      </abbr>
       ${renderConductingEquipments(
         this.element,
         this.editCount,
@@ -54,15 +48,6 @@ export class LineEditor extends LitElement {
 
   static styles = css`
     ${styles}
-
-    :host(.moving) {
-      opacity: 0.3;
-    }
-
-    abbr {
-      text-decoration: none;
-      border-bottom: none;
-    }
   `;
 }
 

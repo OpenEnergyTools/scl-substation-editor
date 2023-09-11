@@ -1,32 +1,21 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { LitElement, TemplateResult, css, html } from 'lit';
+import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
+import '@material/mwc-icon-button';
 import '@openscd/oscd-action-pane';
+
 import './bay-editor.js';
 import { renderFunctions } from './function-editor.js';
 import { renderGeneralEquipment } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 import { renderPowerTransformerContainer } from './power-transformer-editor.js';
 import { styles } from '../foundation.js';
+import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** [[`Substation`]] subeditor for a `VoltageLevel` element. */
 @customElement('voltage-level-editor')
-export class VoltageLevelEditor extends LitElement {
-  /** The document being edited as provided to editor by [[`Zeroline`]]. */
-  @property({ attribute: false })
-  doc!: XMLDocument;
-
-  @property({ type: Number })
-  editCount = -1;
-
-  @property({ attribute: false })
-  element!: Element;
-
-  /** Whether `Function` and `SubFunction` are rendered */
-  @property({ type: Boolean })
-  showfunctions = false;
-
+export class VoltageLevelEditor extends BaseSubstationElementEditor {
   @property()
   get voltage(): string | null {
     const V = this.element.querySelector(`VoltageLevel > Voltage`);
@@ -48,6 +37,12 @@ export class VoltageLevelEditor extends LitElement {
 
   render(): TemplateResult {
     return html`<oscd-action-pane label="${this.header}">
+      <abbr slot="action" title="Remove">
+        <mwc-icon-button
+          icon="delete"
+          @click=${() => this.removeElement()}
+        ></mwc-icon-button>
+      </abbr>
       ${renderGeneralEquipment(
         this.element,
         this.editCount,
@@ -64,7 +59,6 @@ export class VoltageLevelEditor extends LitElement {
         ${Array.from(this.element?.querySelectorAll('Bay') ?? []).map(
           bay => html`<bay-editor
             .editCount=${this.editCount}
-            .doc=${this.doc}
             .element=${bay}
             ?showfunctions=${this.showfunctions}
           ></bay-editor>`

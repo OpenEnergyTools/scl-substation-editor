@@ -1,4 +1,4 @@
-import { LitElement, TemplateResult, css, html } from 'lit';
+import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
@@ -12,24 +12,11 @@ import { renderGeneralEquipment } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 
 import { getChildElementsByTagName, styles } from '../foundation.js';
+import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** [[`SubstationEditor`]] subeditor for a `Bay` element. */
 @customElement('bay-editor')
-export class BayEditor extends LitElement {
-  /** The document being edited as provided to editor by [[`Zeroline`]]. */
-  @property({ attribute: false })
-  doc!: XMLDocument;
-
-  @property({ type: Number })
-  editCount = -1;
-
-  @property({ attribute: false })
-  element!: Element;
-
-  /** Whether `Function` and `SubFunction` are rendered */
-  @property({ type: Boolean })
-  showfunctions = false;
-
+export class BayEditor extends BaseSubstationElementEditor {
   @property({ type: String })
   get header(): string {
     const name = this.element.getAttribute('name') ?? '';
@@ -39,7 +26,13 @@ export class BayEditor extends LitElement {
   }
 
   render(): TemplateResult {
-    return html`<oscd-action-pane label="${this.header}">
+    return html`<oscd-action-pane label="${this.header}"
+      ><abbr slot="action" title="Remove">
+        <mwc-icon-button
+          icon="delete"
+          @click=${() => this.removeElement()}
+        ></mwc-icon-button>
+      </abbr>
       ${renderGeneralEquipment(
         this.element,
         this.editCount,
