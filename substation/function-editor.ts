@@ -72,7 +72,7 @@ export function renderFunctions(
   editCount: number,
   showfunctions: boolean
 ): TemplateResult {
-  if (showfunctions) return html``;
+  if (!showfunctions) return html``;
 
   const functions = getChildElementsByTagName(parent, 'Function');
   return html` ${functions.map(

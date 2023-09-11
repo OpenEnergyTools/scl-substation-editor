@@ -73,7 +73,7 @@ export function renderEqFunctions(
   editCount: number,
   showfunctions: boolean
 ): TemplateResult {
-  if (showfunctions) return html``;
+  if (!showfunctions) return html``;
 
   const eqFunctions = getChildElementsByTagName(parent, 'EqFunction');
   return html` ${eqFunctions.map(
