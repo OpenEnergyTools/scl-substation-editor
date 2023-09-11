@@ -1,17 +1,13 @@
-import { LitElement, TemplateResult } from 'lit';
+import { TemplateResult } from 'lit';
+import '@material/mwc-fab';
+import '@material/mwc-icon-button';
 import '@openscd/oscd-action-icon';
 import '@openscd/oscd-action-pane';
+import BaseSubstationElementEditor from './base-substation-element-editor.js';
 /** [[`SubstationEditor`]] subeditor for a `ConductingEquipment` element. */
-export declare class ConductingEquipmentEditor extends LitElement {
-    /** The document being edited as provided to editor by [[`Zeroline`]]. */
-    doc: XMLDocument;
-    editCount: number;
-    /** SCL element ConductingEquipment */
-    element: Element;
+export declare class ConductingEquipmentEditor extends BaseSubstationElementEditor {
     /** ConductingEquipment name attribute */
     get name(): string;
-    /** Whether `EqFunction`, `SubEqFunction` and `SubEquipment` are rendered */
-    showfunctions: boolean;
     renderContentPane(): TemplateResult;
     renderContentIcon(): TemplateResult;
     render(): TemplateResult;
