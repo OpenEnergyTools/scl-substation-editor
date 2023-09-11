@@ -1,12 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { LitElement, TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+
 import '@openscd/oscd-action-icon';
 import '@openscd/oscd-action-pane';
-import './eq-function-editor.js';
-import './l-node-editor.js';
-import './sub-equipment-editor.js';
+import { renderLNodes } from './l-node-editor.js';
+import { renderEqFunctions } from './eq-function-editor.js';
+
 import { getChildElementsByTagName, getIcon, styles } from '../foundation.js';
+import { renderSubEquipments } from './sub-equipment-editor.js';
 
 /** [[`SubstationEditor`]] subeditor for a `ConductingEquipment` element. */
 @customElement('conducting-equipment-editor')
@@ -32,56 +34,6 @@ export class ConductingEquipmentEditor extends LitElement {
   @property({ type: Boolean })
   showfunctions = false;
 
-  private renderLNodes(): TemplateResult {
-    const lNodes = getChildElementsByTagName(this.element, 'LNode');
-
-    return lNodes.length
-      ? html`<div class="container lnode">
-          ${lNodes.map(
-            lNode =>
-              html`<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`
-          )}
-        </div>`
-      : html``;
-  }
-
-  renderEqFunctions(): TemplateResult {
-    if (!this.showfunctions) return html``;
-
-    const eqFunctions = getChildElementsByTagName(this.element, 'EqFunction');
-    return html` ${eqFunctions.map(
-      eqFunction =>
-        html`<eq-function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${eqFunction}
-          ?showfunctions=${this.showfunctions}
-        ></eq-function-editor>`
-    )}`;
-  }
-
-  private renderSubEquipments(): TemplateResult {
-    if (!this.showfunctions) return html``;
-
-    const subEquipments = getChildElementsByTagName(
-      this.element,
-      'SubEquipment'
-    );
-
-    return html` ${subEquipments.map(
-      subEquipment =>
-        html`<sub-equipment-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${subEquipment}
-        ></sub-equipment-editor>`
-    )}`;
-  }
-
   renderContentPane(): TemplateResult {
     return html`<mwc-icon slot="icon" style="width:24px;height:24px"
       >${getIcon(this.element)}</mwc-icon
@@ -95,7 +47,11 @@ export class ConductingEquipmentEditor extends LitElement {
   render(): TemplateResult {
     if (this.showfunctions)
       return html`<oscd-action-pane label="${this.name}"
-        >${this.renderContentPane()}${this.renderLNodes()}${this.renderEqFunctions()}${this.renderSubEquipments()}</oscd-action-pane
+        >${this.renderContentPane()}
+        ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+        ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
+        ${renderSubEquipments(this.element, this.editCount, this.showfunctions)}
+        </oscd-action-pane
         ></oscd-action-pane
       >`;
 
@@ -116,4 +72,23 @@ export class ConductingEquipmentEditor extends LitElement {
       border-bottom: none;
     }
   `;
+}
+
+export function renderConductingEquipments(
+  parent: Element,
+  editCount: number,
+  showfunctions: boolean
+): TemplateResult {
+  const ConductingEquipments = getChildElementsByTagName(
+    parent,
+    'ConductingEquipment'
+  );
+  return html` ${ConductingEquipments.map(
+    ConductingEquipment =>
+      html`<conducting-equipment-editor
+        .element=${ConductingEquipment}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></conducting-equipment-editor>`
+  )}`;
 }

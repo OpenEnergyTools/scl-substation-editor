@@ -1,5 +1,4 @@
 import { TemplateResult, css, html } from 'lit';
-import { classMap } from 'lit/directives/class-map.js';
 
 import './substation/general-equipment-editor.js';
 
@@ -9,35 +8,6 @@ export function getChildElementsByTagName(
 ): Element[] {
   if (!element || !tag) return [];
   return Array.from(element.children).filter(child => child.tagName === tag);
-}
-
-export function renderGeneralEquipment(
-  doc: XMLDocument,
-  element: Element,
-  showfunctions: boolean
-): TemplateResult {
-  const generalEquipment = getChildElementsByTagName(
-    element,
-    'GeneralEquipment'
-  );
-
-  return generalEquipment.length
-    ? html` <div
-        class="${classMap({
-          content: true,
-          actionicon: !showfunctions,
-        })}"
-      >
-        ${generalEquipment.map(
-          gEquipment =>
-            html`<general-equipment-editor
-              .doc=${doc}
-              .element=${gEquipment}
-              ?showfunctions=${showfunctions}
-            ></general-equipment-editor>`
-        )}
-      </div>`
-    : html``;
 }
 
 /** Common `CSS` styles used by substation subeditors */
@@ -89,7 +59,7 @@ export const styles = css`
     margin-top: 16px;
   }
 
-  powertransformer-editor[showfunctions] {
+  power-transformer-editor[showfunctions] {
     margin: 4px 8px 16px;
   }
 

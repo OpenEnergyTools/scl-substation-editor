@@ -3,10 +3,10 @@ import { LitElement, TemplateResult, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@openscd/oscd-action-pane';
-import './conducting-equipment-editor.js';
-import './function-editor.js';
-import './general-equipment-editor.js';
-import './l-node-editor.js';
+import { renderConductingEquipments } from './conducting-equipment-editor.js';
+import { renderFunctions } from './function-editor.js';
+import { renderGeneralEquipment } from './general-equipment-editor.js';
+import { renderLNodes } from './l-node-editor.js';
 
 import { getChildElementsByTagName, styles } from '../foundation.js';
 
@@ -35,74 +35,20 @@ export class LineEditor extends LitElement {
     return `${name} ${desc ? `—${desc}` : ''}`;
   }
 
-  private renderConductingEquipments(): TemplateResult {
-    const ConductingEquipments = getChildElementsByTagName(
-      this.element,
-      'ConductingEquipment'
-    );
-    return html` ${ConductingEquipments.map(
-      ConductingEquipment =>
-        html`<conducting-equipment-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${ConductingEquipment}
-          ?showfunctions=${this.showfunctions}
-        ></conducting-equipment-editor>`
-    )}`;
-  }
-
-  private renderGeneralEquipments(): TemplateResult {
-    const GeneralEquipments = getChildElementsByTagName(
-      this.element,
-      'GeneralEquipment'
-    );
-    return html` ${GeneralEquipments.map(
-      GeneralEquipment =>
-        html`<general-equipment-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${GeneralEquipment}
-          ?showfunctions=${this.showfunctions}
-        ></general-equipment-editor>`
-    )}`;
-  }
-
-  private renderFunctions(): TemplateResult {
-    if (!this.showfunctions) return html``;
-
-    const Functions = getChildElementsByTagName(this.element, 'Function');
-    return html` ${Functions.map(
-      Function =>
-        html`<function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${Function}
-          ?showfunctions=${this.showfunctions}
-        ></function-editor>`
-    )}`;
-  }
-
-  private renderLNodes(): TemplateResult {
-    if (!this.showfunctions) return html``;
-
-    const lNodes = getChildElementsByTagName(this.element, 'LNode');
-    return lNodes.length
-      ? html`<div class="container lnode">
-          ${lNodes.map(
-            lNode =>
-              html`<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`
-          )}
-        </div>`
-      : html``;
-  }
-
   render(): TemplateResult {
     return html`<oscd-action-pane label=${this.header}>
-      ${this.renderConductingEquipments()}${this.renderGeneralEquipments()}${this.renderFunctions()}${this.renderLNodes()}
+      ${renderConductingEquipments(
+        this.element,
+        this.editCount,
+        this.showfunctions
+      )}
+      ${renderGeneralEquipment(
+        this.element,
+        this.editCount,
+        this.showfunctions
+      )}
+      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
     </oscd-action-pane>`;
   }
 
@@ -118,4 +64,20 @@ export class LineEditor extends LitElement {
       border-bottom: none;
     }
   `;
+}
+
+export function renderLines(
+  parent: Element,
+  editCount: number,
+  showfunctions: boolean
+): TemplateResult {
+  const Lines = getChildElementsByTagName(parent, 'Line');
+  return html` ${Lines.map(
+    Line =>
+      html`<line-editor
+        .element=${Line}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></line-editor>`
+  )}`;
 }

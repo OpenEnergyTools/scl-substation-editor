@@ -1,14 +1,14 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable import/no-extraneous-dependencies */
 import { LitElement, TemplateResult, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@openscd/oscd-action-pane';
 import './sub-function-editor.js';
-import './general-equipment-editor.js';
-import {
-  getChildElementsByTagName,
-  renderGeneralEquipment,
-} from '../foundation.js';
+import { renderGeneralEquipment } from './general-equipment-editor.js';
+import { renderLNodes } from './l-node-editor.js';
+
+import { getChildElementsByTagName } from '../foundation.js';
 
 /** Pane rendering `SubFunction` element with its children */
 @customElement('sub-function-editor')
@@ -36,45 +36,20 @@ export class SubFunctionEditor extends LitElement {
     return `${name}${desc ? ` - ${desc}` : ''}${type ? ` (${type})` : ''}`;
   }
 
-  private renderLNodes(): TemplateResult {
-    const lNodes = getChildElementsByTagName(this.element, 'LNode');
-
-    return lNodes.length
-      ? html`<div class="container lnode">
-          ${lNodes.map(
-            lNode =>
-              html`<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`
-          )}
-        </div>`
-      : html``;
-  }
-
-  private renderSubFunctions(): TemplateResult {
-    const subfunctions = getChildElementsByTagName(this.element, 'SubFunction');
-    return html` ${subfunctions.map(
-      subFunction =>
-        html`<sub-function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${subFunction}
-          ?showfunctions=${this.showfunctions}
-        ></sub-function-editor>`
-    )}`;
-  }
-
   render(): TemplateResult {
     return html`<oscd-action-pane
       label="${this.header}"
       icon="functions"
       secondary
     >
-      ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
-      ${this.renderLNodes()}${this.renderSubFunctions()}</oscd-action-pane
-    >`;
+      ${renderGeneralEquipment(
+        this.element,
+        this.editCount,
+        this.showfunctions
+      )}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderSubFunctions(this.element, this.editCount, this.showfunctions)}
+    </oscd-action-pane>`;
   }
 
   static styles = css`
@@ -91,4 +66,20 @@ export class SubFunctionEditor extends LitElement {
       grid-template-columns: repeat(auto-fit, minmax(64px, auto));
     }
   `;
+}
+
+export function renderSubFunctions(
+  parent: Element,
+  editCount: number,
+  showfunctions: boolean
+): TemplateResult {
+  const subfunctions = getChildElementsByTagName(parent, 'SubFunction');
+  return html` ${subfunctions.map(
+    subFunction =>
+      html`<sub-function-editor
+        .element=${subFunction}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></sub-function-editor>`
+  )}`;
 }

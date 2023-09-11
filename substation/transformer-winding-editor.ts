@@ -4,9 +4,9 @@ import { customElement, property } from 'lit/decorators.js';
 
 import '@openscd/oscd-action-icon';
 import '@openscd/oscd-action-pane';
-import './eq-function-editor.js';
-import './l-node-editor.js';
 import './tapchanger-editor.js';
+import { renderLNodes } from './l-node-editor.js';
+import { renderEqFunctions } from './eq-function-editor.js';
 
 import { getChildElementsByTagName, styles } from '../foundation.js';
 
@@ -45,39 +45,6 @@ export class TransformerWindingEditor extends LitElement {
     return `${name}${description}`;
   }
 
-  private renderLNodes(): TemplateResult {
-    const lNodes = getChildElementsByTagName(this.element, 'LNode');
-
-    return lNodes.length
-      ? html`<div class="container lnode">
-          ${lNodes.map(
-            lNode =>
-              html`<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`
-          )}
-        </div>`
-      : html``;
-  }
-
-  private renderEqFunctions(): TemplateResult {
-    if (!this.showfunctions) return html``;
-    const eqFunctions = getChildElementsByTagName(this.element, 'EqFunction');
-    return eqFunctions.length
-      ? html` ${eqFunctions.map(
-          eqFunction =>
-            html`<eq-function-editor
-              .editCount=${this.editCount}
-              .doc=${this.doc}
-              .element=${eqFunction}
-              ?showfunctions=${this.showfunctions}
-            ></eq-function-editor>`
-        )}`
-      : html``;
-  }
-
   private renderTapChanger(): TemplateResult {
     if (!this.showfunctions) return html``;
     const tapChangers = getChildElementsByTagName(this.element, 'TapChanger');
@@ -96,7 +63,8 @@ export class TransformerWindingEditor extends LitElement {
 
   render(): TemplateResult {
     return html`<oscd-action-pane label="${this.label}">
-      ${this.renderLNodes()} ${this.renderEqFunctions()}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
       ${this.renderTapChanger()}
     </oscd-action-pane> `;
   }

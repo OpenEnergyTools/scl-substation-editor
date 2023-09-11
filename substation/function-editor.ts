@@ -3,13 +3,11 @@ import { LitElement, TemplateResult, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@openscd/oscd-action-pane';
-import './sub-function-editor.js';
-import './general-equipment-editor.js';
 
-import {
-  getChildElementsByTagName,
-  renderGeneralEquipment,
-} from '../foundation.js';
+import { renderGeneralEquipment } from './general-equipment-editor.js';
+import { renderLNodes } from './l-node-editor.js';
+import { renderSubFunctions } from './sub-function-editor.js';
+import { getChildElementsByTagName } from '../foundation.js';
 
 /** Pane rendering `Function` element with its children */
 @customElement('function-editor')
@@ -37,36 +35,6 @@ export class FunctionEditor extends LitElement {
     return `${name}${desc ? ` - ${desc}` : ''}${type ? ` (${type})` : ''}`;
   }
 
-  private renderLNodes(): TemplateResult {
-    const lNodes = getChildElementsByTagName(this.element, 'LNode');
-
-    return lNodes.length
-      ? html`<div class="container lnode">
-          ${lNodes.map(
-            lNode =>
-              html`<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`
-          )}
-        </div>`
-      : html``;
-  }
-
-  private renderSubFunctions(): TemplateResult {
-    const subfunctions = getChildElementsByTagName(this.element, 'SubFunction');
-    return html` ${subfunctions.map(
-      subFunction =>
-        html`<sub-function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${subFunction}
-          ?showfunctions=${this.showfunctions}
-        ></sub-function-editor>`
-    )}`;
-  }
-
   render(): TemplateResult {
     return html`<oscd-action-pane
       label="${this.header}"
@@ -74,11 +42,13 @@ export class FunctionEditor extends LitElement {
       secondary
       highlighted
       >${renderGeneralEquipment(
-        this.doc,
         this.element,
+        this.editCount,
         this.showfunctions
-      )}${this.renderLNodes()}${this.renderSubFunctions()}</oscd-action-pane
-    >`;
+      )}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderSubFunctions(this.element, this.editCount, this.showfunctions)}
+    </oscd-action-pane>`;
   }
 
   static styles = css`
@@ -95,4 +65,22 @@ export class FunctionEditor extends LitElement {
       grid-template-columns: repeat(auto-fit, minmax(64px, auto));
     }
   `;
+}
+
+export function renderFunctions(
+  parent: Element,
+  editCount: number,
+  showfunctions: boolean
+): TemplateResult {
+  if (showfunctions) return html``;
+
+  const functions = getChildElementsByTagName(parent, 'Function');
+  return html` ${functions.map(
+    fUnction =>
+      html`<function-editor
+        .element=${fUnction}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></function-editor>`
+  )}`;
 }

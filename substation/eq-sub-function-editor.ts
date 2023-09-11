@@ -1,14 +1,14 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable import/no-extraneous-dependencies */
 import { LitElement, TemplateResult, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@openscd/oscd-action-pane';
-import './general-equipment-editor.js';
 
-import {
-  getChildElementsByTagName,
-  renderGeneralEquipment,
-} from '../foundation.js';
+import { renderGeneralEquipment } from './general-equipment-editor.js';
+import { renderLNodes } from './l-node-editor.js';
+
+import { getChildElementsByTagName } from '../foundation.js';
 
 /** Pane rendering `EqSubFunction` element with its children */
 @customElement('eq-sub-function-editor')
@@ -36,47 +36,20 @@ export class EqSubFunctionEditor extends LitElement {
     return `${name}${desc ? ` - ${desc}` : ''}${type ? ` (${type})` : ''}`;
   }
 
-  private renderLNodes(): TemplateResult {
-    const lNodes = getChildElementsByTagName(this.element, 'LNode');
-
-    return lNodes.length
-      ? html`<div class="container lnode">
-          ${lNodes.map(
-            lNode =>
-              html`<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`
-          )}
-        </div>`
-      : html``;
-  }
-
-  private renderEqSubFunctions(): TemplateResult {
-    const eqSubFunctions = getChildElementsByTagName(
-      this.element,
-      'EqSubFunction'
-    );
-    return html` ${eqSubFunctions.map(
-      eqSubFunction =>
-        html`<eq-sub-function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${eqSubFunction}
-        ></eq-sub-function-editor>`
-    )}`;
-  }
-
   render(): TemplateResult {
     return html`<oscd-action-pane
       label="${this.header}"
       icon="functions"
       secondary
     >
-      ${renderGeneralEquipment(this.doc, this.element, this.showfunctions)}
-      ${this.renderLNodes()}${this.renderEqSubFunctions()}</oscd-action-pane
-    >`;
+      ${renderGeneralEquipment(
+        this.element,
+        this.editCount,
+        this.showfunctions
+      )}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderEqSubFunctions(this.element, this.editCount, this.showfunctions)}
+    </oscd-action-pane>`;
   }
 
   static styles = css`
@@ -93,4 +66,20 @@ export class EqSubFunctionEditor extends LitElement {
       grid-template-columns: repeat(auto-fit, minmax(64px, auto));
     }
   `;
+}
+
+export function renderEqSubFunctions(
+  parent: Element,
+  editCount: number,
+  showfunctions: boolean
+): TemplateResult {
+  const eqSubFunctions = getChildElementsByTagName(parent, 'EqSubFunction');
+  return html` ${eqSubFunctions.map(
+    eqSubFunction =>
+      html`<eq-sub-function-editor
+        .element=${eqSubFunction}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></eq-sub-function-editor>`
+  )}`;
 }

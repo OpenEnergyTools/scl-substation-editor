@@ -1,10 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { LitElement, TemplateResult, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
 
 import '@openscd/oscd-action-pane';
-import '../substation/eq-function-editor.js';
-import '../substation/l-node-editor.js';
+import { renderLNodes } from './l-node-editor.js';
+import { renderEqFunctions } from './eq-function-editor.js';
 
 import {
   generalConductingEquipmentIcon,
@@ -13,9 +14,6 @@ import {
 
 @customElement('general-equipment-editor')
 export class GeneralEquipmentEditor extends LitElement {
-  @property({ attribute: false })
-  doc!: XMLDocument;
-
   @property({ type: Number })
   editCount = -1;
 
@@ -36,42 +34,11 @@ export class GeneralEquipmentEditor extends LitElement {
     return `${name} ${desc ? `—  ${desc}` : ''}`;
   }
 
-  private renderLNodes(): TemplateResult {
-    const lNodes = getChildElementsByTagName(this.element, 'LNode');
-
-    return lNodes.length
-      ? html`<div class="container lnode">
-          ${lNodes.map(
-            lNode =>
-              html`<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`
-          )}
-        </div>`
-      : html``;
-  }
-
-  private renderEqFunctions(): TemplateResult {
-    const eFunctions = getChildElementsByTagName(this.element, 'EqFunction');
-
-    return eFunctions.length
-      ? html`${eFunctions.map(
-          eFunction =>
-            html` <eq-function-editor
-              .editCount=${this.editCount}
-              .doc=${this.doc}
-              .element=${eFunction}
-            ></eq-function-editor>`
-        )}`
-      : html``;
-  }
-
   render(): TemplateResult {
     if (this.showfunctions)
       return html`<oscd-action-pane label=${this.header}>
-        ${this.renderLNodes()} ${this.renderEqFunctions()}
+        ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+        ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
       </oscd-action-pane>`;
 
     return html`<oscd-action-icon label=${this.header}>
@@ -93,4 +60,33 @@ export class GeneralEquipmentEditor extends LitElement {
       grid-template-columns: repeat(auto-fit, minmax(64px, auto));
     }
   `;
+}
+
+export function renderGeneralEquipment(
+  parent: Element,
+  editCount: number,
+  showfunctions: boolean
+): TemplateResult {
+  const generalEquipment = getChildElementsByTagName(
+    parent,
+    'GeneralEquipment'
+  );
+
+  return generalEquipment.length
+    ? html` <div
+        class="${classMap({
+          content: true,
+          actionicon: !showfunctions,
+        })}"
+      >
+        ${generalEquipment.map(
+          gEquipment =>
+            html`<general-equipment-editor
+              .editCount=${editCount}
+              .element=${gEquipment}
+              ?showfunctions=${showfunctions}
+            ></general-equipment-editor>`
+        )}
+      </div>`
+    : html``;
 }

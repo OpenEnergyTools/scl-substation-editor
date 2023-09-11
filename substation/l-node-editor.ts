@@ -23,6 +23,7 @@ import {
   systemLogicalNode,
   transformerLogicalNode,
 } from './lnode.js';
+import { getChildElementsByTagName } from '../foundation.js';
 
 const lnClassIcons: Partial<Record<string, TemplateResult>> = {
   L: systemLogicalNode,
@@ -83,4 +84,26 @@ export class LNodeEditor extends LitElement {
       ><mwc-icon slot="icon">${getLNodeIcon(this.element)}</mwc-icon>
     </oscd-action-icon>`;
   }
+}
+
+export function renderLNodes(
+  parent: Element,
+  editCount: number,
+  showfunctions: boolean
+): TemplateResult {
+  if (!showfunctions) return html``;
+
+  const lNodes = getChildElementsByTagName(parent, 'LNode');
+
+  return lNodes.length
+    ? html`<div class="container lnode">
+        ${lNodes.map(
+          lNode =>
+            html`<l-node-editor
+              .editCount=${editCount}
+              .element=${lNode}
+            ></l-node-editor>`
+        )}
+      </div>`
+    : html``;
 }

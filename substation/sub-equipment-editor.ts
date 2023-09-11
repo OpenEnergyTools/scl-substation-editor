@@ -4,9 +4,8 @@ import { customElement, property } from 'lit/decorators.js';
 
 import '@openscd/oscd-action-icon';
 import '@openscd/oscd-action-pane';
-import './l-node-editor.js';
-import './eq-function-editor.js';
-
+import { renderLNodes } from './l-node-editor.js';
+import { renderEqFunctions } from './eq-function-editor.js';
 import { getChildElementsByTagName } from '../foundation.js';
 
 /** [[`SubstationEditor`]] subeditor for a child-less `SubEquipment` element. */
@@ -47,40 +46,10 @@ export class SubEquipmentEditor extends LitElement {
     return `${name}${description}${phase}`;
   }
 
-  private renderLNodes(): TemplateResult {
-    const lNodes = getChildElementsByTagName(this.element, 'LNode');
-
-    return lNodes.length
-      ? html`<div class="container lnode">
-          ${lNodes.map(
-            lNode =>
-              html`<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`
-          )}
-        </div>`
-      : html``;
-  }
-
-  private renderEqFunctions(): TemplateResult {
-    const eqFunctions = getChildElementsByTagName(this.element, 'EqFunction');
-    return eqFunctions.length
-      ? html` ${eqFunctions.map(
-          eqFunction =>
-            html`<eq-function-editor
-              .editCount=${this.editCount}
-              .doc=${this.doc}
-              .element=${eqFunction}
-            ></eq-function-editor>`
-        )}`
-      : html``;
-  }
-
   render(): TemplateResult {
     return html`<oscd-action-pane label="${this.label}">
-      ${this.renderLNodes()} ${this.renderEqFunctions()}
+      ${renderLNodes(this.element, this.editCount, false)}
+      ${renderEqFunctions(this.element, this.editCount, true)}
     </oscd-action-pane> `;
   }
 
@@ -98,4 +67,21 @@ export class SubEquipmentEditor extends LitElement {
       grid-template-columns: repeat(auto-fit, minmax(64px, auto));
     }
   `;
+}
+
+export function renderSubEquipments(
+  parent: Element,
+  editCount: number,
+  showfunctions: boolean
+): TemplateResult {
+  if (!showfunctions) return html``;
+  const subEquipments = getChildElementsByTagName(parent, 'SubEquipment');
+
+  return html` ${subEquipments.map(
+    subEquipment =>
+      html`<sub-equipment-editor
+        .editCount=${editCount}
+        .element=${subEquipment}
+      ></sub-equipment-editor>`
+  )}`;
 }

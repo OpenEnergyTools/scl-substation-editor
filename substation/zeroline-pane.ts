@@ -4,9 +4,9 @@ import { customElement, property } from 'lit/decorators.js';
 
 import '@material/mwc-icon-button-toggle';
 
-// import './line-editor.js';
-// import './process-editor.js';
-import './substation-editor.js';
+import { renderLines } from './line-editor.js';
+import { renderProcesses } from './process-editor.js';
+import { renderSubstations } from './substation-editor.js';
 
 function shouldShowFunctions(): boolean {
   return localStorage.getItem('showfunctions') === 'on';
@@ -36,54 +36,16 @@ export class ZerolinePane extends LitElement {
     // eslint-disable-next-line no-nested-ternary
     return this.doc?.querySelector(':root > Substation')
       ? html`<section>
-          ${Array.from(
-            this.doc.querySelectorAll(':root > Substation') ?? []
-          ).map(
-            substation =>
-              html`<substation-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${substation}
-                ?showfunctions=${shouldShowFunctions()}
-              ></substation-editor>`
+          ${renderSubstations(
+            this.doc.querySelector('SCL')!,
+            this.editCount,
+            shouldShowFunctions()
           )}
         </section>`
       : !this.doc?.querySelector(':root > Line, :root > Process')
       ? html`<h1>
-          <span style="color: var(--oscd-base1)">Substation Missing</span>
+          <span style="color: var(--oscd-theme-base1)">Substation Missing</span>
         </h1>`
-      : html``;
-  }
-
-  renderLines(): TemplateResult {
-    return this.doc?.querySelector(':root > Line')
-      ? html`<section>
-          ${Array.from(this.doc.querySelectorAll('Line') ?? []).map(
-            line =>
-              html`<line-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${line}
-                ?showfunctions=${shouldShowFunctions()}
-              ></line-editor>`
-          )}
-        </section>`
-      : html``;
-  }
-
-  renderProcesses(): TemplateResult {
-    return this.doc?.querySelector(':root > Process')
-      ? html`<section>
-          ${Array.from(this.doc.querySelectorAll(':root > Process') ?? []).map(
-            process =>
-              html`<process-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${process}
-                ?showfunctions=${shouldShowFunctions()}
-              ></process-editor>`
-          )}
-        </section>`
       : html``;
   }
 
@@ -101,7 +63,21 @@ export class ZerolinePane extends LitElement {
           </abbr>
         </nav>
       </h1>
-      ${this.renderSubstation()}${this.renderLines()}${this.renderProcesses()}`;
+      ${this.renderSubstation()}
+      ${this.doc.querySelector('SCL')
+        ? renderLines(
+            this.doc.querySelector('SCL')!,
+            this.editCount,
+            shouldShowFunctions()
+          )
+        : html``}
+      ${this.doc.querySelector('SCL')
+        ? renderProcesses(
+            this.doc.querySelector('SCL')!,
+            this.editCount,
+            shouldShowFunctions()
+          )
+        : html``}`;
   }
 
   static styles = css`

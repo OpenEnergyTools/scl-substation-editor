@@ -1,16 +1,17 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable import/no-extraneous-dependencies */
 import { LitElement, TemplateResult, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@openscd/oscd-action-pane';
-import './conducting-equipment-editor.js';
-import './function-editor.js';
-import './general-equipment-editor.js';
-import './l-node-editor.js';
-import './line-editor.js';
-import './substation-editor.js';
+import { renderConductingEquipments } from './conducting-equipment-editor.js';
+import { renderFunctions } from './function-editor.js';
+import { renderGeneralEquipment } from './general-equipment-editor.js';
+import { renderLines } from './line-editor.js';
+import { renderLNodes } from './l-node-editor.js';
+import { renderSubstations } from './substation-editor.js';
 
-import { getChildElementsByTagName, styles } from '../foundation.js';
+import { styles } from '../foundation.js';
 
 @customElement('process-editor')
 export class ProcessEditor extends LitElement {
@@ -37,114 +38,23 @@ export class ProcessEditor extends LitElement {
     return `${name} ${desc ? `—${desc}` : ''}`;
   }
 
-  private renderConductingEquipments(): TemplateResult {
-    const ConductingEquipments = getChildElementsByTagName(
-      this.element,
-      'ConductingEquipment'
-    );
-    return html` ${ConductingEquipments.map(
-      ConductingEquipment =>
-        html`<conducting-equipment-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${ConductingEquipment}
-          ?showfunctions=${this.showfunctions}
-        ></conducting-equipment-editor>`
-    )}`;
-  }
-
-  private renderGeneralEquipments(): TemplateResult {
-    const GeneralEquipments = getChildElementsByTagName(
-      this.element,
-      'GeneralEquipment'
-    );
-    return html` ${GeneralEquipments.map(
-      GeneralEquipment =>
-        html`<general-equipment-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${GeneralEquipment}
-          ?showfunctions=${this.showfunctions}
-        ></general-equipment-editor>`
-    )}`;
-  }
-
-  private renderLines(): TemplateResult {
-    const Lines = getChildElementsByTagName(this.element, 'Line');
-    return html` ${Lines.map(
-      Line =>
-        html`<line-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${Line}
-          ?showfunctions=${this.showfunctions}
-        ></line-editor>`
-    )}`;
-  }
-
-  private renderSubstations(): TemplateResult {
-    const Substations = getChildElementsByTagName(this.element, 'Substation');
-    return html` ${Substations.map(
-      Substation =>
-        html`<substation-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${Substation}
-          ?showfunctions=${this.showfunctions}
-        ></substation-editor>`
-    )}`;
-  }
-
-  private renderProcesses(): TemplateResult {
-    const Processes = getChildElementsByTagName(this.element, 'Process');
-    return html` ${Processes.map(
-      Process =>
-        html`<process-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${Process}
-          ?showfunctions=${this.showfunctions}
-        ></process-editor>`
-    )}`;
-  }
-
-  private renderFunctions(): TemplateResult {
-    if (!this.showfunctions) return html``;
-
-    const Functions = getChildElementsByTagName(this.element, 'Function');
-    return html` ${Functions.map(
-      Function =>
-        html`<function-editor
-          .editCount=${this.editCount}
-          .doc=${this.doc}
-          .element=${Function}
-          ?showfunctions=${this.showfunctions}
-        ></function-editor>`
-    )}`;
-  }
-
-  private renderLNodes(): TemplateResult {
-    if (!this.showfunctions) return html``;
-
-    const lNodes = getChildElementsByTagName(this.element, 'LNode');
-    return lNodes.length
-      ? html`<div class="container lnode">
-          ${lNodes.map(
-            lNode =>
-              html`<l-node-editor
-                .editCount=${this.editCount}
-                .doc=${this.doc}
-                .element=${lNode}
-              ></l-node-editor>`
-          )}
-        </div>`
-      : html``;
-  }
-
   render(): TemplateResult {
     return html`<oscd-action-pane label=${this.header}>
-      ${this.renderConductingEquipments()}${this.renderGeneralEquipments()}${this.renderFunctions()}${this.renderLNodes()}
-      ${this.renderLines()} ${this.renderSubstations()}${this.renderProcesses()}
+      ${renderConductingEquipments(
+        this.element,
+        this.editCount,
+        this.showfunctions
+      )}
+      ${renderGeneralEquipment(
+        this.element,
+        this.editCount,
+        this.showfunctions
+      )}
+      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderLines(this.element, this.editCount, this.showfunctions)}
+      ${renderSubstations(this.element, this.editCount, this.showfunctions)}
+      ${renderProcesses(this.element, this.editCount, this.showfunctions)}
     </oscd-action-pane>`;
   }
 
@@ -160,4 +70,25 @@ export class ProcessEditor extends LitElement {
       border-bottom: none;
     }
   `;
+}
+
+export function renderProcesses(
+  parent: Element,
+  editCount: number,
+  showfunctions: boolean
+): TemplateResult {
+  const processes = parent.querySelectorAll(':root > Process');
+
+  return processes.length
+    ? html`<section>
+        ${Array.from(processes).map(
+          process =>
+            html`<process-editor
+              .element=${process}
+              .editCount=${editCount}
+              ?showfunctions=${showfunctions}
+            ></process-editor>`
+        )}
+      </section>`
+    : html``;
 }
