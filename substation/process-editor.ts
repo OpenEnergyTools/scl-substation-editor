@@ -26,6 +26,12 @@ export class ProcessEditor extends BaseSubstationElementEditor {
 
   render(): TemplateResult {
     return html`<oscd-action-pane label=${this.header}>
+      <abbr slot="action" title="Edit">
+        <mwc-icon-button
+          icon="edit"
+          @click=${() => this.openEditWizard()}
+        ></mwc-icon-button>
+      </abbr>
       <abbr slot="action" title="Remove">
         <mwc-icon-button
           icon="delete"

@@ -31,8 +31,14 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
   }
 
   renderContentIcon(): TemplateResult {
-    return html`<mwc-icon slot="icon">${getIcon(this.element)}</mwc-icon
-      ><mwc-fab
+    return html`<mwc-icon slot="icon">${getIcon(this.element)}</mwc-icon>
+      <mwc-fab
+        slot="action"
+        mini
+        icon="edit"
+        @click="${() => this.openEditWizard()}"
+      ></mwc-fab>
+      <mwc-fab
         slot="action"
         mini
         icon="delete"
@@ -43,7 +49,19 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
   render(): TemplateResult {
     if (this.showfunctions)
       return html`<oscd-action-pane label="${this.name}"
-        ><abbr slot="action" title="Remove">
+        ><abbr slot="action" title="Edit">
+          <mwc-icon-button
+            icon="edit"
+            @click=${() => this.openEditWizard()}
+          ></mwc-icon-button>
+        </abbr>
+        <abbr slot="action" title="Edit">
+        <mwc-icon-button
+          icon="edit"
+          @click=${() => this.openEditWizard()}
+        ></mwc-icon-button>
+      </abbr>
+      <abbr slot="action" title="Remove">
         <mwc-icon-button
           icon="delete"
           @click=${() => this.removeElement()}

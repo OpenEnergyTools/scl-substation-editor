@@ -1,8 +1,8 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import '@openscd/oscd-action-pane';
 
 import './power-transformer-editor.js';
@@ -26,8 +26,14 @@ export class BayEditor extends BaseSubstationElementEditor {
   }
 
   render(): TemplateResult {
-    return html`<oscd-action-pane label="${this.header}"
-      ><abbr slot="action" title="Remove">
+    return html`<oscd-action-pane label="${this.header}">
+      <abbr slot="action" title="Edit">
+        <mwc-icon-button
+          icon="edit"
+          @click=${() => this.openEditWizard()}
+        ></mwc-icon-button>
+      </abbr>
+      <abbr slot="action" title="Remove">
         <mwc-icon-button
           icon="delete"
           @click=${() => this.removeElement()}

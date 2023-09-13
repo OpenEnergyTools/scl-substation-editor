@@ -63,6 +63,12 @@ export class PowerTransformerEditor extends BaseSubstationElementEditor {
       ><mwc-fab
         slot="action"
         mini
+        icon="edit"
+        @click="${() => this.openEditWizard()}"
+      ></mwc-fab>
+      <mwc-fab
+        slot="action"
+        mini
         icon="delete"
         @click="${() => this.removeElement()}"
       ></mwc-fab> `;
@@ -71,6 +77,12 @@ export class PowerTransformerEditor extends BaseSubstationElementEditor {
   render(): TemplateResult {
     if (this.showfunctions)
       return html`<oscd-action-pane label="${this.name}">
+        <abbr slot="action" title="Edit">
+          <mwc-icon-button
+            icon="edit"
+            @click=${() => this.openEditWizard()}
+          ></mwc-icon-button>
+        </abbr>
         <abbr slot="action" title="Remove">
           <mwc-icon-button
             icon="delete"

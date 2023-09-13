@@ -28,6 +28,12 @@ export class EqFunctionEditor extends BaseSubstationElementEditor {
       icon="functions"
       secondary
       highlighted
+    >
+      <abbr slot="action" title="Edit">
+        <mwc-icon-button
+          icon="edit"
+          @click=${() => this.openEditWizard()}
+        ></mwc-icon-button> </abbr
       ><abbr slot="action" title="Remove">
         <mwc-icon-button
           icon="delete"
