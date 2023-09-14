@@ -25,6 +25,8 @@
     "@material/mwc-icon": "^0.27.0",
     "@material/mwc-icon-button": "^0.27.0",
     "@material/mwc-icon-button-toggle": "^0.27.0",
+    "@material/mwc-menu": "^0.27.0",
+    "@openenergytools/scl-lib": "^0.5.9",
     "@openscd/oscd-action-icon": "^1.0.0",
     "@openscd/oscd-action-pane": "^1.0.1",
     "lit": "^2.4.0"
@@ -34,7 +36,7 @@
     "@open-wc/building-rollup": "^2.0.2",
     "@open-wc/eslint-config": "^8.0.2",
     "@open-wc/testing": "^3.1.6",
-    "@openscd/open-scd-core": "^0.0.1-rc2.8",
+    "@openscd/open-scd-core": "^0.0.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.41.0",

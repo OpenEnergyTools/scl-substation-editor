@@ -38,6 +38,7 @@ export class ProcessEditor extends BaseSubstationElementEditor {
           @click=${() => this.removeElement()}
         ></mwc-icon-button
       ></abbr>
+      ${this.renderAddButton()}
       ${renderConductingEquipments(
         this.element,
         this.editCount,

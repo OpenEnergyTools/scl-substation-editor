@@ -61,6 +61,7 @@ export class TransformerWindingEditor extends BaseSubstationElementEditor {
           @click=${() => this.removeElement()}
         ></mwc-icon-button>
       </abbr>
+      ${this.renderAddButton()}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
       ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
       ${this.renderTapChanger()}

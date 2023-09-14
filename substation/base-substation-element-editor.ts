@@ -1,9 +1,21 @@
-import { LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
+/* eslint-disable import/no-extraneous-dependencies */
+import { LitElement, TemplateResult, html } from 'lit';
+import { property, query } from 'lit/decorators.js';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { newEditEvent } from '@openscd/open-scd-core';
-import { newEditWizardEvent } from '../foundation.js';
+import { getChildren } from '@openenergytools/scl-lib';
+
+import '@material/mwc-icon-button';
+import type { IconButton } from '@material/mwc-icon-button';
+import type { ListItem } from '@material/mwc-list/mwc-list-item';
+import type { Menu } from '@material/mwc-menu';
+
+import { newCreateWizardEvent, newEditWizardEvent } from '../foundation.js';
+
+function childTags(element: Element | null | undefined): string[] {
+  if (!element) return [];
+  return getChildren(element);
+}
 
 /** base class hosting global properties and the remove method */
 export default class BaseSubstationElementEditor extends LitElement {
@@ -19,6 +31,14 @@ export default class BaseSubstationElementEditor extends LitElement {
   @property({ type: Boolean })
   showfunctions = false;
 
+  @query('mwc-menu') addMenu!: Menu;
+
+  @query('mwc-icon-button[icon="playlist_add"]') addButton!: IconButton;
+
+  private openCreateWizard(tagName: string): void {
+    this.dispatchEvent(newCreateWizardEvent(this.element, tagName));
+  }
+
   openEditWizard(): void {
     this.dispatchEvent(newEditWizardEvent(this.element));
   }
@@ -29,5 +49,38 @@ export default class BaseSubstationElementEditor extends LitElement {
         node: this.element,
       })
     );
+  }
+
+  updated(): void {
+    this.addMenu.anchor = <HTMLElement>this.addButton;
+  }
+
+  private renderAddButtons(): TemplateResult[] {
+    return childTags(this.element).map(
+      child =>
+        html`<mwc-list-item value="${child}"
+          ><span>${child}</span></mwc-list-item
+        >`
+    );
+  }
+
+  renderAddButton(): TemplateResult {
+    return html` <abbr slot="action" style="position:relative;">
+      <mwc-icon-button
+        icon="playlist_add"
+        @click=${() => {
+          this.addMenu.open = true;
+        }}
+      ></mwc-icon-button
+      ><mwc-menu
+        corner="BOTTOM_RIGHT"
+        menuCorner="END"
+        @action=${(e: Event) => {
+          const tagName = (<ListItem>(<Menu>e.target).selected).value;
+          this.openCreateWizard(tagName);
+        }}
+        >${this.renderAddButtons()}</mwc-menu
+      >
+    </abbr>`;
   }
 }

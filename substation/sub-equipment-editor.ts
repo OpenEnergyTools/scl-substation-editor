@@ -51,6 +51,7 @@ export class SubEquipmentEditor extends BaseSubstationElementEditor {
           @click=${() => this.removeElement()}
         ></mwc-icon-button>
       </abbr>
+      ${this.renderAddButton()}
       ${renderLNodes(this.element, this.editCount, false)}
       ${renderEqFunctions(this.element, this.editCount, true)}
     </oscd-action-pane> `;

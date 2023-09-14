@@ -49,6 +49,7 @@ export class VoltageLevelEditor extends BaseSubstationElementEditor {
           @click=${() => this.removeElement()}
         ></mwc-icon-button>
       </abbr>
+      ${this.renderAddButton()}
       ${renderGeneralEquipment(
         this.element,
         this.editCount,

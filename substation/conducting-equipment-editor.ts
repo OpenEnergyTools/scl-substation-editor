@@ -66,7 +66,9 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
           icon="delete"
           @click=${() => this.removeElement()}
         ></mwc-icon-button>
-      </abbr>${this.renderContentPane()}
+      </abbr>
+      ${this.renderAddButton()}
+      ${this.renderContentPane()}
         ${renderLNodes(this.element, this.editCount, this.showfunctions)}
         ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
         ${renderSubEquipments(this.element, this.editCount, this.showfunctions)}
