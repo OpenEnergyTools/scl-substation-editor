@@ -104,13 +104,13 @@ export class PowerTransformerEditor extends BaseSubstationElementEditor {
   static styles = css`
     ${styles}
 
-    :host(.moving) {
-      opacity: 0.3;
-    }
-
     abbr {
       text-decoration: none;
       border-bottom: none;
+    }
+
+    transformer-winding-editor[showfunctions] {
+      margin: 4px 8px 16px;
     }
   `;
 }

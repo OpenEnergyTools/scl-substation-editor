@@ -48,19 +48,13 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
 
   render(): TemplateResult {
     if (this.showfunctions)
-      return html`<oscd-action-pane label="${this.name}"
-        ><abbr slot="action" title="Edit">
+      return html`<oscd-action-pane label="${this.name}">
+      <abbr slot="action" title="Edit">
           <mwc-icon-button
             icon="edit"
             @click=${() => this.openEditWizard()}
           ></mwc-icon-button>
         </abbr>
-        <abbr slot="action" title="Edit">
-        <mwc-icon-button
-          icon="edit"
-          @click=${() => this.openEditWizard()}
-        ></mwc-icon-button>
-      </abbr>
       <abbr slot="action" title="Remove">
         <mwc-icon-button
           icon="delete"
@@ -83,10 +77,6 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
 
   static styles = css`
     ${styles}
-
-    :host(.moving) {
-      opacity: 0.3;
-    }
 
     abbr {
       text-decoration: none;

@@ -79,7 +79,7 @@ export class LNodeEditor extends BaseSubstationElementEditor {
       <mwc-fab
         slot="action"
         mini
-        icon="delete"
+        icon="edit"
         @click="${() => this.openEditWizard()}"
       ></mwc-fab>
       <mwc-fab

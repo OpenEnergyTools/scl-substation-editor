@@ -60,10 +60,6 @@ export class ProcessEditor extends BaseSubstationElementEditor {
   static styles = css`
     ${styles}
 
-    :host(.moving) {
-      opacity: 0.3;
-    }
-
     abbr {
       text-decoration: none;
       border-bottom: none;
