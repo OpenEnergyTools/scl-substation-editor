@@ -31,7 +31,7 @@ export default class BaseSubstationElementEditor extends LitElement {
   @property({ type: Boolean })
   showfunctions = false;
 
-  @query('mwc-menu') addMenu!: Menu;
+  @query('mwc-menu') addMenu?: Menu;
 
   @query('mwc-icon-button[icon="playlist_add"]') addButton!: IconButton;
 
@@ -52,7 +52,7 @@ export default class BaseSubstationElementEditor extends LitElement {
   }
 
   updated(): void {
-    this.addMenu.anchor = <HTMLElement>this.addButton;
+    if (this.addMenu) this.addMenu.anchor = <HTMLElement>this.addButton;
   }
 
   private renderAddButtons(): TemplateResult[] {
@@ -69,7 +69,7 @@ export default class BaseSubstationElementEditor extends LitElement {
       <mwc-icon-button
         icon="playlist_add"
         @click=${() => {
-          this.addMenu.open = true;
+          if (this.addMenu) this.addMenu.open = true;
         }}
       ></mwc-icon-button
       ><mwc-menu
