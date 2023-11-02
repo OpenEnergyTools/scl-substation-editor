@@ -6,7 +6,8 @@
   "menu": 
   [
     {"name": "Open File", "translations": {"de": "Datei öffnen"}, "icon": "folder_open", "active": true, "src": "https://openscd.github.io/oscd-open/oscd-open.js"}, 
-    {"name": "Save File", "translations": {"de": "Datei speichern"}, "icon": "save", "active": true, "src": "https://openscd.github.io/oscd-save.js"}
+    {"name": "Save File", "translations": {"de": "Datei speichern"}, "icon": "save", "active": true, "src": "https://openscd.github.io/oscd-save/oscd-save.js"},
+    {"name": "Wizarding", "translations": {"de": "Wizarding"}, "icon": "publish", "active": true, "src": "https://openenergytools.github.io/scl-wizarding/scl-wizarding.js"}
   ],
   "editor": 
   [
@@ -23,6 +24,18 @@ for (const [name, value] of params) {
 editor.setAttribute(name, value);
 }
 </script>
+
+<script>
+  const _customElementsDefine = window.customElements.define;
+  window.customElements.define = (name, cl, conf) => {
+    if (!customElements.get(name)) {
+      try {
+        _customElementsDefine.call(window.customElements, name, cl, conf);
+      } catch (e) { console.warn(e); }
+    }
+  };
+</script>
+
 <style>
 * {
   margin: 0px;
