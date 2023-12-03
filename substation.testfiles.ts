@@ -38,6 +38,16 @@ export const substationDoc = `<SCL>
                         </SubFunction>
                     </SubFunction>
                 </Function>
+                <Function name="func2" >
+                    <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
+                    <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
+                    <GeneralEquipment name="genEquip1" desc="desc" />
+                    <GeneralEquipment name="genEquip2" />
+                    <ConductingEquipment name="condEquip1" desc="desc" type="CBR" />
+                    <ConductingEquipment name="condEquip2" type="DIS" />
+                    <SubFunction name="subSubFunc3" />
+                    <SubFunction name="subSubFunc4" />
+                </Function>
                 <ConductingEquipment name="QA1" desc="desc" type="CBR" >
                     <EqFunction name="eqFunc1" desc="desc" type="type">
                         <EqSubFunction name="Trip" desc="" >
