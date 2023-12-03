@@ -39,7 +39,7 @@ export const substationDoc = `<SCL>
                     </SubFunction>
                 </Function>
                 <ConductingEquipment name="QA1" desc="desc" type="CBR" >
-                    <EqFunction name="eqFunc" desc="">
+                    <EqFunction name="eqFunc1" desc="desc" type="type">
                         <EqSubFunction name="Trip" desc="" >
                             <LNode iedName="IED1" ldInst="ldInst" lnClass="XCBR" lnInst="1" />
                             <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
@@ -54,6 +54,18 @@ export const substationDoc = `<SCL>
                             <EqSubFunction name="tripC" type="type" >
                             </EqSubFunction>
                         </EqSubFunction>
+                        <EqSubFunction name="Start" >
+                        </EqSubFunction>
+                    </EqFunction>
+                </ConductingEquipment>
+                <ConductingEquipment name="Qb1" type="DIS" >
+                    <EqFunction name="eqFunc2" >
+                        <LNode iedName="IED1" ldInst="ldInst" lnClass="CSWI" lnInst="1" />
+                        <LNode iedName="IED1" ldInst="ldInst" lnClass="CILO" lnInst="1" />
+                        <GeneralEquipment name="someGenEquipment1" desc="desc" />
+                        <GeneralEquipment name="someGenEquipment2" />
+                        <EqSubFunction name="interlock" desc="desc" />
+                        <EqSubFunction name="control" type="type" desc="desc" />
                     </EqFunction>
                 </ConductingEquipment>
             </Bay>
