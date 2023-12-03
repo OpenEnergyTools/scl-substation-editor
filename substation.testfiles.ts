@@ -20,19 +20,19 @@ export const substationDoc = `<SCL>
         <LNode iedName="IED1" ldInst="ldInst" prefix="prefix" lnClass="PTOC" lnInst="1" />
         <VoltageLevel name="E1" >
             <Bay name="Q01" >
-                <Function name="SomeFunction" >
-                    <SubFunction name="SomeSubFunction1" >
+                <Function name="func1" >
+                    <SubFunction name="subFunc1" >
                         <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
                         <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
-                        <GeneralEquipment name="someGenEquipment1" desc="desc" >
-                        </GeneralEquipment>
-                        <GeneralEquipment name="someGenEquipment2" >
-                        </GeneralEquipment>
-                        <SubFunction name="subSubFunction1" desc="desc" type="type" >
+                        <GeneralEquipment name="genEquip1" desc="desc" />
+                        <GeneralEquipment name="genEquip2" />
+                        <ConductingEquipment name="condEquip1" desc="desc" type="CBR" />
+                        <ConductingEquipment name="condEquip2" type="DIS" />
+                        <SubFunction name="subSubFunc1" desc="desc" type="type" >
                             <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
                             <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
                         </SubFunction>
-                        <SubFunction name="subSubFunction2" desc="desc" type="type" >
+                        <SubFunction name="subSubFunc2" >
                             <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
                             <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
                         </SubFunction>

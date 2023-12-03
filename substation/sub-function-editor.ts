@@ -5,6 +5,7 @@ import { customElement, state } from 'lit/decorators.js';
 
 import '@openscd/oscd-action-pane';
 import './sub-function-editor.js';
+import { renderConductingEquipments } from './conducting-equipment-editor.js';
 import { renderGeneralEquipment } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 
@@ -30,23 +31,30 @@ export class SubFunctionEditor extends BaseSubstationElementEditor {
       secondary
       ><abbr slot="action" title="Edit">
         <mwc-icon-button
+          class="action edit"
           icon="edit"
           @click=${() => this.openEditWizard()}
         ></mwc-icon-button>
       </abbr>
       <abbr slot="action" title="Remove">
         <mwc-icon-button
+          class="action remove"
           icon="delete"
           @click=${() => this.removeElement()}
         ></mwc-icon-button>
       </abbr>
       ${this.renderAddButton()}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
       ${renderGeneralEquipment(
         this.element,
         this.editCount,
         this.showfunctions
       )}
-      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderConductingEquipments(
+        this.element,
+        this.editCount,
+        this.showfunctions
+      )}
       ${renderSubFunctions(this.element, this.editCount, this.showfunctions)}
     </oscd-action-pane>`;
   }
@@ -55,6 +63,14 @@ export class SubFunctionEditor extends BaseSubstationElementEditor {
     abbr {
       text-decoration: none;
       border-bottom: none;
+    }
+
+    .content.actionicon {
+      display: grid;
+      grid-gap: 12px;
+      padding: 8px 12px 16px;
+      box-sizing: border-box;
+      grid-template-columns: repeat(auto-fit, minmax(64px, auto));
     }
 
     .container.lnode {

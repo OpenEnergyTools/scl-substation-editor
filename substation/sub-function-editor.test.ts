@@ -5,12 +5,12 @@ import { sendMouse, setViewport } from '@web/test-runner-commands';
 
 import { visualDiff } from '@web/test-runner-visual-regression';
 
-import { substationDoc } from '../substation.testfiles.js';
-
 import { baseStyle } from './base-visual.js';
 
-import './general-equipment-editor.js';
-import type { GeneralEquipmentEditor } from './general-equipment-editor.js';
+import { substationDoc } from '../substation.testfiles.js';
+
+import './sub-function-editor.js';
+import type { SubFunctionEditor } from './sub-function-editor.js';
 
 const factor = window.process && process.env.CI ? 4 : 2;
 function timeout(ms: number) {
@@ -24,21 +24,21 @@ const style = document.createElement('style');
 style.textContent = baseStyle;
 document.body.prepend(style);
 
-describe('Component for SCL element GeneralEquipment ', () => {
+describe('Component for SCL element SubFunction ', () => {
   describe('with add menu open', () => {
-    let editor: GeneralEquipmentEditor;
+    let editor: SubFunctionEditor;
     beforeEach(async () => {
       const subFunc = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
-        .querySelector(`GeneralEquipment`)!;
+        .querySelector(`SubFunction[name="subFunc1"]`)!;
 
       editor = await fixture(
-        html`<general-equipment-editor
+        html`<sub-function-editor
           .element=${subFunc}
           ?showfunctions=${true}
-        ></general-equipment-editor>`
+        ></sub-function-editor>`
       );
-      document.body.style.width = '400';
+      document.body.style.width = '540';
       document.body.style.height = '400';
       editor.style.position = 'absolute';
       editor.style.top = '20';
@@ -51,70 +51,30 @@ describe('Component for SCL element GeneralEquipment ', () => {
     });
 
     it('looks like the latest snapshot', async () => {
-      await setViewport({ width: 400, height: 400 });
-      await sendMouse({ type: 'click', position: [360, 20] });
+      await setViewport({ width: 800, height: 900 });
+      await sendMouse({ type: 'click', position: [530, 20] });
 
       await editor.updateComplete;
-      await timeout(400);
+      await timeout(600);
       await visualDiff(
         document.body,
-        `general-equipment-editor/#1 add menu visible`
+        `sub-function-editor/#1 add menu visible`
       );
     });
   });
 
   describe('with showfunction false', () => {
-    let editor: GeneralEquipmentEditor;
+    let editor: SubFunctionEditor;
     beforeEach(async () => {
       const subFunc = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
-        .querySelector(`GeneralEquipment[name="someGenEquip2"]`)!;
+        .querySelector(`SubFunction[name="subFunc1"]`)!;
 
       editor = await fixture(
-        html`<general-equipment-editor
-          .element=${subFunc}
-        ></general-equipment-editor>`
+        html`<sub-function-editor .element=${subFunc}></sub-function-editor>`
       );
-      document.body.style.width = '200';
-      document.body.style.height = '200';
-      editor.style.position = 'absolute';
-      editor.style.top = '80';
-      editor.style.left = '50';
-      document.body.prepend(editor);
-    });
-
-    afterEach(async () => {
-      editor.remove();
-    });
-
-    it('looks like the latest snapshot', async () => {
-      await setViewport({ width: 100, height: 100 });
-      await sendMouse({ type: 'click', position: [50, 80] });
-
-      await editor.updateComplete;
-      await timeout(400);
-      await visualDiff(
-        document.body,
-        `general-equipment-editor/#2 Unfocused with showfunction=false`
-      );
-    });
-  });
-
-  describe('with showfunction true', () => {
-    let editor: GeneralEquipmentEditor;
-    beforeEach(async () => {
-      const lNode = new DOMParser()
-        .parseFromString(substationDoc, 'application/xml')
-        .querySelector(`GeneralEquipment[name="someGenEquip2"]`)!;
-
-      editor = await fixture(
-        html`<general-equipment-editor
-          .element=${lNode}
-          ?showfunctions=${true}
-        ></general-equipment-editor>`
-      );
-      document.body.style.width = '500';
-      document.body.style.height = '400';
+      document.body.style.width = '600';
+      document.body.style.height = '600';
       editor.style.position = 'absolute';
       editor.style.top = '20';
       editor.style.left = '20';
@@ -126,14 +86,52 @@ describe('Component for SCL element GeneralEquipment ', () => {
     });
 
     it('looks like the latest snapshot', async () => {
-      await setViewport({ width: 500, height: 400 });
+      await setViewport({ width: 600, height: 600 });
+      await sendMouse({ type: 'click', position: [50, 80] });
+
+      await editor.updateComplete;
+      await timeout(600);
+      await visualDiff(
+        document.body,
+        `sub-function-editor/#2 Unfocused with showfunction=false`
+      );
+    });
+  });
+
+  describe('with showfunction true', () => {
+    let editor: SubFunctionEditor;
+    beforeEach(async () => {
+      const lNode = new DOMParser()
+        .parseFromString(substationDoc, 'application/xml')
+        .querySelector(`SubFunction[name="subFunc1"]`)!;
+
+      editor = await fixture(
+        html`<sub-function-editor
+          .element=${lNode}
+          ?showfunctions=${true}
+        ></sub-function-editor>`
+      );
+      document.body.style.width = '600';
+      document.body.style.height = '1000';
+      editor.style.position = 'absolute';
+      editor.style.top = '20';
+      editor.style.left = '20';
+      document.body.prepend(editor);
+    });
+
+    afterEach(async () => {
+      editor.remove();
+    });
+
+    it('looks like the latest snapshot', async () => {
+      await setViewport({ width: 600, height: 1000 });
 
       await sendMouse({ type: 'click', position: [120, 120] });
 
-      await timeout(200);
+      await timeout(600);
       await visualDiff(
         document.body,
-        `general-equipment-editor/#3 Focused with showfunction=true`
+        `sub-function-editor/#3 Focused with showfunction=true`
       );
     });
   });
