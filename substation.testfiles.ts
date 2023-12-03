@@ -69,6 +69,16 @@ export const substationDoc = `<SCL>
                     </EqFunction>
                 </ConductingEquipment>
             </Bay>
+            <Bay name="Q02" >
+                <GeneralEquipment name="someGenEquip1" desc="desc" >
+                </GeneralEquipment>
+                <GeneralEquipment name="someGenEquip2" >
+                    <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
+                    <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
+                    <EqFunction name="eqFunc1" desc="desc" />
+                    <EqFunction name="eqFunc2" type="type" desc="desc" />
+                </GeneralEquipment>
+            </Bay>
         </VoltageLevel>
     </Substation>
 </SCL>

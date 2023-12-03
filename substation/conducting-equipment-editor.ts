@@ -64,7 +64,7 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
       ${this.renderAddButton()}
       ${this.renderContentPane()}
         ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-        ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
+        ${renderEqFunctions(this.element, this.editCount)}
         ${renderSubEquipments(this.element, this.editCount, this.showfunctions)}
         </oscd-action-pane
         ></oscd-action-pane

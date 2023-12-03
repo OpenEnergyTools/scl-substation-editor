@@ -63,7 +63,7 @@ export class TransformerWindingEditor extends BaseSubstationElementEditor {
       </abbr>
       ${this.renderAddButton()}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-      ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
+      ${renderEqFunctions(this.element, this.editCount)}
       ${this.renderTapChanger()}
     </oscd-action-pane> `;
   }

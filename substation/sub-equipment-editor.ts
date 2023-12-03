@@ -53,7 +53,7 @@ export class SubEquipmentEditor extends BaseSubstationElementEditor {
       </abbr>
       ${this.renderAddButton()}
       ${renderLNodes(this.element, this.editCount, false)}
-      ${renderEqFunctions(this.element, this.editCount, true)}
+      ${renderEqFunctions(this.element, this.editCount)}
     </oscd-action-pane> `;
   }
 

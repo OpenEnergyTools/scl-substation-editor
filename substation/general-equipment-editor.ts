@@ -19,7 +19,7 @@ import BaseSubstationElementEditor from './base-substation-element-editor.js';
 export class GeneralEquipmentEditor extends BaseSubstationElementEditor {
   @state()
   get header(): string {
-    const name = this.element.getAttribute('name') ?? '';
+    const name = this.element.getAttribute('name');
     const desc = this.element.getAttribute('desc');
 
     if (!this.showfunctions) return `${name}`;
@@ -32,30 +32,34 @@ export class GeneralEquipmentEditor extends BaseSubstationElementEditor {
       return html`<oscd-action-pane label=${this.header}>
         <abbr slot="action" title="Edit">
           <mwc-icon-button
+            class="action edit"
             icon="edit"
             @click=${() => this.openEditWizard()}
           ></mwc-icon-button>
         </abbr>
         <abbr slot="action" title="Remove">
           <mwc-icon-button
+            class="action remove"
             icon="delete"
             @click=${() => this.removeElement()}
           ></mwc-icon-button>
         </abbr>
         ${this.renderAddButton()}
         ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-        ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
+        ${renderEqFunctions(this.element, this.editCount)}
       </oscd-action-pane>`;
 
     return html`<oscd-action-icon label=${this.header}>
       <mwc-icon slot="icon">${generalConductingEquipmentIcon}</mwc-icon>
       <mwc-fab
+        class="action edit"
         slot="action"
         mini
         icon="edit"
         @click="${() => this.openEditWizard()}"
       ></mwc-fab>
       <mwc-fab
+        class="action remove"
         slot="action"
         mini
         icon="delete"

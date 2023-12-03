@@ -79,18 +79,15 @@ export class EqFunctionEditor extends BaseSubstationElementEditor {
 
 export function renderEqFunctions(
   parent: Element,
-  editCount: number,
-  showfunctions: boolean
+  editCount: number
 ): TemplateResult {
-  if (!showfunctions) return html``;
-
   const eqFunctions = getChildElementsByTagName(parent, 'EqFunction');
   return html` ${eqFunctions.map(
     eqFunction =>
       html`<eq-function-editor
         .element=${eqFunction}
         .editCount=${editCount}
-        ?showfunctions=${showfunctions}
+        ?showfunctions=${true}
       ></eq-function-editor>`
   )}`;
 }

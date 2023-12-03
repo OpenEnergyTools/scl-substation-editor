@@ -9,8 +9,8 @@ import { substationDoc } from '../substation.testfiles.js';
 
 import { baseStyle } from './base-visual.js';
 
-import './eq-function-editor.js';
-import type { EqFunctionEditor } from './eq-function-editor.js';
+import './general-equipment-editor.js';
+import type { GeneralEquipmentEditor } from './general-equipment-editor.js';
 
 const factor = window.process && process.env.CI ? 4 : 2;
 function timeout(ms: number) {
@@ -24,19 +24,25 @@ const style = document.createElement('style');
 style.textContent = baseStyle;
 document.body.prepend(style);
 
-describe('Component for SCL element EqSubFunction ', () => {
+describe('Component for SCL element GeneralEquipment ', () => {
   describe('with add menu open', () => {
-    let editor: EqFunctionEditor;
+    let editor: GeneralEquipmentEditor;
     beforeEach(async () => {
       const subFunc = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
-        .querySelector(`EqFunction[name="eqFunc1"]`)!;
+        .querySelector(`GeneralEquipment`)!;
 
       editor = await fixture(
-        html`<eq-function-editor .element=${subFunc}></eq-function-editor>`
+        html`<general-equipment-editor
+          .element=${subFunc}
+          ?showfunctions=${true}
+        ></general-equipment-editor>`
       );
-      document.body.style.width = '800';
-      document.body.style.height = '900';
+      document.body.style.width = '500';
+      document.body.style.height = '400';
+      editor.style.position = 'absolute';
+      editor.style.top = '20';
+      editor.style.left = '20';
       document.body.prepend(editor);
     });
 
@@ -46,61 +52,72 @@ describe('Component for SCL element EqSubFunction ', () => {
 
     it('looks like the latest snapshot', async () => {
       await setViewport({ width: 800, height: 900 });
-      await sendMouse({ type: 'click', position: [780, 20] });
-
-      await editor.updateComplete;
-      await timeout(400);
-      await visualDiff(document.body, `eq-function-editor/#1 add menu visible`);
-    });
-  });
-
-  describe('with showfunction false', () => {
-    let editor: EqFunctionEditor;
-    beforeEach(async () => {
-      const subFunc = new DOMParser()
-        .parseFromString(substationDoc, 'application/xml')
-        .querySelector(`EqFunction[name="eqFunc2"]`)!;
-
-      editor = await fixture(
-        html`<eq-function-editor .element=${subFunc}></eq-function-editor>`
-      );
-      document.body.style.width = '800';
-      document.body.style.height = '900';
-      document.body.prepend(editor);
-    });
-
-    afterEach(async () => {
-      editor.remove();
-    });
-
-    it('looks like the latest snapshot', async () => {
-      await setViewport({ width: 800, height: 900 });
-      await sendMouse({ type: 'click', position: [30, 30] });
+      await sendMouse({ type: 'click', position: [460, 20] });
 
       await editor.updateComplete;
       await timeout(400);
       await visualDiff(
         document.body,
-        `eq-function-editor/#2 Unfocused with showfunction=false`
+        `general-equipment-editor/#1 add menu visible`
+      );
+    });
+  });
+
+  describe('with showfunction false', () => {
+    let editor: GeneralEquipmentEditor;
+    beforeEach(async () => {
+      const subFunc = new DOMParser()
+        .parseFromString(substationDoc, 'application/xml')
+        .querySelector(`GeneralEquipment[name="someGenEquip2"]`)!;
+
+      editor = await fixture(
+        html`<general-equipment-editor
+          .element=${subFunc}
+        ></general-equipment-editor>`
+      );
+      document.body.style.width = '200';
+      document.body.style.height = '200';
+      editor.style.position = 'absolute';
+      editor.style.top = '80';
+      editor.style.left = '50';
+      document.body.prepend(editor);
+    });
+
+    afterEach(async () => {
+      editor.remove();
+    });
+
+    it('looks like the latest snapshot', async () => {
+      await setViewport({ width: 100, height: 100 });
+      await sendMouse({ type: 'click', position: [50, 80] });
+
+      await editor.updateComplete;
+      await timeout(400);
+      await visualDiff(
+        document.body,
+        `general-equipment-editor/#2 Unfocused with showfunction=false`
       );
     });
   });
 
   describe('with showfunction true', () => {
-    let editor: EqFunctionEditor;
+    let editor: GeneralEquipmentEditor;
     beforeEach(async () => {
       const lNode = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
-        .querySelector(`EqFunction[name="eqFunc2"]`)!;
+        .querySelector(`GeneralEquipment[name="someGenEquip2"]`)!;
 
       editor = await fixture(
-        html`<eq-function-editor
+        html`<general-equipment-editor
           .element=${lNode}
           ?showfunctions=${true}
-        ></eq-function-editor>`
+        ></general-equipment-editor>`
       );
-      document.body.style.width = '800';
-      document.body.style.height = '900';
+      document.body.style.width = '500';
+      document.body.style.height = '400';
+      editor.style.position = 'absolute';
+      editor.style.top = '20';
+      editor.style.left = '20';
       document.body.prepend(editor);
     });
 
@@ -109,14 +126,14 @@ describe('Component for SCL element EqSubFunction ', () => {
     });
 
     it('looks like the latest snapshot', async () => {
-      await setViewport({ width: 800, height: 900 });
+      await setViewport({ width: 500, height: 400 });
 
       await sendMouse({ type: 'click', position: [120, 120] });
 
-      await timeout(400);
+      await timeout(200);
       await visualDiff(
         document.body,
-        `eq-function-editor/#3 Focused with showfunction=true`
+        `general-equipment-editor/#3 Focused with showfunction=true`
       );
     });
   });

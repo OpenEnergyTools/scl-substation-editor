@@ -36,7 +36,7 @@ export class TapChangerEditor extends BaseSubstationElementEditor {
       </abbr>
       ${this.renderAddButton()}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-      ${renderEqFunctions(this.element, this.editCount, this.showfunctions)}
+      ${renderEqFunctions(this.element, this.editCount)}
       ${renderSubEquipments(this.element, this.editCount, this.showfunctions)}
     </oscd-action-pane>`;
   }
