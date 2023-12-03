@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
 
 import '@material/mwc-fab';
 import '@material/mwc-icon-button';
@@ -91,13 +90,18 @@ export function renderGeneralEquipment(
     'GeneralEquipment'
   );
 
+  if (showfunctions)
+    return html`${generalEquipment.map(
+      gEquipment =>
+        html`<general-equipment-editor
+          .editCount=${editCount}
+          .element=${gEquipment}
+          ?showfunctions=${showfunctions}
+        ></general-equipment-editor>`
+    )}`;
+
   return generalEquipment.length
-    ? html` <div
-        class="${classMap({
-          content: true,
-          actionicon: !showfunctions,
-        })}"
-      >
+    ? html` <div class="content actionicon">
         ${generalEquipment.map(
           gEquipment =>
             html`<general-equipment-editor
