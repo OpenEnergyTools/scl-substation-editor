@@ -1,21 +1,18 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { LitElement, TemplateResult, html } from 'lit';
-import { property, query } from 'lit/decorators.js';
+import { property, query, queryAll } from 'lit/decorators.js';
 
-import { newEditEvent } from '@openscd/open-scd-core';
-import { getChildren } from '@openenergytools/scl-lib';
-
+import '@material/mwc-menu';
+import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-icon-button';
 import type { IconButton } from '@material/mwc-icon-button';
 import type { ListItem } from '@material/mwc-list/mwc-list-item';
 import type { Menu } from '@material/mwc-menu';
 
-import { newCreateWizardEvent, newEditWizardEvent } from '../foundation.js';
+import { newEditEvent } from '@openscd/open-scd-core';
+import { getChildren } from '@openenergytools/scl-lib';
 
-function childTags(element: Element | null | undefined): string[] {
-  if (!element) return [];
-  return getChildren(element);
-}
+import { newCreateWizardEvent, newEditWizardEvent } from '../foundation.js';
 
 /** base class hosting global properties and the remove method */
 export default class BaseSubstationElementEditor extends LitElement {
@@ -34,6 +31,14 @@ export default class BaseSubstationElementEditor extends LitElement {
   @query('mwc-menu') addMenu?: Menu;
 
   @query('mwc-icon-button[icon="playlist_add"]') addButton!: IconButton;
+
+  @query('.action.remove') removeActionable?: HTMLElement;
+
+  @query('.action.edit') editActionable?: HTMLElement;
+
+  @query('.action.addmenu') addMenuActionable?: HTMLElement;
+
+  @queryAll('.action.add') addActionable?: ListItem[];
 
   private openCreateWizard(tagName: string): void {
     this.dispatchEvent(newCreateWizardEvent(this.element, tagName));
@@ -56,9 +61,9 @@ export default class BaseSubstationElementEditor extends LitElement {
   }
 
   private renderAddButtons(): TemplateResult[] {
-    return childTags(this.element).map(
+    return getChildren(this.element).map(
       child =>
-        html`<mwc-list-item value="${child}"
+        html`<mwc-list-item class="action add" value="${child}"
           ><span>${child}</span></mwc-list-item
         >`
     );
@@ -67,6 +72,7 @@ export default class BaseSubstationElementEditor extends LitElement {
   renderAddButton(): TemplateResult {
     return html` <abbr slot="action" style="position:relative;">
       <mwc-icon-button
+        class="action addmenu"
         icon="playlist_add"
         @click=${() => {
           if (this.addMenu) this.addMenu.open = true;

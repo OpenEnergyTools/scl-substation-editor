@@ -60,16 +60,14 @@ export class LNodeEditor extends BaseSubstationElementEditor {
     const lnClass = this.element.getAttribute('lnClass');
     const lnInst = this.element.getAttribute('lnInst');
 
-    const header = `${prefix} ${lnClass} ${lnInst}`;
-    return typeof header === 'string' ? header : '';
+    return `${prefix} ${lnClass} ${lnInst}`;
   }
 
   @state()
   private get missingIedReference(): boolean {
-    return this.element.getAttribute('iedName') === 'None' ?? false;
+    return this.element.getAttribute('iedName') === 'None';
   }
 
-  @state()
   render(): TemplateResult {
     return html`<oscd-action-icon
       label="${this.header}"
@@ -77,12 +75,14 @@ export class LNodeEditor extends BaseSubstationElementEditor {
       ?highlighted=${this.missingIedReference}
       ><mwc-icon slot="icon">${getLNodeIcon(this.element)}</mwc-icon>
       <mwc-fab
+        class="action edit"
         slot="action"
         mini
         icon="edit"
         @click="${() => this.openEditWizard()}"
       ></mwc-fab>
       <mwc-fab
+        class="action remove"
         slot="action"
         mini
         icon="delete"
