@@ -88,7 +88,9 @@ export const substationDoc = `<SCL>
                     <EqFunction name="eqFunc1" desc="desc" />
                     <EqFunction name="eqFunc2" type="type" desc="desc" />
                 </GeneralEquipment>
-                <ConductingEquipment name="QA1" type="CBR" >
+                <ConductingEquipment name="QA2" type="CBR" >
+                    <LNode iedName="IED1" ldInst="ldInst" lnClass="CSWI" lnInst="1" />
+                    <LNode iedName="IED1" ldInst="ldInst" lnClass="CILO" lnInst="1" />
                     <SubEquipment name="phsA" desc="desc" phase="A" >
                         <LNode iedName="IED1" ldInst="ldInst" lnClass="CSWI" lnInst="1" />
                         <LNode iedName="IED1" ldInst="ldInst" lnClass="CILO" lnInst="1" />
@@ -97,6 +99,8 @@ export const substationDoc = `<SCL>
                     </SubEquipment>
                     <SubEquipment name="phsB" />
                     <SubEquipment name="phsC" />
+                    <EqFunction name="eqFunc9" />
+                    <EqFunction name="eqFunc10" />
                 </ConductingEquipment>
             </Bay>
         </VoltageLevel>

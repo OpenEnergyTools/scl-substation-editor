@@ -21,7 +21,7 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
   /** ConductingEquipment name attribute */
   @property({ type: String })
   get name(): string {
-    return this.element.getAttribute('name') ?? '';
+    return `${this.element.getAttribute('name')}`;
   }
 
   renderContentPane(): TemplateResult {
@@ -33,12 +33,14 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
   renderContentIcon(): TemplateResult {
     return html`<mwc-icon slot="icon">${getIcon(this.element)}</mwc-icon>
       <mwc-fab
+        class="action edit"
         slot="action"
         mini
         icon="edit"
         @click="${() => this.openEditWizard()}"
       ></mwc-fab>
       <mwc-fab
+        class="action remove"
         slot="action"
         mini
         icon="delete"
@@ -51,12 +53,14 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
       return html`<oscd-action-pane label="${this.name}">
       <abbr slot="action" title="Edit">
           <mwc-icon-button
+            class="action edit"
             icon="edit"
             @click=${() => this.openEditWizard()}
           ></mwc-icon-button>
         </abbr>
       <abbr slot="action" title="Remove">
         <mwc-icon-button
+          class="action remove"
           icon="delete"
           @click=${() => this.removeElement()}
         ></mwc-icon-button>

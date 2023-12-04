@@ -16,25 +16,14 @@ export class SubEquipmentEditor extends BaseSubstationElementEditor {
   /** SubEquipment name attribute */
   @property({ type: String })
   get label(): string {
-    const name = `${
-      this.element.hasAttribute('name')
-        ? `${this.element.getAttribute('name')}`
-        : ''
-    }`;
+    const name = this.element.getAttribute('name');
+    const desc = this.element.getAttribute('desc');
+    const phase = this.element.getAttribute('phase');
 
-    const description = `${
-      this.element.hasAttribute('desc')
-        ? ` - ${this.element.getAttribute('desc')}`
-        : ''
-    }`;
+    const description = `${desc ? ` - ${desc}` : ''}`;
+    const phs = `${phase ? ` (${phase})` : ''}`;
 
-    const phase = `${
-      this.element.hasAttribute('phase')
-        ? ` (${this.element.getAttribute('phase')})`
-        : ''
-    }`;
-
-    return `${name}${description}${phase}`;
+    return `${name}${description}${phs}`;
   }
 
   render(): TemplateResult {
@@ -80,7 +69,6 @@ export function renderSubEquipments(
   editCount: number,
   showfunctions: boolean
 ): TemplateResult {
-  if (!showfunctions) return html``;
   const subEquipments = getChildElementsByTagName(parent, 'SubEquipment');
 
   return html` ${subEquipments.map(
@@ -88,6 +76,7 @@ export function renderSubEquipments(
       html`<sub-equipment-editor
         .editCount=${editCount}
         .element=${subEquipment}
+        ?showfunctions=${showfunctions}
       ></sub-equipment-editor>`
   )}`;
 }
