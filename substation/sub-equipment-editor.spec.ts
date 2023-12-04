@@ -16,7 +16,7 @@ const subEquip = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')
   .querySelector('SubFunction')!;
 
-describe('Component for SCL element SubFunction', () => {
+describe('Component for SCL element SubEquipment', () => {
   let editor: SubEquipmentEditor;
 
   let eventSpy: SinonSpy;
@@ -57,7 +57,7 @@ describe('Component for SCL element SubFunction', () => {
     });
   });
 
-  it('allows to remove an existing SubFunction element', () => {
+  it('allows to remove an existing SubEquipment element', () => {
     editor.removeActionable?.click();
 
     expect(eventSpy).to.have.been.calledOnce;

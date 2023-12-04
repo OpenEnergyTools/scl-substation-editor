@@ -16,7 +16,7 @@ const condEq = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')
   .querySelector('ConductingEquipment[name="QA1"]')!;
 
-describe('Component for SCL element GeneralEquipment ', () => {
+describe('Component for SCL element ConductingEquipment ', () => {
   describe('with showfunctions = true', () => {
     let editor: ConductingEquipmentEditor;
 
@@ -61,7 +61,7 @@ describe('Component for SCL element GeneralEquipment ', () => {
       });
     });
 
-    it('allows to remove an existing EqFunction element', () => {
+    it('allows to remove an existing ConductingEquipment element', () => {
       editor.removeActionable?.click();
 
       expect(eventSpy).to.have.been.calledOnce;
@@ -101,7 +101,7 @@ describe('Component for SCL element GeneralEquipment ', () => {
       expect(event.detail.element).to.equal(condEq);
     });
 
-    it('allows to remove an existing EqFunction element', () => {
+    it('allows to remove an existing ConductingEquipment element', () => {
       editor.removeActionable?.click();
 
       expect(eventSpy).to.have.been.calledOnce;

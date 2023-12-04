@@ -24,7 +24,7 @@ const style = document.createElement('style');
 style.textContent = baseStyle;
 document.body.prepend(style);
 
-describe('Component for SCL element GeneralEquipment ', () => {
+describe('Component for SCL element ConductingEquipment ', () => {
   describe('with add menu open', () => {
     let editor: ConductingEquipmentEditor;
     beforeEach(async () => {
