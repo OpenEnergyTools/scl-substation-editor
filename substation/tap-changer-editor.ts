@@ -11,11 +11,11 @@ import { renderSubEquipments } from './sub-equipment-editor.js';
 import { styles } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
-@customElement('tapchanger-editor')
+@customElement('tap-changer-editor')
 export class TapChangerEditor extends BaseSubstationElementEditor {
   @state()
   get header(): string {
-    const name = this.element.getAttribute('name') ?? '';
+    const name = this.element.getAttribute('name');
     const desc = this.element.getAttribute('desc');
 
     return `${name} ${desc ? `—${desc}` : ''}`;
@@ -25,11 +25,13 @@ export class TapChangerEditor extends BaseSubstationElementEditor {
     return html`<oscd-action-pane label=${this.header}>
       <abbr slot="action" title="Edit">
         <mwc-icon-button
+          class="action edit"
           icon="edit"
           @click=${() => this.openEditWizard()}
         ></mwc-icon-button> </abbr
       ><abbr slot="action" title="Remove">
         <mwc-icon-button
+          class="action remove"
           icon="delete"
           @click=${() => this.removeElement()}
         ></mwc-icon-button>

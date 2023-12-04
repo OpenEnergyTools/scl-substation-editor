@@ -103,6 +103,22 @@ export const substationDoc = `<SCL>
                     <EqFunction name="eqFunc10" />
                 </ConductingEquipment>
             </Bay>
+            <Bay name="PowTrans" >
+                <PowerTransformer name="PTR1" type="PTR" >  
+                    <TransformerWinding name="win1" >
+                        <TapChanger name="ch1" >
+                            <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
+                            <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
+                            <SubEquipment name="phsA" />
+                            <SubEquipment name="phsB" />
+                            <SubEquipment name="phsC" />
+                            <EqFunction name="eqFunc11" />
+                            <EqFunction name="eqFunc12" />
+                        </TapChanger>
+                        <TapChanger name="ch2" />
+                    </TransformerWinding>
+                </PowerTransformer>
+            </Bay>
         </VoltageLevel>
     </Substation>
 </SCL>

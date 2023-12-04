@@ -5,7 +5,7 @@ import { customElement, property } from 'lit/decorators.js';
 import '@openscd/oscd-action-icon';
 import '@openscd/oscd-action-pane';
 
-import './tapchanger-editor.js';
+import './tap-changer-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
 
@@ -38,11 +38,11 @@ export class TransformerWindingEditor extends BaseSubstationElementEditor {
     return tapChangers.length
       ? html` ${tapChangers.map(
           tapChanger =>
-            html`<tapchanger-editor
+            html`<tap-changer-editor
               .element=${tapChanger}
               .editCount=${this.editCount}
               ?showfunctions=${this.showfunctions}
-            ></tapchanger-editor>`
+            ></tap-changer-editor>`
         )}`
       : html``;
   }
