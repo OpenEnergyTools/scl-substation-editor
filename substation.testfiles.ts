@@ -287,3 +287,8 @@ export const substationDoc = `<SCL>
     </Process>
 </SCL>
 `;
+
+export const missingSubstation = `<SCL>
+   <Header id="missingSubstation"/>
+</SCL>
+`;
