@@ -18,7 +18,7 @@ import BaseSubstationElementEditor from './base-substation-element-editor.js';
 export class ProcessEditor extends BaseSubstationElementEditor {
   @state()
   get header(): string {
-    const name = this.element.getAttribute('name') ?? '';
+    const name = this.element.getAttribute('name');
     const desc = this.element.getAttribute('desc');
 
     return `${name} ${desc ? `—${desc}` : ''}`;
@@ -28,32 +28,34 @@ export class ProcessEditor extends BaseSubstationElementEditor {
     return html`<oscd-action-pane label=${this.header}>
       <abbr slot="action" title="Edit">
         <mwc-icon-button
+          class="action edit"
           icon="edit"
           @click=${() => this.openEditWizard()}
         ></mwc-icon-button>
       </abbr>
       <abbr slot="action" title="Remove">
         <mwc-icon-button
+          class="action remove"
           icon="delete"
           @click=${() => this.removeElement()}
         ></mwc-icon-button
       ></abbr>
       ${this.renderAddButton()}
-      ${renderConductingEquipments(
-        this.element,
-        this.editCount,
-        this.showfunctions
-      )}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
       ${renderGeneralEquipment(
         this.element,
         this.editCount,
         this.showfunctions
       )}
-      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
-      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderConductingEquipments(
+        this.element,
+        this.editCount,
+        this.showfunctions
+      )}
       ${renderLines(this.element, this.editCount, this.showfunctions)}
       ${renderSubstations(this.element, this.editCount, this.showfunctions)}
       ${renderProcesses(this.element, this.editCount, this.showfunctions)}
+      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
     </oscd-action-pane>`;
   }
 
@@ -72,16 +74,14 @@ export function renderProcesses(
   editCount: number,
   showfunctions: boolean
 ): TemplateResult {
-  const processes = parent.querySelectorAll(':root > Process');
+  const processes = parent.querySelectorAll(':scope > Process');
 
-  return processes.length
-    ? html` ${Array.from(processes).map(
-        process =>
-          html`<process-editor
-            .element=${process}
-            .editCount=${editCount}
-            ?showfunctions=${showfunctions}
-          ></process-editor>`
-      )}`
-    : html``;
+  return html` ${Array.from(processes).map(
+    process =>
+      html`<process-editor
+        .element=${process}
+        .editCount=${editCount}
+        ?showfunctions=${showfunctions}
+      ></process-editor>`
+  )}`;
 }

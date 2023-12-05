@@ -267,5 +267,23 @@ export const substationDoc = `<SCL>
         <Function name="func1" desc="desc" type="type" />
         <Function name="func2" />
     </Line>
+    <Process name="proc1" />
+    <Process name="proc2" desc="desc" >
+        <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
+        <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
+        <GeneralEquipment name="genEquip2" type="ERP" />
+        <GeneralEquipment name="genEquip3" type="ERP" />
+        <ConductingEquipment name="condEq1" type="DIS" />
+        <ConductingEquipment name="condEq2" type="DIS" />
+        <ConductingEquipment name="condEq3" type="DIS" />
+        <Line name="line1" />
+        <Line name="line2" />
+        <Process name="subProc1" />
+        <Process name="subProc2" />
+        <Substation name="subSt1" />
+        <Substation name="subSt1" />
+        <Function name="func1" desc="desc" type="type" />
+        <Function name="func2" />
+    </Process>
 </SCL>
 `;
