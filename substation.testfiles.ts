@@ -224,5 +224,23 @@ export const substationDoc = `<SCL>
             <Function name="func2" />
         </VoltageLevel>
     </Substation>
+    <Substation name="testSubst1" />
+    <Substation name="testSubst2" desc="desc" >
+        <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
+        <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
+        <PowerTransformer name="pTrans1" type="PTR" />
+        <PowerTransformer name="pTrans2" type="PTR" />
+        <GeneralEquipment name="genEquip1" type="ERP" />
+        <GeneralEquipment name="genEquip2" type="ERP" />
+        <GeneralEquipment name="genEquip3" type="ERP" />
+        <VoltageLevel name="voltLv1" >
+            <Voltage ></Voltage>
+        </VoltageLevel>
+        <VoltageLevel name="voltLv2" desc="desc" >
+            <Voltage unit="V" multiplier="k" >100</Voltage>
+        </VoltageLevel>
+        <Function name="func1" desc="desc" type="type" />
+        <Function name="func2" />
+    </Substation>
 </SCL>
 `;
