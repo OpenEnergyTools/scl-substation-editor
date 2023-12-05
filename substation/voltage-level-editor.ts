@@ -36,15 +36,6 @@ export class VoltageLevelEditor extends BaseSubstationElementEditor {
   }
 
   renderBay(): TemplateResult {
-    if (this.showfunctions)
-      return html`${getChildElementsByTagName(this.element, 'Bay').map(
-        bay => html`<bay-editor
-          .editCount=${this.editCount}
-          .element=${bay}
-          ?showfunctions=${this.showfunctions}
-        ></bay-editor>`
-      )}`;
-
     return html`<div class="container bay">
       ${getChildElementsByTagName(this.element, 'Bay').map(
         bay => html`<bay-editor
