@@ -25,7 +25,7 @@ export class PowerTransformerEditor extends BaseSubstationElementEditor {
   /** PowerTransformer name attribute */
   @property({ type: String })
   get name(): string {
-    return this.element.getAttribute('name') ?? 'UNDEFINED';
+    return `${this.element.getAttribute('name')}`;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -36,24 +36,19 @@ export class PowerTransformerEditor extends BaseSubstationElementEditor {
   }
 
   private renderTransformerWinding(): TemplateResult {
-    if (!this.showfunctions) return html``;
     const transformerWindings = getChildElementsByTagName(
       this.element,
       'TransformerWinding'
     );
 
-    return transformerWindings.length
-      ? html`<div class="container">
-          ${transformerWindings.map(
-            transformerWinding =>
-              html`<transformer-winding-editor
-                .element=${transformerWinding}
-                .editCount=${this.editCount}
-                ?showfunctions=${this.showfunctions}
-              ></transformer-winding-editor>`
-          )}
-        </div>`
-      : html``;
+    return html`${transformerWindings.map(
+      transformerWinding =>
+        html`<transformer-winding-editor
+          .element=${transformerWinding}
+          .editCount=${this.editCount}
+          ?showfunctions=${this.showfunctions}
+        ></transformer-winding-editor>`
+    )}`;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -61,12 +56,14 @@ export class PowerTransformerEditor extends BaseSubstationElementEditor {
     return html`<mwc-icon slot="icon"
         >${powerTransformerTwoWindingIcon}</mwc-icon
       ><mwc-fab
+        class="action edit"
         slot="action"
         mini
         icon="edit"
         @click="${() => this.openEditWizard()}"
       ></mwc-fab>
       <mwc-fab
+        class="action remove"
         slot="action"
         mini
         icon="delete"
@@ -79,21 +76,23 @@ export class PowerTransformerEditor extends BaseSubstationElementEditor {
       return html`<oscd-action-pane label="${this.name}">
         <abbr slot="action" title="Edit">
           <mwc-icon-button
+            class="action edit"
             icon="edit"
             @click=${() => this.openEditWizard()}
           ></mwc-icon-button>
         </abbr>
         <abbr slot="action" title="Remove">
           <mwc-icon-button
+            class="action edit"
             icon="delete"
             @click=${() => this.removeElement()}
           ></mwc-icon-button>
         </abbr>
         ${this.renderAddButton()} ${this.renderContentPane()}
         ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+        ${this.renderTransformerWinding()}
         ${renderEqFunctions(this.element, this.editCount)}
         ${renderSubEquipments(this.element, this.editCount, this.showfunctions)}
-        ${this.renderTransformerWinding()}
       </oscd-action-pane> `;
 
     return html`<oscd-action-icon label="${this.name}"
@@ -108,10 +107,6 @@ export class PowerTransformerEditor extends BaseSubstationElementEditor {
       text-decoration: none;
       border-bottom: none;
     }
-
-    transformer-winding-editor[showfunctions] {
-      margin: 4px 8px 16px;
-    }
   `;
 }
 
@@ -121,6 +116,7 @@ export function renderPowerTransformerContainer(
   showfunctions: boolean
 ): TemplateResult {
   const pwts = getChildElementsByTagName(parent, 'PowerTransformer');
+
   return pwts?.length
     ? html`<div
         class="${classMap({
