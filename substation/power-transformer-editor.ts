@@ -126,7 +126,7 @@ export function renderPowerTransformerContainer(
         ></power-transformer-editor>`
     )}`;
 
-  return pTrans?.length
+  return pTrans.length
     ? html`<div class="content actionicon">
         ${pTrans.map(
           pwt =>

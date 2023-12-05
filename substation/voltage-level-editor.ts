@@ -10,7 +10,7 @@ import { renderFunctions } from './function-editor.js';
 import { renderGeneralEquipment } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 import { renderPowerTransformerContainer } from './power-transformer-editor.js';
-import { styles } from '../foundation.js';
+import { getChildElementsByTagName, styles } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** [[`Substation`]] subeditor for a `VoltageLevel` element. */
@@ -20,7 +20,7 @@ export class VoltageLevelEditor extends BaseSubstationElementEditor {
   get voltage(): string | null {
     const V = this.element.querySelector(`VoltageLevel > Voltage`);
     if (V === null) return null;
-    const v = V.textContent ?? '';
+    const v = V.textContent;
     const m = V.getAttribute('multiplier');
     const u = m === null ? 'V' : ` ${m}V`;
     return v ? v + u : null;
@@ -28,56 +28,71 @@ export class VoltageLevelEditor extends BaseSubstationElementEditor {
 
   @property({ type: String })
   get header(): string {
-    const name = this.element.getAttribute('name') ?? '';
+    const name = this.element.getAttribute('name');
     const desc = this.element.getAttribute('desc');
 
     return `${name} ${desc ? `- ${desc}` : ''}
     ${this.voltage === null ? '' : `(${this.voltage})`}`;
   }
 
+  renderBay(): TemplateResult {
+    if (this.showfunctions)
+      return html`${getChildElementsByTagName(this.element, 'Bay').map(
+        bay => html`<bay-editor
+          .editCount=${this.editCount}
+          .element=${bay}
+          ?showfunctions=${this.showfunctions}
+        ></bay-editor>`
+      )}`;
+
+    return html`<div class="container bay">
+      ${getChildElementsByTagName(this.element, 'Bay').map(
+        bay => html`<bay-editor
+          .editCount=${this.editCount}
+          .element=${bay}
+          ?showfunctions=${this.showfunctions}
+        ></bay-editor>`
+      )}
+    </div>`;
+  }
+
   render(): TemplateResult {
     return html`<oscd-action-pane label="${this.header}">
       <abbr slot="action" title="Edit">
         <mwc-icon-button
+          class="action edit"
           icon="edit"
           @click=${() => this.openEditWizard()}
         ></mwc-icon-button>
       </abbr>
       <abbr slot="action" title="Remove">
         <mwc-icon-button
+          class="action remove"
           icon="delete"
           @click=${() => this.removeElement()}
         ></mwc-icon-button>
       </abbr>
       ${this.renderAddButton()}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
       ${renderGeneralEquipment(
         this.element,
         this.editCount,
         this.showfunctions
       )}
-      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
       ${renderPowerTransformerContainer(
         this.element,
         this.editCount,
         this.showfunctions
       )}
-      <div id="bayContainer">
-        ${Array.from(this.element?.querySelectorAll('Bay') ?? []).map(
-          bay => html`<bay-editor
-            .editCount=${this.editCount}
-            .element=${bay}
-            ?showfunctions=${this.showfunctions}
-          ></bay-editor>`
-        )}
-      </div>
+      ${this.renderBay()}
+      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
     </oscd-action-pane>`;
   }
 
   static styles = css`
     ${styles}
 
-    #bayContainer {
+    .container.bay {
       display: grid;
       grid-gap: 12px;
       box-sizing: border-box;
@@ -85,7 +100,7 @@ export class VoltageLevelEditor extends BaseSubstationElementEditor {
     }
 
     @media (max-width: 387px) {
-      #bayContainer {
+      .container.bay {
         grid-template-columns: repeat(auto-fit, minmax(196px, auto));
       }
     }

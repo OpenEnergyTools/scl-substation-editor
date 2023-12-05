@@ -170,6 +170,59 @@ export const substationDoc = `<SCL>
                 <Function name="func2" />
             </Bay>
         </VoltageLevel>
+        <VoltageLevel name="testVoltLv1" desc="desc" >
+            <Voltage unit="V" multiplier="k" >110</Voltage>
+        </VoltageLevel>
+        <VoltageLevel name="testVoltLv2" >
+            <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
+            <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
+            <PowerTransformer name="pTrans1" type="PTR" />
+            <PowerTransformer name="pTrans2" type="PTR" />
+            <GeneralEquipment name="genEquip1" type="ERP" />
+            <GeneralEquipment name="genEquip2" type="ERP" />
+            <GeneralEquipment name="genEquip3" type="ERP" />
+            <GeneralEquipment name="genEquip4" type="ERP" />
+            <Bay name="bay1" >
+                <ConductingEquipment name="condEq1" type="DIS" />
+                <ConductingEquipment name="condEq2" type="DIS" />
+                <ConductingEquipment name="condEq3" type="DIS" />
+            </Bay>
+            <Bay name="bay2" >
+                <ConductingEquipment name="condEq1" type="DIS" />
+                <ConductingEquipment name="condEq2" type="DIS" />
+                <ConductingEquipment name="condEq3" type="DIS" />
+            </Bay>
+            <Bay name="bay3" >
+                <PowerTransformer name="pTrans1" type="PTR" />
+                <PowerTransformer name="pTrans2" type="PTR" />
+                <ConductingEquipment name="condEq1" type="DIS" />
+                <ConductingEquipment name="condEq2" type="DIS" />
+                <ConductingEquipment name="condEq3" type="DIS" />
+            </Bay>
+            <Function name="func1" desc="desc" />
+            <Function name="func2" />
+        </VoltageLevel>
+        <VoltageLevel name="testVoltLv3" >
+            <Voltage unit="V" >20000</Voltage>
+            <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
+            <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
+            <PowerTransformer name="pTrans1" type="PTR" />
+            <PowerTransformer name="pTrans2" type="PTR" />
+            <GeneralEquipment name="genEquip3" type="ERP" />
+            <GeneralEquipment name="genEquip4" type="ERP" />
+            <Bay name="bay1" >
+                <ConductingEquipment name="condEq1" type="DIS" />
+                <ConductingEquipment name="condEq2" type="DIS" />
+                <ConductingEquipment name="condEq3" type="DIS" />
+            </Bay>
+            <Bay name="bay2" >
+                <ConductingEquipment name="condEq1" type="DIS" />
+                <ConductingEquipment name="condEq2" type="DIS" />
+                <ConductingEquipment name="condEq3" type="DIS" />
+            </Bay>
+            <Function name="func1" desc="desc" type="type" />
+            <Function name="func2" />
+        </VoltageLevel>
     </Substation>
 </SCL>
 `;
