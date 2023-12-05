@@ -105,7 +105,7 @@ export const substationDoc = `<SCL>
             </Bay>
             <Bay name="PowTrans" >
                 <PowerTransformer name="PTR1" type="PTR" >  
-                    <TransformerWinding name="win1" >
+                    <TransformerWinding name="winding1" >
                         <TapChanger name="ch1" >
                             <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
                             <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
@@ -116,6 +116,18 @@ export const substationDoc = `<SCL>
                             <EqFunction name="eqFunc12" />
                         </TapChanger>
                         <TapChanger name="ch2" />
+                    </TransformerWinding>
+                    <TransformerWinding name="winding2" />
+                    <TransformerWinding name="winding3" desc="desc" >
+                        <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
+                        <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
+                        <TapChanger name="ch1" />
+                        <TapChanger name="ch2" desc="desc" />
+                        <SubEquipment name="phsA" />
+                        <SubEquipment name="phsB" />
+                        <SubEquipment name="phsC" />
+                        <EqFunction name="eqFunc11" />
+                        <EqFunction name="eqFunc12" />
                     </TransformerWinding>
                 </PowerTransformer>
             </Bay>
