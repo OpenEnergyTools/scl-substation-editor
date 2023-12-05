@@ -143,6 +143,32 @@ export const substationDoc = `<SCL>
                     <EqFunction name="eqFunc12" />
                 </PowerTransformer>
             </Bay>
+            <Bay name="testBay1" />
+            <Bay name="testBay2" desc="desc" >
+                <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="1" />
+                <LNode iedName="IED1" ldInst="ldInst" lnClass="PTOC" lnInst="2" />
+                <PowerTransformer name="pTrans1" type="PTR" >
+                    <TransformerWinding name="wind1" />
+                    <TransformerWinding name="wind2" />
+                </PowerTransformer>
+                <PowerTransformer name="pTrans2" type="PTR" >
+                    <TransformerWinding name="wind1" />
+                    <TransformerWinding name="wind2" />
+                </PowerTransformer>
+                <PowerTransformer name="pTrans3" type="PTR" />
+                <PowerTransformer name="pTrans4" type="PTR" />
+                <GeneralEquipment name="genEquip1" type="ERP" />
+                <GeneralEquipment name="genEquip2" type="ERP" />
+                <GeneralEquipment name="genEquip3" type="ERP" />
+                <GeneralEquipment name="genEquip4" type="ERP" />
+                <ConductingEquipment name="condEq1" type="CBR" />
+                <ConductingEquipment name="condEq2" type="DIS" />
+                <ConductingEquipment name="condEq3" type="DIS" />
+                <ConductingEquipment name="condEq4" type="DIS" />
+                <ConductingEquipment name="condEq5" type="DIS" />
+                <Function name="func1" desc="desc" />
+                <Function name="func2" />
+            </Bay>
         </VoltageLevel>
     </Substation>
 </SCL>

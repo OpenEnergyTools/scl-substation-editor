@@ -94,24 +94,21 @@ export function renderConductingEquipments(
   editCount: number,
   showfunctions: boolean
 ): TemplateResult {
-  const conductingEquipments = getChildElementsByTagName(
-    parent,
-    'ConductingEquipment'
-  );
+  const condEqs = getChildElementsByTagName(parent, 'ConductingEquipment');
 
   if (showfunctions)
-    return html` ${conductingEquipments.map(
-      conductingEquipment =>
+    return html`${condEqs.map(
+      condEq =>
         html`<conducting-equipment-editor
-          .element=${conductingEquipment}
+          .element=${condEq}
           .editCount=${editCount}
           ?showfunctions=${showfunctions}
         ></conducting-equipment-editor>`
     )}`;
 
-  return conductingEquipments.length
+  return condEqs.length
     ? html` <div class="content actionicon">
-        ${conductingEquipments.map(
+        ${condEqs.map(
           conductingEquipment =>
             html`<conducting-equipment-editor
               .editCount=${editCount}

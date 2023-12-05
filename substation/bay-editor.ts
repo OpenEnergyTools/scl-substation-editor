@@ -1,17 +1,17 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
 
 import '@openscd/oscd-action-pane';
+import '@material/mwc-icon-button';
 
-import './power-transformer-editor.js';
 import { renderConductingEquipments } from './conducting-equipment-editor.js';
 import { renderFunctions } from './function-editor.js';
 import { renderGeneralEquipment } from './general-equipment-editor.js';
+import { renderPowerTransformerContainer } from './power-transformer-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 
-import { getChildElementsByTagName, styles } from '../foundation.js';
+import { styles } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** [[`SubstationEditor`]] subeditor for a `Bay` element. */
@@ -19,7 +19,7 @@ import BaseSubstationElementEditor from './base-substation-element-editor.js';
 export class BayEditor extends BaseSubstationElementEditor {
   @property({ type: String })
   get header(): string {
-    const name = this.element.getAttribute('name') ?? '';
+    const name = this.element.getAttribute('name');
     const desc = this.element.getAttribute('desc');
 
     return `${name} ${desc ? `- ${desc}` : ''}`;
@@ -29,62 +29,40 @@ export class BayEditor extends BaseSubstationElementEditor {
     return html`<oscd-action-pane label="${this.header}">
       <abbr slot="action" title="Edit">
         <mwc-icon-button
+          class="action edit"
           icon="edit"
           @click=${() => this.openEditWizard()}
         ></mwc-icon-button>
       </abbr>
       <abbr slot="action" title="Remove">
         <mwc-icon-button
+          class="action remove"
           icon="delete"
           @click=${() => this.removeElement()}
         ></mwc-icon-button>
       </abbr>
       ${this.renderAddButton()}
+      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
       ${renderGeneralEquipment(
         this.element,
         this.editCount,
         this.showfunctions
       )}
-      ${renderLNodes(this.element, this.editCount, this.showfunctions)}
+      ${renderPowerTransformerContainer(
+        this.element,
+        this.editCount,
+        this.showfunctions
+      )}
+      ${renderConductingEquipments(
+        this.element,
+        this.editCount,
+        this.showfunctions
+      )}
       ${renderFunctions(this.element, this.editCount, this.showfunctions)}
-      <div
-        class="${classMap({
-          content: true,
-          actionicon: !this.showfunctions,
-        })}"
-      >
-        ${Array.from(
-          getChildElementsByTagName(this.element, 'PowerTransformer')
-        ).map(
-          pwt =>
-            html`<power-transformer-editor
-              .element=${pwt}
-              .editCount=${this.editCount}
-              ?showfunctions=${this.showfunctions}
-            ></power-transformer-editor>`
-        )}
-        ${renderConductingEquipments(
-          this.element,
-          this.editCount,
-          this.showfunctions
-        )}
-      </div>
     </oscd-action-pane> `;
   }
 
   static styles = css`
     ${styles}
-
-    .content.actionicon {
-      display: grid;
-      grid-gap: 12px;
-      padding: 12px;
-      box-sizing: border-box;
-      grid-template-columns: repeat(auto-fit, minmax(64px, auto));
-    }
-
-    conducting-equipment-editor[showfunctions] {
-      margin: 4px 8px 16px;
-    }
   `;
 }

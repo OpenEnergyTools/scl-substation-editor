@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
 
 import '@material/mwc-fab';
 import '@material/mwc-icon-button';
@@ -115,16 +114,21 @@ export function renderPowerTransformerContainer(
   editCount: number,
   showfunctions: boolean
 ): TemplateResult {
-  const pwts = getChildElementsByTagName(parent, 'PowerTransformer');
+  const pTrans = getChildElementsByTagName(parent, 'PowerTransformer');
 
-  return pwts?.length
-    ? html`<div
-        class="${classMap({
-          ptrContent: true,
-          actionicon: !showfunctions,
-        })}"
-      >
-        ${pwts.map(
+  if (showfunctions)
+    return html`${pTrans.map(
+      ptr =>
+        html`<power-transformer-editor
+          .element=${ptr}
+          .editCount=${editCount}
+          ?showfunctions=${showfunctions}
+        ></power-transformer-editor>`
+    )}`;
+
+  return pTrans?.length
+    ? html`<div class="content actionicon">
+        ${pTrans.map(
           pwt =>
             html`<power-transformer-editor
               .element=${pwt}
