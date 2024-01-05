@@ -16,6 +16,14 @@ function setShowFunctions(value: 'on' | 'off') {
   localStorage.setItem('showfunctions', value);
 }
 
+function shouldShowUserDef(): boolean {
+  return localStorage.getItem('showuserdef') === 'on';
+}
+
+function setShowUserDef(value: 'on' | 'off') {
+  localStorage.setItem('showuserdef', value);
+}
+
 /** An editor [[`plugin`]] for editing the `Substation` section. */
 export default class SclSubstationEditorPlugin extends LitElement {
   /** The document being edited as provided to plugins by [[`OpenSCD`]]. */
@@ -46,6 +54,12 @@ export default class SclSubstationEditorPlugin extends LitElement {
     this.requestUpdate();
   }
 
+  toggleShowUserDef(): void {
+    if (shouldShowUserDef()) setShowUserDef('off');
+    else setShowUserDef('on');
+    this.requestUpdate();
+  }
+
   render(): TemplateResult {
     if (!this.doc)
       return html`<h1>
@@ -65,6 +79,16 @@ export default class SclSubstationEditorPlugin extends LitElement {
 
     return html`<h1>
         <nav>
+          <abbr title="Filter user-defined information">
+            <mwc-icon-button-toggle
+              ?on=${shouldShowUserDef()}
+              @click=${() => this.toggleShowUserDef()}
+              id="showuserdef"
+              onIcon="subtitles"
+              offIcon="subtitles_off"
+              ?disabled="${!shouldShowFunctions()}"
+            ></mwc-icon-button-toggle>
+          </abbr>
           <abbr title="Show Function Structure">
             <mwc-icon-button-toggle
               ?on=${shouldShowFunctions()}
@@ -80,17 +104,20 @@ export default class SclSubstationEditorPlugin extends LitElement {
         ${renderSubstations(
           this.doc.documentElement,
           this.editCount,
-          shouldShowFunctions()
+          shouldShowFunctions(),
+          shouldShowUserDef()
         )}
         ${renderLines(
           this.doc.documentElement,
           this.editCount,
-          shouldShowFunctions()
+          shouldShowFunctions(),
+          shouldShowUserDef()
         )}
         ${renderProcesses(
           this.doc.documentElement,
           this.editCount,
-          shouldShowFunctions()
+          shouldShowFunctions(),
+          shouldShowUserDef()
         )}
       </section>`;
   }

@@ -28,6 +28,10 @@ export default class BaseSubstationElementEditor extends LitElement {
   @property({ type: Boolean })
   showfunctions = false;
 
+  /** Whether text/private type element shall be shown */
+  @property({ type: Boolean })
+  showuserdef = false;
+
   @query('mwc-menu') addMenu?: Menu;
 
   @query('mwc-icon-button[icon="playlist_add"]') addButton!: IconButton;
@@ -61,12 +65,18 @@ export default class BaseSubstationElementEditor extends LitElement {
   }
 
   private renderAddButtons(): TemplateResult[] {
-    return getChildren(this.element).map(
-      child =>
-        html`<mwc-list-item class="action add" value="${child}"
-          ><span>${child}</span></mwc-list-item
-        >`
-    );
+    const alreadyHasText = this.element.querySelector(':scope > Text') ?? false;
+
+    return getChildren(this.element)
+      .filter(
+        child => child !== 'Text' || (child === 'Text' && !alreadyHasText)
+      )
+      .map(
+        child =>
+          html`<mwc-list-item class="action add" value="${child}"
+            ><span>${child}</span></mwc-list-item
+          >`
+      );
   }
 
   renderAddButton(): TemplateResult {

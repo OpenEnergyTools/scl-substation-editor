@@ -9,6 +9,9 @@ import { renderConductingEquipments } from './conducting-equipment-editor.js';
 import { renderGeneralEquipment } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 import { renderSubFunctions } from './sub-function-editor.js';
+import { renderText } from './text-editor.js';
+import { renderPrivate } from './private-editor.js';
+
 import { getChildElementsByTagName } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
@@ -45,18 +48,37 @@ export class FunctionEditor extends BaseSubstationElementEditor {
         ></mwc-icon-button>
       </abbr>
       ${this.renderAddButton()}
+      ${renderText(
+        this.element,
+        this.editCount,
+        this.showfunctions,
+        this.showuserdef
+      )}
+      ${renderPrivate(
+        this.element,
+        this.editCount,
+        this.showfunctions,
+        this.showuserdef
+      )}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
       ${renderGeneralEquipment(
         this.element,
         this.editCount,
-        this.showfunctions
+        this.showfunctions,
+        this.showuserdef
       )}
       ${renderConductingEquipments(
         this.element,
         this.editCount,
-        this.showfunctions
+        this.showfunctions,
+        this.showuserdef
       )}
-      ${renderSubFunctions(this.element, this.editCount, this.showfunctions)}
+      ${renderSubFunctions(
+        this.element,
+        this.editCount,
+        this.showfunctions,
+        this.showuserdef
+      )}
     </oscd-action-pane>`;
   }
 
@@ -87,7 +109,8 @@ export class FunctionEditor extends BaseSubstationElementEditor {
 export function renderFunctions(
   parent: Element,
   editCount: number,
-  showfunctions: boolean
+  showfunctions: boolean,
+  showuserdef: boolean
 ): TemplateResult {
   if (!showfunctions) return html``;
 
@@ -98,6 +121,7 @@ export function renderFunctions(
         .element=${fUnction}
         .editCount=${editCount}
         ?showfunctions=${showfunctions}
+        ?showuserdef=${showuserdef}
       ></function-editor>`
   )}`;
 }

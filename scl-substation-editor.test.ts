@@ -132,4 +132,32 @@ describe('SclCommunication editor component', () => {
       );
     });
   });
+
+  describe('with function and user-defined filter toggled ', () => {
+    beforeEach(async () => {
+      editor = await fixture(
+        html`<scl-substation-plugin .doc=${substDoc}></scl-substation-plugin>`
+      );
+      document.body.prepend(editor);
+    });
+
+    afterEach(async () => {
+      editor.remove();
+    });
+
+    it('looks like the latest snapshot', async () => {
+      await setViewport({ width: 1200, height: 800 });
+
+      // await sendMouse({ type: 'click', position: [1180, 20] });
+      // await resetMouse();
+      await sendMouse({ type: 'click', position: [1120, 20] });
+
+      await editor.updateComplete;
+      await timeout(400);
+      await visualDiff(
+        document.body,
+        `scl-substation-editor/#5 Function and user-defined filter toggled`
+      );
+    });
+  });
 });

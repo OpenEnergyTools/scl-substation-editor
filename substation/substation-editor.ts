@@ -10,6 +10,8 @@ import { renderFunctions } from './function-editor.js';
 import { renderGeneralEquipment } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 import { renderPowerTransformerContainer } from './power-transformer-editor.js';
+import { renderText } from './text-editor.js';
+import { renderPrivate } from './private-editor.js';
 
 import { getChildElementsByTagName, styles } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
@@ -42,16 +44,30 @@ export class SubstationEditor extends BaseSubstationElementEditor {
         ></mwc-icon-button>
       </abbr>
       ${this.renderAddButton()}
+      ${renderText(
+        this.element,
+        this.editCount,
+        this.showfunctions,
+        this.showuserdef
+      )}
+      ${renderPrivate(
+        this.element,
+        this.editCount,
+        this.showfunctions,
+        this.showuserdef
+      )}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
       ${renderGeneralEquipment(
         this.element,
         this.editCount,
-        this.showfunctions
+        this.showfunctions,
+        this.showuserdef
       )}
       ${renderPowerTransformerContainer(
         this.element,
         this.editCount,
-        this.showfunctions
+        this.showfunctions,
+        this.showuserdef
       )}
       ${getChildElementsByTagName(this.element, 'VoltageLevel').map(
         voltageLevel =>
@@ -59,9 +75,15 @@ export class SubstationEditor extends BaseSubstationElementEditor {
             .editCount=${this.editCount}
             .element=${voltageLevel}
             ?showfunctions=${this.showfunctions}
+            ?showuserdef=${this.showuserdef}
           ></voltage-level-editor>`
       )}
-      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
+      ${renderFunctions(
+        this.element,
+        this.editCount,
+        this.showfunctions,
+        this.showuserdef
+      )}
     </oscd-action-pane>`;
   }
 
@@ -73,7 +95,8 @@ export class SubstationEditor extends BaseSubstationElementEditor {
 export function renderSubstations(
   parent: Element,
   editCount: number,
-  showfunctions: boolean
+  showfunctions: boolean,
+  showuserdef: boolean
 ): TemplateResult {
   const substations = getChildElementsByTagName(parent, 'Substation');
 
@@ -83,6 +106,7 @@ export function renderSubstations(
         .element=${Substation}
         .editCount=${editCount}
         ?showfunctions=${showfunctions}
+        ?showuserdef=${showuserdef}
       ></substation-editor>`
   )}`;
 }
