@@ -7,6 +7,9 @@ import '@openscd/oscd-action-icon';
 import '@openscd/oscd-action-pane';
 import { renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
+import { renderText } from './text-editor.js';
+import { renderPrivate } from './private-editor.js';
+
 import { getChildElementsByTagName } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
@@ -43,8 +46,20 @@ export class SubEquipmentEditor extends BaseSubstationElementEditor {
         ></mwc-icon-button>
       </abbr>
       ${this.renderAddButton()}
+      ${renderText(
+        this.element,
+        this.editCount,
+        this.showfunctions,
+        this.showuserdef
+      )}
+      ${renderPrivate(
+        this.element,
+        this.editCount,
+        this.showfunctions,
+        this.showuserdef
+      )}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-      ${renderEqFunctions(this.element, this.editCount)}
+      ${renderEqFunctions(this.element, this.editCount, this.showuserdef)}
     </oscd-action-pane> `;
   }
 
@@ -67,7 +82,8 @@ export class SubEquipmentEditor extends BaseSubstationElementEditor {
 export function renderSubEquipments(
   parent: Element,
   editCount: number,
-  showfunctions: boolean
+  showfunctions: boolean,
+  showuserdef: boolean
 ): TemplateResult {
   const subEquipments = getChildElementsByTagName(parent, 'SubEquipment');
 
@@ -77,6 +93,7 @@ export function renderSubEquipments(
         .editCount=${editCount}
         .element=${subEquipment}
         ?showfunctions=${showfunctions}
+        ?showuserdef=${showuserdef}
       ></sub-equipment-editor>`
   )}`;
 }
