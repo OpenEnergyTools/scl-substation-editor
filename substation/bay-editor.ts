@@ -10,6 +10,8 @@ import { renderFunctions } from './function-editor.js';
 import { renderGeneralEquipment } from './general-equipment-editor.js';
 import { renderPowerTransformerContainer } from './power-transformer-editor.js';
 import { renderLNodes } from './l-node-editor.js';
+import { renderText } from './text-editor.js';
+import { renderPrivate } from './private-editor.js';
 
 import { styles } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
@@ -42,23 +44,43 @@ export class BayEditor extends BaseSubstationElementEditor {
         ></mwc-icon-button>
       </abbr>
       ${this.renderAddButton()}
+      ${renderText(
+        this.element,
+        this.editCount,
+        this.showfunctions,
+        this.showuserdef
+      )}
+      ${renderPrivate(
+        this.element,
+        this.editCount,
+        this.showfunctions,
+        this.showuserdef
+      )}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
       ${renderGeneralEquipment(
         this.element,
         this.editCount,
-        this.showfunctions
+        this.showfunctions,
+        this.showuserdef
       )}
       ${renderPowerTransformerContainer(
         this.element,
         this.editCount,
-        this.showfunctions
+        this.showfunctions,
+        this.showuserdef
       )}
       ${renderConductingEquipments(
         this.element,
         this.editCount,
-        this.showfunctions
+        this.showfunctions,
+        this.showuserdef
       )}
-      ${renderFunctions(this.element, this.editCount, this.showfunctions)}
+      ${renderFunctions(
+        this.element,
+        this.editCount,
+        this.showfunctions,
+        this.showuserdef
+      )}
     </oscd-action-pane> `;
   }
 
