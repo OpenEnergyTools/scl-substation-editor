@@ -13,15 +13,17 @@
     "analyze": "cem analyze --litelement",
     "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
     "build": "rimraf dist && rollup -c rollup.config.js",
-    "deploy": "npm run build && gh-pages --dist 'dist'",
+    "deploy": "npm run build && gh-pages --dist 'dist' --branch 'deploy'",
     "prepublish": "tsc && npm run analyze -- --exclude dist",
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
-    "test": "playwright install && tsc && wtr --coverage",
-    "test:watch": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --watch --coverage\"",
-    "test:unit": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --group unit --watch --coverage\"",
-    "test:visual": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --group visual --watch --coverage\"",
-    "test:update": "tsc && wtr --group visual --update-visual-baseline"
+    "test": "wtr --coverage",
+    "test:update": "tsc && wtr --group visual --update-visual-baseline",
+    "test:unit": "tsc && wtr --group unit --coverage",
+    "test:visual": "tsc && wtr --group visual --coverage",
+    "test:watch": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --watch\"",
+    "test:unitw": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --group unit --watch --coverage\"",
+    "test:visualw": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --group visual --watch --coverage\""
   },
   "dependencies": {
     "@material/mwc-fab": "^0.27.0",
