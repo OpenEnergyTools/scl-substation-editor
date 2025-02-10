@@ -28,23 +28,26 @@ function setShowUserDef(value: 'on' | 'off') {
 export default class SclSubstationEditorPlugin extends LitElement {
   /** The document being edited as provided to plugins by [[`OpenSCD`]]. */
   @property({ attribute: false })
-  doc!: XMLDocument;
+  doc?: XMLDocument;
 
   @property({ type: Number })
   editCount = -1;
 
   @state()
   get substations(): Element[] {
+    if (!this.doc) return [];
     return getChildElementsByTagName(this.doc.documentElement, 'Substation');
   }
 
   @state()
   get lines(): Element[] {
+    if (!this.doc) return [];
     return getChildElementsByTagName(this.doc.documentElement, 'Line');
   }
 
   @state()
   get processes(): Element[] {
+    if (!this.doc) return [];
     return getChildElementsByTagName(this.doc.documentElement, 'Process');
   }
 
