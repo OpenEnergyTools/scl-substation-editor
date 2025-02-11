@@ -9,7 +9,7 @@ import type { IconButton } from '@material/mwc-icon-button';
 import type { ListItem } from '@material/mwc-list/mwc-list-item';
 import type { Menu } from '@material/mwc-menu';
 
-import { newEditEvent } from '@openscd/open-scd-core';
+import { newEditEvent } from '@openenergytools/open-scd-core';
 import { getChildren } from '@openenergytools/scl-lib';
 
 import { newCreateWizardEvent, newEditWizardEvent } from '../foundation.js';

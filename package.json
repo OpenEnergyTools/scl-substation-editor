@@ -34,7 +34,7 @@
     "@openenergytools/scl-lib": "^0.8.17",
     "@openscd/oscd-action-icon": "^1.0.0",
     "@openscd/oscd-action-pane": "^1.0.1",
-    "@openscd/open-scd-core": "0.0.2",
+    "@openenergytools/open-scd-core": "0.0.5",
     "lit": "^3.0.0"
   },
   "devDependencies": {
