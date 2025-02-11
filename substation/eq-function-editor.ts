@@ -2,7 +2,6 @@
 import { TemplateResult, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
-import '@openscd/oscd-action-pane';
 import { renderEqSubFunctions } from './eq-sub-function-editor.js';
 import { renderGeneralEquipment } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';

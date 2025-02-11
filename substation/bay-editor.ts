@@ -2,7 +2,6 @@
 import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import '@openscd/oscd-action-pane';
 import '@material/mwc-icon-button';
 
 import { renderConductingEquipments } from './conducting-equipment-editor.js';

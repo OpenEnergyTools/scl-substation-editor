@@ -5,8 +5,8 @@ import { customElement, property } from 'lit/decorators.js';
 import '@material/mwc-fab';
 import '@material/mwc-icon-button';
 import '@openscd/oscd-action-icon';
-import '@openscd/oscd-action-pane';
 import './transformer-winding-editor.js';
+
 import { renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
 import { renderSubEquipments } from './sub-equipment-editor.js';

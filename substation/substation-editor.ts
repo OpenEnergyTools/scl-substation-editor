@@ -3,7 +3,6 @@ import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import '@material/mwc-icon-button';
-import '@openscd/oscd-action-pane';
 
 import './voltage-level-editor.js';
 import { renderFunctions } from './function-editor.js';

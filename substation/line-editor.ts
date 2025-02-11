@@ -3,7 +3,6 @@ import { TemplateResult, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import '@material/mwc-icon-button';
-import '@openscd/oscd-action-pane';
 
 import { renderConductingEquipments } from './conducting-equipment-editor.js';
 import { renderFunctions } from './function-editor.js';

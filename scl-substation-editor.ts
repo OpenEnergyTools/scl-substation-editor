@@ -3,10 +3,15 @@ import { property, state } from 'lit/decorators.js';
 
 import '@material/mwc-icon-button-toggle';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+
 import { renderSubstations } from './substation/substation-editor.js';
 import { renderLines } from './substation/line-editor.js';
 import { renderProcesses } from './substation/process-editor.js';
 import { getChildElementsByTagName } from './foundation.js';
+
+window.customElements.define('oscd-action-pane', OscdActionPane);
 
 function shouldShowFunctions(): boolean {
   return localStorage.getItem('showfunctions') === 'on';

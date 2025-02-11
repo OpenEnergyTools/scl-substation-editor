@@ -5,7 +5,6 @@ import { customElement, state } from 'lit/decorators.js';
 import '@material/mwc-fab';
 import '@material/mwc-icon-button';
 
-import '@openscd/oscd-action-pane';
 import { renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
 import { renderText } from './text-editor.js';

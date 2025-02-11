@@ -3,9 +3,8 @@ import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import '@material/mwc-icon-button';
-import '@openscd/oscd-action-pane';
-
 import './bay-editor.js';
+
 import { renderFunctions } from './function-editor.js';
 import { renderGeneralEquipment } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';

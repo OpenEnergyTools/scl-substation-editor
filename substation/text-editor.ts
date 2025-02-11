@@ -5,8 +5,6 @@ import { customElement, state } from 'lit/decorators.js';
 import '@material/mwc-fab';
 import '@material/mwc-icon-button';
 
-import '@openscd/oscd-action-pane';
-
 import { getChildElementsByTagName } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 

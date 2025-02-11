@@ -3,8 +3,6 @@
 import { TemplateResult, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
-import '@openscd/oscd-action-pane';
-
 import { renderGeneralEquipment } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 import { renderText } from './text-editor.js';

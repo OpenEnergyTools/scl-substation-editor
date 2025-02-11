@@ -5,10 +5,14 @@ import { sendMouse, setViewport } from '@web/test-runner-commands';
 
 import { visualDiff } from '@web/test-runner-visual-regression';
 
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+
 import { missingSubstation, substationDoc } from './substation.testfiles.js';
 
 import SclSubstationEditorPlugin from './scl-substation-editor.js';
 import { baseStyle } from './substation/base-visual.js';
+
+window.customElements.define('oscd-action-pane', OscdActionPane);
 
 const factor = window.process && process.env.CI ? 4 : 2;
 function timeout(ms: number) {
