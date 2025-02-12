@@ -2,10 +2,6 @@
 import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import '@material/mwc-fab';
-
-import '@openenergytools/oscd-action-icon';
-
 import { renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
 import { renderText } from './text-editor.js';
@@ -32,20 +28,20 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
 
   renderContentIcon(): TemplateResult {
     return html`<md-icon slot="icon">${getIcon(this.element)}</md-icon>
-      <mwc-fab
+      <md-filled-icon-button
         class="action edit"
         slot="action"
         mini
-        icon="edit"
         @click="${() => this.openEditWizard()}"
-      ></mwc-fab>
-      <mwc-fab
+        ><md-icon>edit</md-icon></md-filled-icon-button
+      >
+      <md-filled-icon-button
         class="action remove"
         slot="action"
         mini
-        icon="delete"
         @click="${() => this.removeElement()}"
-      ></md-fab> `;
+        ><md-icon>delete</md-icon></md-filled-icon-button
+      > `;
   }
 
   render(): TemplateResult {

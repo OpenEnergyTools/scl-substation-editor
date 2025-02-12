@@ -2,7 +2,6 @@
 import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import '@material/mwc-fab';
 import './transformer-winding-editor.js';
 
 import { renderLNodes } from './l-node-editor.js';
@@ -55,20 +54,18 @@ export class PowerTransformerEditor extends BaseSubstationElementEditor {
   renderContentIcon(): TemplateResult {
     return html`<md-icon slot="icon"
         >${powerTransformerTwoWindingIcon}</mwc-icon
-      ><mwc-fab
+      ><md-filled-icon-button
         class="action edit"
         slot="action"
         mini
-        icon="edit"
         @click="${() => this.openEditWizard()}"
-      ></mwc-fab>
-      <mwc-fab
+      ><md-icon>edit</md-icon></md-filled-icon-button>
+      <md-filled-icon-button
         class="action remove"
         slot="action"
         mini
-        icon="delete"
         @click="${() => this.removeElement()}"
-      ></mwc-fab> `;
+      ><md-icon>delete</md-icon></md-filled-icon-button> `;
   }
 
   render(): TemplateResult {

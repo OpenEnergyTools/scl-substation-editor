@@ -7,6 +7,7 @@ import { OscdActionIcon } from '@openenergytools/oscd-action-icon';
 import { OscdActionPane } from '@openenergytools/oscd-action-pane';
 
 import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import { MdFilledIconButton } from '@scopedelement/material-web/iconbutton/MdFilledIconButton.js';
 import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
 import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
 import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
@@ -33,6 +34,9 @@ if (!window.customElements.get('md-menu'))
 
 if (!window.customElements.get('md-menu-item'))
   window.customElements.define('md-menu-item', MdMenuItem);
+
+if (!window.customElements.get('md-filled-icon-button'))
+  window.customElements.define('md-filled-icon-button', MdFilledIconButton);
 
 function shouldShowFunctions(): boolean {
   return localStorage.getItem('showfunctions') === 'on';
@@ -192,6 +196,8 @@ export default class SclSubstationEditorPlugin extends LitElement {
       --md-sys-color-on-primary: var(--oscd-base2);
       --md-sys-color-on-surface-variant: var(--oscd-base00);
       --md-menu-container-color: var(--oscd-base3);
+
+      --md-filled-icon-button-container-color: var(--oscd-secondary);
 
       --oscd-action-pane-theme-surface: var(--oscd-theme-base3);
       --oscd-action-pane-theme-on-surface: var(--oscd-theme-base00);

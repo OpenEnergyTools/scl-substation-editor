@@ -2,9 +2,6 @@
 import { TemplateResult, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
-import '@material/mwc-fab';
-import '@openenergytools/oscd-action-icon';
-
 import {
   automationLogicalNode,
   controlLogicalNode,
@@ -73,20 +70,20 @@ export class LNodeEditor extends BaseSubstationElementEditor {
       ?secondary=${this.missingIedReference}
       ?highlighted=${this.missingIedReference}
       ><md-icon slot="icon">${getLNodeIcon(this.element)}</md-icon>
-      <mwc-fab
+      <md-filled-icon-button
         class="action edit"
         slot="action"
         mini
-        icon="edit"
         @click="${() => this.openEditWizard()}"
-      ></mwc-fab>
-      <mwc-fab
+        ><md-icon>edit</md-icon></md-filled-icon-button
+      >
+      <md-filled-icon-button
         class="action remove"
         slot="action"
         mini
-        icon="delete"
         @click="${() => this.removeElement()}"
-      ></mwc-fab>
+        ><md-icon>delete</md-icon></md-filled-icon-button
+      >
     </oscd-action-icon>`;
   }
 }
