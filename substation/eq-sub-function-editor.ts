@@ -30,17 +30,17 @@ export class EqSubFunctionEditor extends BaseSubstationElementEditor {
       secondary
     >
       <abbr slot="action" title="Edit">
-        <mwc-icon-button
+        <md-icon-button
           class="action edit"
-          icon="edit"
           @click=${() => this.openEditWizard()}
-        ></mwc-icon-button> </abbr
+          ><md-icon>edit</md-icon></md-icon-button
+        > </abbr
       ><abbr slot="action" title="Remove">
-        <mwc-icon-button
+        <md-icon-button
           class="action remove"
-          icon="delete"
           @click=${() => this.removeElement()}
-        ></mwc-icon-button>
+          ><md-icon>delete</md-icon></md-icon-button
+        >
       </abbr>
       ${this.renderAddButton()}
       ${renderText(

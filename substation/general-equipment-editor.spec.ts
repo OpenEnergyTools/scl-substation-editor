@@ -55,7 +55,7 @@ describe('Component for SCL element GeneralEquipment ', () => {
         const event = eventSpy.args[0][0];
         expect(event.type).to.equal('oscd-create-wizard-request');
         expect(event.detail.parent).to.equal(eqFun);
-        expect(event.detail.tagName).to.equal(add.value);
+        expect(event.detail.tagName).to.equal(add.getAttribute('value'));
 
         eventSpy.resetHistory(); // individual select
       });

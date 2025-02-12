@@ -2,13 +2,14 @@
 import { LitElement, html, TemplateResult, css } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
-import '@material/mwc-icon-button-toggle';
-
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { OscdActionIcon } from '@openenergytools/oscd-action-icon';
 import { OscdActionPane } from '@openenergytools/oscd-action-pane';
 
 import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
+import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
 
 import { renderSubstations } from './substation/substation-editor.js';
 import { renderLines } from './substation/line-editor.js';
@@ -23,6 +24,15 @@ if (!window.customElements.get('oscd-action-icon'))
 
 if (!window.customElements.get('md-icon'))
   window.customElements.define('md-icon', MdIcon);
+
+if (!window.customElements.get('md-icon-button'))
+  window.customElements.define('md-icon-button', MdIconButton);
+
+if (!window.customElements.get('md-menu'))
+  window.customElements.define('md-menu', MdMenu);
+
+if (!window.customElements.get('md-menu-item'))
+  window.customElements.define('md-menu-item', MdMenuItem);
 
 function shouldShowFunctions(): boolean {
   return localStorage.getItem('showfunctions') === 'on';
@@ -99,23 +109,23 @@ export default class SclSubstationEditorPlugin extends LitElement {
     return html`<h1>
         <nav>
           <abbr title="Filter user-defined information">
-            <mwc-icon-button-toggle
-              ?on=${shouldShowUserDef()}
+            <md-icon-button
+              ?selected=${shouldShowUserDef()}
               @click=${() => this.toggleShowUserDef()}
               id="showuserdef"
-              onIcon="subtitles"
-              offIcon="subtitles_off"
               ?disabled="${!shouldShowFunctions()}"
-            ></mwc-icon-button-toggle>
+              ><md-icon>subtitles_off</md-icon
+              ><md-icon slot="selected">subtitles</md-icon></md-icon-button
+            >
           </abbr>
           <abbr title="Show Function Structure">
-            <mwc-icon-button-toggle
-              ?on=${shouldShowFunctions()}
+            <md-icon-button
+              ?selected=${shouldShowFunctions()}
               @click=${() => this.toggleShowFunctions()}
               id="showfunctions"
-              onIcon="layers"
-              offIcon="layers_clear"
-            ></mwc-icon-button-toggle>
+              ><md-icon>layers_clear</md-icon
+              ><md-icon slot="selected">layers</md-icon></md-icon-button
+            >
           </abbr>
         </nav>
       </h1>
@@ -156,7 +166,7 @@ export default class SclSubstationEditorPlugin extends LitElement {
     }
 
     h1 > nav,
-    h1 > abbr > mwc-icon-button {
+    h1 > abbr > md-icon-button {
       float: right;
     }
 
@@ -172,6 +182,17 @@ export default class SclSubstationEditorPlugin extends LitElement {
     }
 
     * {
+      --md-sys-color-primary: var(--oscd-primary);
+      --md-sys-color-secondary: var(--oscd-secondary);
+      --md-sys-typescale-body-large-font: var(--oscd-theme-text-font);
+      --md-outlined-text-field-input-text-color: var(--oscd-base01);
+
+      --md-sys-color-surface: var(--oscd-base3);
+      --md-sys-color-on-surface: var(--oscd-base00);
+      --md-sys-color-on-primary: var(--oscd-base2);
+      --md-sys-color-on-surface-variant: var(--oscd-base00);
+      --md-menu-container-color: var(--oscd-base3);
+
       --oscd-action-pane-theme-surface: var(--oscd-theme-base3);
       --oscd-action-pane-theme-on-surface: var(--oscd-theme-base00);
       --oscd-action-pane-theme-on-primary: var(--oscd-theme-base2);

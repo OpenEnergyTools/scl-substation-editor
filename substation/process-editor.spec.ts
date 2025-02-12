@@ -51,7 +51,7 @@ describe('Component for SCL element Process', () => {
       const event = eventSpy.args[0][0];
       expect(event.type).to.equal('oscd-create-wizard-request');
       expect(event.detail.parent).to.equal(proc);
-      expect(event.detail.tagName).to.equal(add.value);
+      expect(event.detail.tagName).to.equal(add.getAttribute('value'));
 
       eventSpy.resetHistory(); // individual select
     });

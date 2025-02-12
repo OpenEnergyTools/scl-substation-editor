@@ -3,7 +3,6 @@ import { TemplateResult, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import '@material/mwc-fab';
-import '@material/mwc-icon-button';
 
 import { renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
@@ -32,18 +31,18 @@ export class GeneralEquipmentEditor extends BaseSubstationElementEditor {
     if (this.showfunctions)
       return html`<oscd-action-pane label=${this.header}>
         <abbr slot="action" title="Edit">
-          <mwc-icon-button
+          <md-icon-button
             class="action edit"
-            icon="edit"
             @click=${() => this.openEditWizard()}
-          ></mwc-icon-button>
+            ><md-icon>edit</md-icon></md-icon-button
+          >
         </abbr>
         <abbr slot="action" title="Remove">
-          <mwc-icon-button
+          <md-icon-button
             class="action remove"
-            icon="delete"
             @click=${() => this.removeElement()}
-          ></mwc-icon-button>
+            ><md-icon>delete</md-icon></md-icon-button
+          >
         </abbr>
         ${this.renderAddButton()}
         ${renderText(

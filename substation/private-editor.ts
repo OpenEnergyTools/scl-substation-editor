@@ -3,7 +3,6 @@ import { TemplateResult, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import '@material/mwc-fab';
-import '@material/mwc-icon-button';
 
 import { getChildElementsByTagName } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
@@ -25,18 +24,18 @@ export class PrivateEditor extends BaseSubstationElementEditor {
       highlighted
     >
       <abbr slot="action" title="Edit">
-        <mwc-icon-button
+        <md-icon-button
           class="action edit"
-          icon="edit"
           @click=${() => this.openEditWizard()}
-        ></mwc-icon-button>
+          ><md-icon>edit</md-icon></md-icon-button
+        >
       </abbr>
       <abbr slot="action" title="Remove">
-        <mwc-icon-button
+        <md-icon-button
           class="action remove"
-          icon="delete"
           @click=${() => this.removeElement()}
-        ></mwc-icon-button>
+          ><md-icon>delete</md-icon></md-icon-button
+        >
       </abbr>
     </oscd-action-pane>`;
   }

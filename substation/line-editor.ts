@@ -2,8 +2,6 @@
 import { TemplateResult, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
-import '@material/mwc-icon-button';
-
 import { renderConductingEquipments } from './conducting-equipment-editor.js';
 import { renderFunctions } from './function-editor.js';
 import { renderGeneralEquipment } from './general-equipment-editor.js';
@@ -39,18 +37,18 @@ export class LineEditor extends BaseSubstationElementEditor {
   render(): TemplateResult {
     return html`<oscd-action-pane label=${this.header}>
       <abbr slot="action" title="Edit">
-        <mwc-icon-button
+        <md-icon-button
           class="action edit"
-          icon="edit"
           @click=${() => this.openEditWizard()}
-        ></mwc-icon-button>
+          ><md-icon>edit</md-icon></md-icon-button
+        >
       </abbr>
       <abbr slot="action" title="Remove">
-        <mwc-icon-button
+        <md-icon-button
           class="action remove"
-          icon="delete"
           @click=${() => this.removeElement()}
-        ></mwc-icon-button>
+          ><md-icon>delete</md-icon></md-icon-button
+        >
       </abbr>
       ${this.renderAddButton()}
       ${renderText(
