@@ -4,7 +4,7 @@ import { customElement, state } from 'lit/decorators.js';
 
 import '@material/mwc-fab';
 import '@material/mwc-icon';
-import '@openscd/oscd-action-icon';
+import '@openenergytools/oscd-action-icon';
 
 import {
   automationLogicalNode,

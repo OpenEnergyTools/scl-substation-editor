@@ -4,6 +4,7 @@ import { property, state } from 'lit/decorators.js';
 import '@material/mwc-icon-button-toggle';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
+import { OscdActionIcon } from '@openenergytools/oscd-action-icon';
 import { OscdActionPane } from '@openenergytools/oscd-action-pane';
 
 import { renderSubstations } from './substation/substation-editor.js';
@@ -13,6 +14,9 @@ import { getChildElementsByTagName } from './foundation.js';
 
 if (!window.customElements.get('oscd-action-pane'))
   window.customElements.define('oscd-action-pane', OscdActionPane);
+
+if (!window.customElements.get('oscd-action-icon'))
+  window.customElements.define('oscd-action-icon', OscdActionIcon);
 
 function shouldShowFunctions(): boolean {
   return localStorage.getItem('showfunctions') === 'on';

@@ -2,7 +2,7 @@
 import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import '@openscd/oscd-action-icon';
+import '@openenergytools/oscd-action-icon';
 import './tap-changer-editor.js';
 
 import { renderLNodes } from './l-node-editor.js';

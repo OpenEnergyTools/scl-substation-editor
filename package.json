@@ -32,7 +32,7 @@
     "@material/mwc-icon-button-toggle": "^0.27.0",
     "@material/mwc-menu": "^0.27.0",
     "@openenergytools/scl-lib": "^0.8.17",
-    "@openscd/oscd-action-icon": "^1.0.0",
+    "@openenergytools/oscd-action-icon": "^1.0.1",
     "@openenergytools/oscd-action-pane": "^1.0.1",
     "@openenergytools/open-scd-core": "0.0.5",
     "lit": "^3.0.0"
