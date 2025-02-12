@@ -12,7 +12,8 @@ import { missingSubstation, substationDoc } from './substation.testfiles.js';
 import SclSubstationEditorPlugin from './scl-substation-editor.js';
 import { baseStyle } from './substation/base-visual.js';
 
-window.customElements.define('oscd-action-pane', OscdActionPane);
+if (!window.customElements.get('oscd-action-pane'))
+  window.customElements.define('oscd-action-pane', OscdActionPane);
 
 const factor = window.process && process.env.CI ? 4 : 2;
 function timeout(ms: number) {

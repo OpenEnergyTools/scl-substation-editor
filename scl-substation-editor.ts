@@ -11,7 +11,8 @@ import { renderLines } from './substation/line-editor.js';
 import { renderProcesses } from './substation/process-editor.js';
 import { getChildElementsByTagName } from './foundation.js';
 
-window.customElements.define('oscd-action-pane', OscdActionPane);
+if (!window.customElements.get('oscd-action-pane'))
+  window.customElements.define('oscd-action-pane', OscdActionPane);
 
 function shouldShowFunctions(): boolean {
   return localStorage.getItem('showfunctions') === 'on';
