@@ -31,8 +31,8 @@ export class PowerTransformerEditor extends BaseSubstationElementEditor {
 
   // eslint-disable-next-line class-methods-use-this
   renderContentPane(): TemplateResult {
-    return html`<mwc-icon slot="icon" style="width:24px;height:24px"
-      >${powerTransformerTwoWindingIcon}</mwc-icon
+    return html`<md-icon slot="icon" style="width:24px;height:24px"
+      >${powerTransformerTwoWindingIcon}</md-icon
     > `;
   }
 
@@ -55,7 +55,7 @@ export class PowerTransformerEditor extends BaseSubstationElementEditor {
 
   // eslint-disable-next-line class-methods-use-this
   renderContentIcon(): TemplateResult {
-    return html`<mwc-icon slot="icon"
+    return html`<md-icon slot="icon"
         >${powerTransformerTwoWindingIcon}</mwc-icon
       ><mwc-fab
         class="action edit"

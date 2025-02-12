@@ -26,13 +26,13 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
   }
 
   renderContentPane(): TemplateResult {
-    return html`<mwc-icon slot="icon" style="width:24px;height:24px"
-      >${getIcon(this.element)}</mwc-icon
+    return html`<md-icon slot="icon" style="width:24px;height:24px"
+      >${getIcon(this.element)}</md-icon
     > `;
   }
 
   renderContentIcon(): TemplateResult {
-    return html`<mwc-icon slot="icon">${getIcon(this.element)}</mwc-icon>
+    return html`<md-icon slot="icon">${getIcon(this.element)}</md-icon>
       <mwc-fab
         class="action edit"
         slot="action"
@@ -46,7 +46,7 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
         mini
         icon="delete"
         @click="${() => this.removeElement()}"
-      ></mwc-fab> `;
+      ></md-fab> `;
   }
 
   render(): TemplateResult {

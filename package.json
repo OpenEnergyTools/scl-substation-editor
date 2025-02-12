@@ -31,6 +31,7 @@
     "@material/mwc-icon-button": "^0.27.0",
     "@material/mwc-icon-button-toggle": "^0.27.0",
     "@material/mwc-menu": "^0.27.0",
+    "@scopedelement/material-web": "3.10.0",
     "@openenergytools/scl-lib": "^0.8.17",
     "@openenergytools/oscd-action-icon": "^1.0.1",
     "@openenergytools/oscd-action-pane": "^1.0.1",

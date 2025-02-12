@@ -73,7 +73,7 @@ export class LNodeEditor extends BaseSubstationElementEditor {
       label="${this.header}"
       ?secondary=${this.missingIedReference}
       ?highlighted=${this.missingIedReference}
-      ><mwc-icon slot="icon">${getLNodeIcon(this.element)}</mwc-icon>
+      ><md-icon slot="icon">${getLNodeIcon(this.element)}</md-icon>
       <mwc-fab
         class="action edit"
         slot="action"

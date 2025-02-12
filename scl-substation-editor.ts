@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { LitElement, html, TemplateResult, css } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
@@ -6,6 +7,8 @@ import '@material/mwc-icon-button-toggle';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { OscdActionIcon } from '@openenergytools/oscd-action-icon';
 import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
 
 import { renderSubstations } from './substation/substation-editor.js';
 import { renderLines } from './substation/line-editor.js';
@@ -17,6 +20,9 @@ if (!window.customElements.get('oscd-action-pane'))
 
 if (!window.customElements.get('oscd-action-icon'))
   window.customElements.define('oscd-action-icon', OscdActionIcon);
+
+if (!window.customElements.get('md-icon'))
+  window.customElements.define('md-icon', MdIcon);
 
 function shouldShowFunctions(): boolean {
   return localStorage.getItem('showfunctions') === 'on';

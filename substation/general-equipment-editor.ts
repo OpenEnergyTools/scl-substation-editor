@@ -63,7 +63,7 @@ export class GeneralEquipmentEditor extends BaseSubstationElementEditor {
       </oscd-action-pane>`;
 
     return html`<oscd-action-icon label=${this.header}>
-      <mwc-icon slot="icon">${generalConductingEquipmentIcon}</mwc-icon>
+      <md-icon slot="icon">${generalConductingEquipmentIcon}</md-icon>
       <mwc-fab
         class="action edit"
         slot="action"
