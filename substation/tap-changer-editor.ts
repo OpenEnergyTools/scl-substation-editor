@@ -50,7 +50,10 @@ export class TapChangerEditor extends BaseSubstationElementEditor {
         this.showuserdef
       )}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-      ${renderEqFunctions(this.element, this.editCount, this.showuserdef)}
+      ${renderEqFunctions(this.element, {
+        docVersion: this.editCount,
+        showuserdef: this.showuserdef,
+      })}
       ${renderSubEquipments(
         this.element,
         this.editCount,

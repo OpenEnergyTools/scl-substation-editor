@@ -72,12 +72,11 @@ export class BayEditor extends BaseSubstationElementEditor {
         this.showfunctions,
         this.showuserdef
       )}
-      ${renderFunctions(
-        this.element,
-        this.editCount,
-        this.showfunctions,
-        this.showuserdef
-      )}
+      ${renderFunctions(this.element, {
+        docVersion: this.editCount,
+        showfunctions: this.showfunctions,
+        showuserdef: this.showuserdef,
+      })}
     </oscd-action-pane> `;
   }
 

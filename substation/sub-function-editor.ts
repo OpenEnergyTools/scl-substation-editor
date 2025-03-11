@@ -12,6 +12,12 @@ import { renderText } from './text-editor.js';
 import { renderPrivate } from './private-editor.js';
 
 import { getChildElementsByTagName } from '../foundation.js';
+import {
+  openEditWizard,
+  Prop,
+  removeElement,
+  renderAddButton,
+} from './foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** Pane rendering `SubFunction` element with its children */
@@ -71,12 +77,11 @@ export class SubFunctionEditor extends BaseSubstationElementEditor {
         this.showfunctions,
         this.showuserdef
       )}
-      ${renderSubFunctions(
-        this.element,
-        this.editCount,
-        this.showfunctions,
-        this.showuserdef
-      )}
+      ${renderSubFunctions(this.element, {
+        docVersion: this.editCount,
+        showfunctions: this.showfunctions,
+        showuserdef: this.showuserdef,
+      })}
     </oscd-action-pane>`;
   }
 
@@ -104,20 +109,68 @@ export class SubFunctionEditor extends BaseSubstationElementEditor {
   `;
 }
 
+function renderSubFunction(element: Element, prop: Prop): TemplateResult {
+  function header(): string {
+    const name = element.getAttribute('name');
+    const desc = element.getAttribute('desc');
+    const type = element.getAttribute('type');
+
+    return `${name}${desc ? ` - ${desc}` : ''}${type ? ` (${type})` : ''}`;
+  }
+
+  return html`<oscd-action-pane label="${header()}" icon="functions" secondary
+    ><abbr slot="action" title="Edit">
+      <md-icon-button
+        class="action edit"
+        @click=${(evt: Event) =>
+          openEditWizard(element, evt.target as HTMLLIElement)}
+        ><md-icon>edit</md-icon></md-icon-button
+      >
+    </abbr>
+    <abbr slot="action" title="Remove">
+      <md-icon-button
+        class="action remove"
+        @click=${(evt: Event) =>
+          removeElement(element, evt.target as HTMLElement)}
+        ><md-icon>delete</md-icon></md-icon-button
+      >
+    </abbr>
+    ${renderAddButton(element)}
+    ${renderText(
+      element,
+      prop.docVersion,
+      prop.showfunctions!,
+      prop.showuserdef!
+    )}
+    ${renderPrivate(
+      element,
+      prop.docVersion,
+      prop.showfunctions!,
+      prop.showuserdef!
+    )}
+    ${renderLNodes(element, prop.docVersion, prop.showfunctions!)}
+    ${renderGeneralEquipment(
+      element,
+      prop.docVersion,
+      prop.showfunctions!,
+      prop.showuserdef!
+    )}
+    ${renderConductingEquipments(
+      element,
+      prop.docVersion,
+      prop.showfunctions!,
+      prop.showuserdef!
+    )}
+    ${renderSubFunctions(element, prop)}
+  </oscd-action-pane>`;
+}
+
 export function renderSubFunctions(
   parent: Element,
-  editCount: number,
-  showfunctions: boolean,
-  showuserdef: boolean
+  prop: Prop
 ): TemplateResult {
   const subfunctions = getChildElementsByTagName(parent, 'SubFunction');
-  return html` ${subfunctions.map(
-    subFunction =>
-      html`<sub-function-editor
-        .element=${subFunction}
-        .editCount=${editCount}
-        ?showfunctions=${showfunctions}
-        ?showuserdef=${showuserdef}
-      ></sub-function-editor>`
+  return html` ${subfunctions.map(subFunction =>
+    renderSubFunction(subFunction, prop)
   )}`;
 }

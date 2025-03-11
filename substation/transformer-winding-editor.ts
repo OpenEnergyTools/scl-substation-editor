@@ -69,7 +69,10 @@ export class TransformerWindingEditor extends BaseSubstationElementEditor {
       )}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
       ${this.renderTapChanger()}
-      ${renderEqFunctions(this.element, this.editCount, this.showuserdef)}
+      ${renderEqFunctions(this.element, {
+        docVersion: this.editCount,
+        showuserdef: this.showuserdef,
+      })}
       ${renderSubEquipments(
         this.element,
         this.editCount,
