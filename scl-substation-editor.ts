@@ -146,12 +146,11 @@ export default class SclSubstationEditorPlugin extends LitElement {
           shouldShowFunctions(),
           shouldShowUserDef()
         )}
-        ${renderProcesses(
-          this.doc.documentElement,
-          this.editCount,
-          shouldShowFunctions(),
-          shouldShowUserDef()
-        )}
+        ${renderProcesses(this.doc.documentElement, {
+          docVersion: this.editCount,
+          showfunctions: shouldShowFunctions(),
+          showuserdef: shouldShowUserDef(),
+        })}
       </section>`;
   }
 

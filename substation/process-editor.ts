@@ -14,6 +14,12 @@ import { renderPrivate } from './private-editor.js';
 
 import { styles } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
+import {
+  openEditWizard,
+  Prop,
+  removeElement,
+  renderAddButton,
+} from './foundation.js';
 
 @customElement('process-editor')
 export class ProcessEditor extends BaseSubstationElementEditor {
@@ -78,12 +84,11 @@ export class ProcessEditor extends BaseSubstationElementEditor {
         this.showfunctions,
         this.showuserdef
       )}
-      ${renderProcesses(
-        this.element,
-        this.editCount,
-        this.showfunctions,
-        this.showuserdef
-      )}
+      ${renderProcesses(this.element, {
+        docVersion: this.editCount,
+        showfunctions: this.showfunctions,
+        showuserdef: this.showuserdef,
+      })}
       ${renderFunctions(this.element, {
         docVersion: this.editCount,
         showfunctions: this.showfunctions,
@@ -102,21 +107,72 @@ export class ProcessEditor extends BaseSubstationElementEditor {
   `;
 }
 
-export function renderProcesses(
-  parent: Element,
-  editCount: number,
-  showfunctions: boolean,
-  showuserdef: boolean
-): TemplateResult {
+function renderProcess(element: Element, prop: Prop): TemplateResult {
+  function header(): string {
+    const name = element.getAttribute('name');
+    const desc = element.getAttribute('desc');
+
+    return `${name} ${desc ? `—${desc}` : ''}`;
+  }
+
+  return html`<oscd-action-pane label=${header()}>
+    <abbr slot="action" title="Edit">
+      <md-icon-button
+        class="action edit"
+        @click=${(evt: Event) =>
+          openEditWizard(element, evt.target as HTMLLIElement)}
+        ><md-icon>edit</md-icon></md-icon-button
+      >
+    </abbr>
+    <abbr slot="action" title="Remove">
+      <md-icon-button
+        class="action remove"
+        @click=${(evt: Event) =>
+          removeElement(element, evt.target as HTMLElement)}
+        ><md-icon>delete</md-icon></md-icon-button
+      ></abbr
+    >
+    ${renderAddButton(element)}
+    ${renderText(
+      element,
+      prop.docVersion,
+      prop.showfunctions!,
+      prop.showuserdef!
+    )}
+    ${renderPrivate(
+      element,
+      prop.docVersion,
+      prop.showfunctions!,
+      prop.showuserdef!
+    )}
+    ${renderLNodes(element, prop.docVersion, prop.showfunctions!)}
+    ${renderGeneralEquipments(element, prop)}
+    ${renderConductingEquipments(
+      element,
+      prop.docVersion,
+      prop.showfunctions!,
+      prop.showuserdef!
+    )}
+    ${renderLines(
+      element,
+      prop.docVersion,
+      prop.showfunctions!,
+      prop.showuserdef!
+    )}
+    ${renderSubstations(
+      element,
+      prop.docVersion,
+      prop.showfunctions!,
+      prop.showuserdef!
+    )}
+    ${renderProcesses(element, prop)} ${renderFunctions(element, prop)}
+  </oscd-action-pane>`;
+}
+
+export function renderProcesses(parent: Element, prop: Prop): TemplateResult {
   const processes = parent.querySelectorAll(':scope > Process');
 
-  return html` ${Array.from(processes).map(
-    process =>
-      html`<process-editor
-        .element=${process}
-        .editCount=${editCount}
-        ?showfunctions=${showfunctions}
-        ?showuserdef=${showuserdef}
-      ></process-editor>`
+  return html` ${Array.from(processes).map(process =>
+    renderProcess(process, prop)
   )}`;
 }
