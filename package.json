@@ -31,6 +31,7 @@
     "@openenergytools/oscd-action-icon": "^1.0.1",
     "@openenergytools/oscd-action-pane": "^1.0.1",
     "@openenergytools/open-scd-core": "0.0.5",
+    "@open-wc/scoped-elements": "^3.0.5",
     "lit": "^3.0.0"
   },
   "devDependencies": {
