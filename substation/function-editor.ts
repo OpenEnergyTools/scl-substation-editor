@@ -3,7 +3,7 @@ import { TemplateResult, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import { renderConductingEquipments } from './conducting-equipment-editor.js';
-import { renderGeneralEquipment } from './general-equipment-editor.js';
+import { renderGeneralEquipments } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 import { renderSubFunctions } from './sub-function-editor.js';
 import { renderText } from './text-editor.js';
@@ -64,12 +64,11 @@ export class FunctionEditor extends BaseSubstationElementEditor {
         this.showuserdef
       )}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-      ${renderGeneralEquipment(
-        this.element,
-        this.editCount,
-        this.showfunctions,
-        this.showuserdef
-      )}
+      ${renderGeneralEquipments(this.element, {
+        docVersion: this.editCount,
+        showfunctions: this.showfunctions,
+        showuserdef: this.showuserdef,
+      })}
       ${renderConductingEquipments(
         this.element,
         this.editCount,
@@ -152,12 +151,7 @@ function renderFunction(element: Element, prop: Prop): TemplateResult {
       prop.showuserdef!
     )}
     ${renderLNodes(element, prop.docVersion, prop.showfunctions!)}
-    ${renderGeneralEquipment(
-      element,
-      prop.docVersion,
-      prop.showfunctions!,
-      prop.showuserdef!
-    )}
+    ${renderGeneralEquipments(element, prop)}
     ${renderConductingEquipments(
       element,
       prop.docVersion,

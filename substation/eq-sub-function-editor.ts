@@ -3,7 +3,7 @@
 import { TemplateResult, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
-import { renderGeneralEquipment } from './general-equipment-editor.js';
+import { renderGeneralEquipments } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 import { renderText } from './text-editor.js';
 import { renderPrivate } from './private-editor.js';
@@ -63,12 +63,11 @@ export class EqSubFunctionEditor extends BaseSubstationElementEditor {
         this.showuserdef
       )}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-      ${renderGeneralEquipment(
-        this.element,
-        this.editCount,
-        this.showfunctions,
-        this.showuserdef
-      )}
+      ${renderGeneralEquipments(this.element, {
+        docVersion: this.editCount,
+        showfunctions: this.showfunctions,
+        showuserdef: this.showuserdef,
+      })}
       ${renderEqSubFunctions(this.element, {
         docVersion: this.editCount,
         showfunctions: this.showfunctions,
@@ -140,12 +139,7 @@ function renderEqSubFunction(element: Element, prop: Prop): TemplateResult {
         prop.showuserdef!
       )}
       ${renderLNodes(element, prop.docVersion, prop.showfunctions!)}
-      ${renderGeneralEquipment(
-        element,
-        prop.docVersion,
-        prop.showfunctions!,
-        prop.showuserdef!
-      )}
+      ${renderGeneralEquipments(element, prop)}
       ${renderEqSubFunctions(element, prop)}
     </oscd-action-pane>
   `;

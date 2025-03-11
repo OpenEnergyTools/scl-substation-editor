@@ -4,7 +4,7 @@ import { customElement, state } from 'lit/decorators.js';
 
 import { renderConductingEquipments } from './conducting-equipment-editor.js';
 import { renderFunctions } from './function-editor.js';
-import { renderGeneralEquipment } from './general-equipment-editor.js';
+import { renderGeneralEquipments } from './general-equipment-editor.js';
 import { renderLNodes } from './l-node-editor.js';
 import { renderText } from './text-editor.js';
 import { renderPrivate } from './private-editor.js';
@@ -70,12 +70,11 @@ export class LineEditor extends BaseSubstationElementEditor {
         this.showfunctions,
         this.showuserdef
       )}
-      ${renderGeneralEquipment(
-        this.element,
-        this.editCount,
-        this.showfunctions,
-        this.showuserdef
-      )}
+      ${renderGeneralEquipments(this.element, {
+        docVersion: this.editCount,
+        showfunctions: this.showfunctions,
+        showuserdef: this.showuserdef,
+      })}
       ${renderFunctions(this.element, {
         docVersion: this.editCount,
         showfunctions: this.showfunctions,
