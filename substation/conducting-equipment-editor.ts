@@ -1,25 +1,43 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 
-import '@material/mwc-fab';
-import '@material/mwc-icon-button';
+import { OscdActionIcon } from '@openenergytools/oscd-action-icon';
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
+import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
+import { MdFilledIconButton } from '@scopedelement/material-web/iconbutton/MdFilledIconButton.js';
 
-import '@openscd/oscd-action-icon';
-import '@openscd/oscd-action-pane';
-
-import { renderLNodes } from './l-node-editor.js';
+import { LNodeEditor, renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
-import { renderText } from './text-editor.js';
-import { renderPrivate } from './private-editor.js';
+import { renderText, TextEditor } from './text-editor.js';
+import { PrivateEditor, renderPrivate } from './private-editor.js';
 
 import { getChildElementsByTagName, getIcon, styles } from '../foundation.js';
-import { renderSubEquipments } from './sub-equipment-editor.js';
+import {
+  renderSubEquipments,
+  SubEquipmentEditor,
+} from './sub-equipment-editor.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** [[`SubstationEditor`]] subeditor for a `ConductingEquipment` element. */
-@customElement('conducting-equipment-editor')
 export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
+  static scopedElements = {
+    'private-editor': PrivateEditor,
+    'text-editor': TextEditor,
+    'l-node-editor': LNodeEditor,
+    'sub-equipment-editor': SubEquipmentEditor,
+    'oscd-action-icon': OscdActionIcon,
+    'oscd-action-pane': OscdActionPane,
+    'md-filled-icon-button': MdFilledIconButton,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+  };
+
   /** ConductingEquipment name attribute */
   @property({ type: String })
   get name(): string {
@@ -27,45 +45,45 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
   }
 
   renderContentPane(): TemplateResult {
-    return html`<mwc-icon slot="icon" style="width:24px;height:24px"
-      >${getIcon(this.element)}</mwc-icon
+    return html`<md-icon slot="icon" style="width:24px;height:24px"
+      >${getIcon(this.element)}</md-icon
     > `;
   }
 
   renderContentIcon(): TemplateResult {
-    return html`<mwc-icon slot="icon">${getIcon(this.element)}</mwc-icon>
-      <mwc-fab
+    return html`<md-icon slot="icon">${getIcon(this.element)}</md-icon>
+      <md-filled-icon-button
         class="action edit"
         slot="action"
         mini
-        icon="edit"
         @click="${() => this.openEditWizard()}"
-      ></mwc-fab>
-      <mwc-fab
+        ><md-icon>edit</md-icon></md-filled-icon-button
+      >
+      <md-filled-icon-button
         class="action remove"
         slot="action"
         mini
-        icon="delete"
         @click="${() => this.removeElement()}"
-      ></mwc-fab> `;
+        ><md-icon>delete</md-icon></md-filled-icon-button
+      > `;
   }
 
   render(): TemplateResult {
     if (this.showfunctions)
       return html`<oscd-action-pane label="${this.name}">
       <abbr slot="action" title="Edit">
-          <mwc-icon-button
+          <md-icon-button
             class="action edit"
             icon="edit"
             @click=${() => this.openEditWizard()}
-          ></mwc-icon-button>
+          ><md-icon>edit</md-icon></md-icon-button>
         </abbr>
       <abbr slot="action" title="Remove">
-        <mwc-icon-button
+        <md-icon-button
           class="action remove"
           icon="delete"
           @click=${() => this.removeElement()}
-        ></mwc-icon-button>
+        ><md-icon>delete</md-icon></md-icon-button>
       </abbr>
       ${this.renderAddButton()}
       ${this.renderContentPane()}
@@ -82,7 +100,10 @@ export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
         this.showuserdef
       )}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-      ${renderEqFunctions(this.element, this.editCount, this.showuserdef)}
+      ${renderEqFunctions(this.element, {
+        docVersion: this.editCount,
+        showuserdef: this.showuserdef,
+      })}
       ${renderSubEquipments(
         this.element,
         this.editCount,

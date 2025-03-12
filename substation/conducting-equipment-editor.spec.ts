@@ -5,12 +5,16 @@ import { expect, fixture, html } from '@open-wc/testing';
 
 import { SinonSpy, spy } from 'sinon';
 
-import { isRemove } from '@openscd/open-scd-core';
+import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './conducting-equipment-editor.js';
-import type { ConductingEquipmentEditor } from './conducting-equipment-editor.js';
+import { ConductingEquipmentEditor } from './conducting-equipment-editor.js';
+
+window.customElements.define(
+  'conducting-equipment-editor',
+  ConductingEquipmentEditor
+);
 
 const condEq = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')
@@ -31,7 +35,7 @@ describe('Component for SCL element ConductingEquipment ', () => {
       );
 
       eventSpy = spy();
-      window.addEventListener('oscd-edit', eventSpy);
+      window.addEventListener('oscd-edit-v2', eventSpy);
       window.addEventListener('oscd-edit-wizard-request', eventSpy);
       window.addEventListener('oscd-create-wizard-request', eventSpy);
     });
@@ -55,7 +59,7 @@ describe('Component for SCL element ConductingEquipment ', () => {
         const event = eventSpy.args[0][0];
         expect(event.type).to.equal('oscd-create-wizard-request');
         expect(event.detail.parent).to.equal(condEq);
-        expect(event.detail.tagName).to.equal(add.value);
+        expect(event.detail.tagName).to.equal(add.getAttribute('value'));
 
         eventSpy.resetHistory(); // individual select
       });
@@ -68,9 +72,9 @@ describe('Component for SCL element ConductingEquipment ', () => {
 
       const event = eventSpy.args[0][0];
 
-      expect(event.type).to.equal('oscd-edit');
-      expect(event.detail).to.satisfy(isRemove);
-      expect(event.detail.node).to.equal(condEq);
+      expect(event.type).to.equal('oscd-edit-v2');
+      expect(event.detail.edit).to.satisfy(isRemove);
+      expect(event.detail.edit.node).to.equal(condEq);
     });
   });
 
@@ -87,7 +91,7 @@ describe('Component for SCL element ConductingEquipment ', () => {
       );
 
       eventSpy = spy();
-      window.addEventListener('oscd-edit', eventSpy);
+      window.addEventListener('oscd-edit-v2', eventSpy);
       window.addEventListener('oscd-edit-wizard-request', eventSpy);
     });
 
@@ -108,9 +112,9 @@ describe('Component for SCL element ConductingEquipment ', () => {
 
       const event = eventSpy.args[0][0];
 
-      expect(event.type).to.equal('oscd-edit');
-      expect(event.detail).to.satisfy(isRemove);
-      expect(event.detail.node).to.equal(condEq);
+      expect(event.type).to.equal('oscd-edit-v2');
+      expect(event.detail.edit).to.satisfy(isRemove);
+      expect(event.detail.edit.node).to.equal(condEq);
     });
   });
 });

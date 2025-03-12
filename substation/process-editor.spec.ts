@@ -1,39 +1,42 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-unused-expressions */
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { expect, fixture, html } from '@open-wc/testing';
+import { expect, fixture } from '@open-wc/testing';
 
 import { SinonSpy, spy } from 'sinon';
 
-import { isRemove } from '@openscd/open-scd-core';
+import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './process-editor.js';
-import type { ProcessEditor } from './process-editor.js';
+import {
+  addActionable,
+  editActionable,
+  removeActionable,
+} from './test-utils.js';
+
+import { renderProcess } from './process-editor.js';
 
 const proc = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')
   .querySelector('Process')!;
 
 describe('Component for SCL element Process', () => {
-  let editor: ProcessEditor;
+  let editor: HTMLElement;
 
   let eventSpy: SinonSpy;
 
   beforeEach(async () => {
-    editor = await fixture(
-      html`<process-editor .element="${proc}"></process-editor>`
-    );
+    editor = await fixture(renderProcess(proc, { docVersion: 1 }));
 
     eventSpy = spy();
-    window.addEventListener('oscd-edit', eventSpy);
+    window.addEventListener('oscd-edit-v2', eventSpy);
     window.addEventListener('oscd-edit-wizard-request', eventSpy);
     window.addEventListener('oscd-create-wizard-request', eventSpy);
   });
 
   it('sends a wizard edit request', () => {
-    editor.editActionable?.click();
+    editActionable(editor)?.click();
 
     expect(eventSpy).to.have.been.calledOnce;
 
@@ -43,7 +46,7 @@ describe('Component for SCL element Process', () => {
   });
 
   it('sends a wizard create request', () => {
-    editor.addActionable?.forEach(add => {
+    addActionable(editor).forEach(add => {
       add.click();
 
       expect(eventSpy).to.have.been.calledOnce;
@@ -51,21 +54,21 @@ describe('Component for SCL element Process', () => {
       const event = eventSpy.args[0][0];
       expect(event.type).to.equal('oscd-create-wizard-request');
       expect(event.detail.parent).to.equal(proc);
-      expect(event.detail.tagName).to.equal(add.value);
+      expect(event.detail.tagName).to.equal(add.getAttribute('value'));
 
       eventSpy.resetHistory(); // individual select
     });
   });
 
   it('allows to remove an existing Line element', () => {
-    editor.removeActionable?.click();
+    removeActionable(editor)?.click();
 
     expect(eventSpy).to.have.been.calledOnce;
 
     const event = eventSpy.args[0][0];
 
-    expect(event.type).to.equal('oscd-edit');
-    expect(event.detail).to.satisfy(isRemove);
-    expect(event.detail.node).to.equal(proc);
+    expect(event.type).to.equal('oscd-edit-v2');
+    expect(event.detail.edit).to.satisfy(isRemove);
+    expect(event.detail.edit.node).to.equal(proc);
   });
 });

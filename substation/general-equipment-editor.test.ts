@@ -1,16 +1,21 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { fixture, html } from '@open-wc/testing';
+import { fixture } from '@open-wc/testing';
 
 import { sendMouse, setViewport } from '@web/test-runner-commands';
 
 import { visualDiff } from '@web/test-runner-visual-regression';
 
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+
 import { substationDoc } from '../substation.testfiles.js';
 
 import { baseStyle } from './base-visual.js';
 
-import './general-equipment-editor.js';
-import type { GeneralEquipmentEditor } from './general-equipment-editor.js';
+import './test-utils.js';
+import { renderGeneralEquipment } from './general-equipment-editor.js';
+
+if (!window.customElements.get('oscd-action-pane'))
+  window.customElements.define('oscd-action-pane', OscdActionPane);
 
 const factor = window.process && process.env.CI ? 4 : 2;
 function timeout(ms: number) {
@@ -26,17 +31,14 @@ document.body.prepend(style);
 
 describe('Component for SCL element GeneralEquipment ', () => {
   describe('with add menu open', () => {
-    let editor: GeneralEquipmentEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
-      const subFunc = new DOMParser()
+      const genEq = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`GeneralEquipment`)!;
 
       editor = await fixture(
-        html`<general-equipment-editor
-          .element=${subFunc}
-          ?showfunctions=${true}
-        ></general-equipment-editor>`
+        renderGeneralEquipment(genEq, { docVersion: 1, showfunctions: true })
       );
       document.body.style.width = '400';
       document.body.style.height = '400';
@@ -54,7 +56,6 @@ describe('Component for SCL element GeneralEquipment ', () => {
       await setViewport({ width: 400, height: 400 });
       await sendMouse({ type: 'click', position: [360, 20] });
 
-      await editor.updateComplete;
       await timeout(400);
       await visualDiff(
         document.body,
@@ -64,17 +65,13 @@ describe('Component for SCL element GeneralEquipment ', () => {
   });
 
   describe('with showfunction false', () => {
-    let editor: GeneralEquipmentEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
-      const subFunc = new DOMParser()
+      const genEq = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`GeneralEquipment[name="someGenEquip2"]`)!;
 
-      editor = await fixture(
-        html`<general-equipment-editor
-          .element=${subFunc}
-        ></general-equipment-editor>`
-      );
+      editor = await fixture(renderGeneralEquipment(genEq, { docVersion: 1 }));
       document.body.style.width = '200';
       document.body.style.height = '200';
       editor.style.position = 'absolute';
@@ -91,7 +88,6 @@ describe('Component for SCL element GeneralEquipment ', () => {
       await setViewport({ width: 100, height: 100 });
       await sendMouse({ type: 'click', position: [50, 80] });
 
-      await editor.updateComplete;
       await timeout(400);
       await visualDiff(
         document.body,
@@ -101,17 +97,14 @@ describe('Component for SCL element GeneralEquipment ', () => {
   });
 
   describe('with showfunction true', () => {
-    let editor: GeneralEquipmentEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
-      const lNode = new DOMParser()
+      const genEq = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`GeneralEquipment[name="someGenEquip2"]`)!;
 
       editor = await fixture(
-        html`<general-equipment-editor
-          .element=${lNode}
-          ?showfunctions=${true}
-        ></general-equipment-editor>`
+        renderGeneralEquipment(genEq, { docVersion: 1, showfunctions: true })
       );
       document.body.style.width = '500';
       document.body.style.height = '400';

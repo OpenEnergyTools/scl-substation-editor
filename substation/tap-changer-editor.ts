@@ -1,20 +1,38 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, css, html } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { state } from 'lit/decorators.js';
 
-import '@material/mwc-icon-button';
-import '@openscd/oscd-action-pane';
-import { renderLNodes } from './l-node-editor.js';
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
+import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
+
+import { LNodeEditor, renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
-import { renderSubEquipments } from './sub-equipment-editor.js';
-import { renderText } from './text-editor.js';
-import { renderPrivate } from './private-editor.js';
+import {
+  renderSubEquipments,
+  SubEquipmentEditor,
+} from './sub-equipment-editor.js';
+import { renderText, TextEditor } from './text-editor.js';
+import { PrivateEditor, renderPrivate } from './private-editor.js';
 
 import { styles } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
-@customElement('tap-changer-editor')
 export class TapChangerEditor extends BaseSubstationElementEditor {
+  static scopedElements = {
+    'private-editor': PrivateEditor,
+    'text-editor': TextEditor,
+    'l-node-editor': LNodeEditor,
+    'sub-equipment-editor': SubEquipmentEditor,
+    'oscd-action-pane': OscdActionPane,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+  };
+
   @state()
   get header(): string {
     const name = this.element.getAttribute('name');
@@ -26,17 +44,17 @@ export class TapChangerEditor extends BaseSubstationElementEditor {
   render(): TemplateResult {
     return html`<oscd-action-pane label=${this.header}>
       <abbr slot="action" title="Edit">
-        <mwc-icon-button
+        <md-icon-button
           class="action edit"
-          icon="edit"
           @click=${() => this.openEditWizard()}
-        ></mwc-icon-button> </abbr
+          ><md-icon>edit</md-icon></md-icon-button
+        > </abbr
       ><abbr slot="action" title="Remove">
-        <mwc-icon-button
+        <md-icon-button
           class="action remove"
-          icon="delete"
           @click=${() => this.removeElement()}
-        ></mwc-icon-button>
+          ><md-icon>delete</md-icon></md-icon-button
+        >
       </abbr>
       ${this.renderAddButton()}
       ${renderText(
@@ -52,7 +70,10 @@ export class TapChangerEditor extends BaseSubstationElementEditor {
         this.showuserdef
       )}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-      ${renderEqFunctions(this.element, this.editCount, this.showuserdef)}
+      ${renderEqFunctions(this.element, {
+        docVersion: this.editCount,
+        showuserdef: this.showuserdef,
+      })}
       ${renderSubEquipments(
         this.element,
         this.editCount,

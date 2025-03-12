@@ -1,12 +1,27 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { LitElement, html, TemplateResult, css } from 'lit';
 import { property, state } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements/lit-element.js';
 
-import '@material/mwc-icon-button-toggle';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
 
-import { renderSubstations } from './substation/substation-editor.js';
-import { renderLines } from './substation/line-editor.js';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
+import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
+
+import {
+  renderSubstations,
+  SubstationEditor,
+} from './substation/substation-editor.js';
+import { LineEditor, renderLines } from './substation/line-editor.js';
 import { renderProcesses } from './substation/process-editor.js';
 import { getChildElementsByTagName } from './foundation.js';
+import { TextEditor } from './substation/text-editor.js';
+import { PrivateEditor } from './substation/private-editor.js';
+import { LNodeEditor } from './substation/l-node-editor.js';
+import { ConductingEquipmentEditor } from './substation/conducting-equipment-editor.js';
 
 function shouldShowFunctions(): boolean {
   return localStorage.getItem('showfunctions') === 'on';
@@ -25,26 +40,45 @@ function setShowUserDef(value: 'on' | 'off') {
 }
 
 /** An editor [[`plugin`]] for editing the `Substation` section. */
-export default class SclSubstationEditorPlugin extends LitElement {
+export default class SclSubstationEditorPlugin extends ScopedElementsMixin(
+  LitElement
+) {
+  static scopedElements = {
+    'substation-editor': SubstationEditor,
+    'private-editor': PrivateEditor,
+    'text-editor': TextEditor,
+    'l-node-editor': LNodeEditor,
+    'line-editor': LineEditor,
+    'conducting-equipment-editor': ConductingEquipmentEditor,
+    'oscd-action-pane': OscdActionPane,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+  };
+
   /** The document being edited as provided to plugins by [[`OpenSCD`]]. */
   @property({ attribute: false })
-  doc!: XMLDocument;
+  doc?: XMLDocument;
 
   @property({ type: Number })
   editCount = -1;
 
   @state()
   get substations(): Element[] {
+    if (!this.doc) return [];
     return getChildElementsByTagName(this.doc.documentElement, 'Substation');
   }
 
   @state()
   get lines(): Element[] {
+    if (!this.doc) return [];
     return getChildElementsByTagName(this.doc.documentElement, 'Line');
   }
 
   @state()
   get processes(): Element[] {
+    if (!this.doc) return [];
     return getChildElementsByTagName(this.doc.documentElement, 'Process');
   }
 
@@ -80,23 +114,23 @@ export default class SclSubstationEditorPlugin extends LitElement {
     return html`<h1>
         <nav>
           <abbr title="Filter user-defined information">
-            <mwc-icon-button-toggle
-              ?on=${shouldShowUserDef()}
+            <md-icon-button
+              ?selected=${shouldShowUserDef()}
               @click=${() => this.toggleShowUserDef()}
               id="showuserdef"
-              onIcon="subtitles"
-              offIcon="subtitles_off"
               ?disabled="${!shouldShowFunctions()}"
-            ></mwc-icon-button-toggle>
+              ><md-icon>subtitles_off</md-icon
+              ><md-icon slot="selected">subtitles</md-icon></md-icon-button
+            >
           </abbr>
           <abbr title="Show Function Structure">
-            <mwc-icon-button-toggle
-              ?on=${shouldShowFunctions()}
+            <md-icon-button
+              ?selected=${shouldShowFunctions()}
               @click=${() => this.toggleShowFunctions()}
               id="showfunctions"
-              onIcon="layers"
-              offIcon="layers_clear"
-            ></mwc-icon-button-toggle>
+              ><md-icon>layers_clear</md-icon
+              ><md-icon slot="selected">layers</md-icon></md-icon-button
+            >
           </abbr>
         </nav>
       </h1>
@@ -113,12 +147,11 @@ export default class SclSubstationEditorPlugin extends LitElement {
           shouldShowFunctions(),
           shouldShowUserDef()
         )}
-        ${renderProcesses(
-          this.doc.documentElement,
-          this.editCount,
-          shouldShowFunctions(),
-          shouldShowUserDef()
-        )}
+        ${renderProcesses(this.doc.documentElement, {
+          docVersion: this.editCount,
+          showfunctions: shouldShowFunctions(),
+          showuserdef: shouldShowUserDef(),
+        })}
       </section>`;
   }
 
@@ -137,7 +170,7 @@ export default class SclSubstationEditorPlugin extends LitElement {
     }
 
     h1 > nav,
-    h1 > abbr > mwc-icon-button {
+    h1 > abbr > md-icon-button {
       float: right;
     }
 
@@ -153,6 +186,19 @@ export default class SclSubstationEditorPlugin extends LitElement {
     }
 
     * {
+      --md-sys-color-primary: var(--oscd-primary);
+      --md-sys-color-secondary: var(--oscd-secondary);
+      --md-sys-typescale-body-large-font: var(--oscd-theme-text-font);
+      --md-outlined-text-field-input-text-color: var(--oscd-base01);
+
+      --md-sys-color-surface: var(--oscd-base3);
+      --md-sys-color-on-surface: var(--oscd-base00);
+      --md-sys-color-on-primary: var(--oscd-base2);
+      --md-sys-color-on-surface-variant: var(--oscd-base00);
+      --md-menu-container-color: var(--oscd-base3);
+
+      --md-filled-icon-button-container-color: var(--oscd-secondary);
+
       --oscd-action-pane-theme-surface: var(--oscd-theme-base3);
       --oscd-action-pane-theme-on-surface: var(--oscd-theme-base00);
       --oscd-action-pane-theme-on-primary: var(--oscd-theme-base2);

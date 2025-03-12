@@ -2,20 +2,29 @@
 import { LitElement, TemplateResult, html } from 'lit';
 import { property, query, queryAll } from 'lit/decorators.js';
 
-import '@material/mwc-menu';
-import '@material/mwc-list/mwc-list-item';
-import '@material/mwc-icon-button';
-import type { IconButton } from '@material/mwc-icon-button';
-import type { ListItem } from '@material/mwc-list/mwc-list-item';
-import type { Menu } from '@material/mwc-menu';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements/lit-element.js';
 
-import { newEditEvent } from '@openscd/open-scd-core';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
+import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
+
+import { newEditEvent } from '@openenergytools/open-scd-core';
 import { getChildren } from '@openenergytools/scl-lib';
 
 import { newCreateWizardEvent, newEditWizardEvent } from '../foundation.js';
 
 /** base class hosting global properties and the remove method */
-export default class BaseSubstationElementEditor extends LitElement {
+export default class BaseSubstationElementEditor extends ScopedElementsMixin(
+  LitElement
+) {
+  static scopedElements = {
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+  };
+
   /** The edited `Function` element */
   @property({ attribute: false })
   element!: Element;
@@ -32,9 +41,9 @@ export default class BaseSubstationElementEditor extends LitElement {
   @property({ type: Boolean })
   showuserdef = false;
 
-  @query('mwc-menu') addMenu?: Menu;
+  @query('md-menu') addMenu?: MdMenu;
 
-  @query('mwc-icon-button[icon="playlist_add"]') addButton!: IconButton;
+  @query('md-icon-button[icon="playlist_add"]') addButton!: MdIconButton;
 
   @query('.action.remove') removeActionable?: HTMLElement;
 
@@ -42,7 +51,7 @@ export default class BaseSubstationElementEditor extends LitElement {
 
   @query('.action.addmenu') addMenuActionable?: HTMLElement;
 
-  @queryAll('.action.add') addActionable?: ListItem[];
+  @queryAll('.action.add') addActionable?: MdMenuItem[];
 
   private openCreateWizard(tagName: string): void {
     this.dispatchEvent(newCreateWizardEvent(this.element, tagName));
@@ -60,10 +69,6 @@ export default class BaseSubstationElementEditor extends LitElement {
     );
   }
 
-  updated(): void {
-    if (this.addMenu) this.addMenu.anchor = <HTMLElement>this.addButton;
-  }
-
   private renderAddButtons(): TemplateResult[] {
     const alreadyHasText = this.element.querySelector(':scope > Text') ?? false;
 
@@ -73,30 +78,37 @@ export default class BaseSubstationElementEditor extends LitElement {
       )
       .map(
         child =>
-          html`<mwc-list-item class="action add" value="${child}"
-            ><span>${child}</span></mwc-list-item
-          >`
+          html`<md-menu-item
+            class="action add"
+            value="${child}"
+            @click="${() => this.openCreateWizard(child)}"
+          >
+            <div slot="headline">${child}</div>
+          </md-menu-item>`
       );
   }
 
   renderAddButton(): TemplateResult {
     return html` <abbr slot="action" style="position:relative;">
-      <mwc-icon-button
-        class="action addmenu"
-        icon="playlist_add"
-        @click=${() => {
-          if (this.addMenu) this.addMenu.open = true;
-        }}
-      ></mwc-icon-button
-      ><mwc-menu
-        corner="BOTTOM_RIGHT"
-        menuCorner="END"
-        @action=${(e: Event) => {
-          const tagName = (<ListItem>(<Menu>e.target).selected).value;
-          this.openCreateWizard(tagName);
-        }}
-        >${this.renderAddButtons()}</mwc-menu
-      >
+      <span style="position: relative">
+        <md-icon-button
+          id="usage-anchor"
+          class="action addmenu"
+          @click=${() => {
+            if (this.addMenu) this.addMenu.open = true;
+          }}
+        >
+          <md-icon>playlist_add</md-icon>
+        </md-icon-button>
+        <md-menu
+          id="usage-menu"
+          anchor="usage-anchor"
+          anchor-corner="end-end"
+          menu-corner="start-end"
+          no-horizontal-flip
+          >${this.renderAddButtons()}</md-menu
+        >
+      </span>
     </abbr>`;
   }
 }

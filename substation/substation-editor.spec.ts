@@ -5,12 +5,13 @@ import { expect, fixture, html } from '@open-wc/testing';
 
 import { SinonSpy, spy } from 'sinon';
 
-import { isRemove } from '@openscd/open-scd-core';
+import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './substation-editor.js';
-import type { SubstationEditor } from './substation-editor.js';
+import { SubstationEditor } from './substation-editor.js';
+
+window.customElements.define('substation-editor', SubstationEditor);
 
 const subSt = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')
@@ -30,7 +31,7 @@ describe('Component for SCL element Substation ', () => {
     );
 
     eventSpy = spy();
-    window.addEventListener('oscd-edit', eventSpy);
+    window.addEventListener('oscd-edit-v2', eventSpy);
     window.addEventListener('oscd-edit-wizard-request', eventSpy);
     window.addEventListener('oscd-create-wizard-request', eventSpy);
   });
@@ -54,7 +55,7 @@ describe('Component for SCL element Substation ', () => {
       const event = eventSpy.args[0][0];
       expect(event.type).to.equal('oscd-create-wizard-request');
       expect(event.detail.parent).to.equal(subSt);
-      expect(event.detail.tagName).to.equal(add.value);
+      expect(event.detail.tagName).to.equal(add.getAttribute('value'));
 
       eventSpy.resetHistory(); // individual select
     });
@@ -67,8 +68,8 @@ describe('Component for SCL element Substation ', () => {
 
     const event = eventSpy.args[0][0];
 
-    expect(event.type).to.equal('oscd-edit');
-    expect(event.detail).to.satisfy(isRemove);
-    expect(event.detail.node).to.equal(subSt);
+    expect(event.type).to.equal('oscd-edit-v2');
+    expect(event.detail.edit).to.satisfy(isRemove);
+    expect(event.detail.edit.node).to.equal(subSt);
   });
 });

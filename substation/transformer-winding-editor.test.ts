@@ -5,12 +5,21 @@ import { sendMouse, setViewport } from '@web/test-runner-commands';
 
 import { visualDiff } from '@web/test-runner-visual-regression';
 
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+
 import { baseStyle } from './base-visual.js';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './transformer-winding-editor.js';
-import type { TransformerWindingEditor } from './transformer-winding-editor.js';
+import { TransformerWindingEditor } from './transformer-winding-editor.js';
+
+window.customElements.define(
+  'transformer-winding-editor',
+  TransformerWindingEditor
+);
+
+if (!window.customElements.get('oscd-action-pane'))
+  window.customElements.define('oscd-action-pane', OscdActionPane);
 
 const factor = window.process && process.env.CI ? 4 : 2;
 function timeout(ms: number) {

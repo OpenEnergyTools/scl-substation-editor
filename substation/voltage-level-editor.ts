@@ -1,24 +1,44 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 
-import '@material/mwc-icon-button';
-import '@openscd/oscd-action-pane';
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
+import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
+import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
 
-import './bay-editor.js';
+import { BayEditor } from './bay-editor.js';
+
 import { renderFunctions } from './function-editor.js';
-import { renderGeneralEquipment } from './general-equipment-editor.js';
-import { renderLNodes } from './l-node-editor.js';
-import { renderPowerTransformerContainer } from './power-transformer-editor.js';
-import { renderText } from './text-editor.js';
-import { renderPrivate } from './private-editor.js';
+import { renderGeneralEquipments } from './general-equipment-editor.js';
+import { LNodeEditor, renderLNodes } from './l-node-editor.js';
+import {
+  PowerTransformerEditor,
+  renderPowerTransformerContainer,
+} from './power-transformer-editor.js';
+import { renderText, TextEditor } from './text-editor.js';
+import { PrivateEditor, renderPrivate } from './private-editor.js';
 
 import { getChildElementsByTagName, styles } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
+// eslint-disable-next-line no-use-before-define
 /** [[`Substation`]] subeditor for a `VoltageLevel` element. */
-@customElement('voltage-level-editor')
 export class VoltageLevelEditor extends BaseSubstationElementEditor {
+  static scopedElements = {
+    'power-transformer-editor': PowerTransformerEditor,
+    'bay-editor': BayEditor,
+    'text-editor': TextEditor,
+    'private-editor': PrivateEditor,
+    'l-node-editor': LNodeEditor,
+    'oscd-action-pane': OscdActionPane,
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+  };
+
   @property()
   get voltage(): string | null {
     const V = this.element.querySelector(`VoltageLevel > Voltage`);
@@ -54,18 +74,18 @@ export class VoltageLevelEditor extends BaseSubstationElementEditor {
   render(): TemplateResult {
     return html`<oscd-action-pane label="${this.header}">
       <abbr slot="action" title="Edit">
-        <mwc-icon-button
+        <md-icon-button
           class="action edit"
-          icon="edit"
           @click=${() => this.openEditWizard()}
-        ></mwc-icon-button>
+          ><md-icon>edit</md-icon></md-icon-button
+        >
       </abbr>
       <abbr slot="action" title="Remove">
-        <mwc-icon-button
+        <md-icon-button
           class="action remove"
-          icon="delete"
           @click=${() => this.removeElement()}
-        ></mwc-icon-button>
+          ><md-icon>delete</md-icon></md-icon-button
+        >
       </abbr>
       ${this.renderAddButton()}
       ${renderText(
@@ -81,12 +101,11 @@ export class VoltageLevelEditor extends BaseSubstationElementEditor {
         this.showuserdef
       )}
       ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-      ${renderGeneralEquipment(
-        this.element,
-        this.editCount,
-        this.showfunctions,
-        this.showuserdef
-      )}
+      ${renderGeneralEquipments(this.element, {
+        docVersion: this.editCount,
+        showfunctions: this.showfunctions,
+        showuserdef: this.showuserdef,
+      })}
       ${renderPowerTransformerContainer(
         this.element,
         this.editCount,
@@ -94,12 +113,11 @@ export class VoltageLevelEditor extends BaseSubstationElementEditor {
         this.showuserdef
       )}
       ${this.renderBay()}
-      ${renderFunctions(
-        this.element,
-        this.editCount,
-        this.showfunctions,
-        this.showuserdef
-      )}
+      ${renderFunctions(this.element, {
+        docVersion: this.editCount,
+        showfunctions: this.showfunctions,
+        showuserdef: this.showuserdef,
+      })}
     </oscd-action-pane>`;
   }
 

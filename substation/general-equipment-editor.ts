@@ -1,11 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { TemplateResult, css, html } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { TemplateResult, html } from 'lit';
 
-import '@material/mwc-fab';
-import '@material/mwc-icon-button';
-
-import '@openscd/oscd-action-pane';
 import { renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
 import { renderText } from './text-editor.js';
@@ -15,122 +10,90 @@ import {
   generalConductingEquipmentIcon,
   getChildElementsByTagName,
 } from '../foundation.js';
-import BaseSubstationElementEditor from './base-substation-element-editor.js';
+import {
+  openEditWizard,
+  Prop,
+  removeElement,
+  renderAddButton,
+} from './foundation.js';
 
-@customElement('general-equipment-editor')
-export class GeneralEquipmentEditor extends BaseSubstationElementEditor {
-  @state()
-  get header(): string {
-    const name = this.element.getAttribute('name');
-    const desc = this.element.getAttribute('desc');
+export function renderGeneralEquipment(
+  element: Element,
+  prop: Prop
+): TemplateResult {
+  function header(): string {
+    const name = element.getAttribute('name');
+    const desc = element.getAttribute('desc');
 
-    if (!this.showfunctions) return `${name}`;
+    if (prop.showfunctions === false) return `${name}`;
 
     return `${name} ${desc ? `—  ${desc}` : ''}`;
   }
 
-  render(): TemplateResult {
-    if (this.showfunctions)
-      return html`<oscd-action-pane label=${this.header}>
+  return prop.showfunctions
+    ? html`<oscd-action-pane label=${header()}>
         <abbr slot="action" title="Edit">
-          <mwc-icon-button
+          <md-icon-buttons
             class="action edit"
-            icon="edit"
-            @click=${() => this.openEditWizard()}
-          ></mwc-icon-button>
+            @click=${(evt: Event) =>
+              openEditWizard(element, evt.target as HTMLLIElement)}
+            ><md-icon>edit</md-icon></md-icon-button
+          >
         </abbr>
         <abbr slot="action" title="Remove">
-          <mwc-icon-button
+          <md-icon-button
             class="action remove"
-            icon="delete"
-            @click=${() => this.removeElement()}
-          ></mwc-icon-button>
+            @click=${(evt: Event) =>
+              removeElement(element, evt.target as HTMLElement)}
+            ><md-icon>delete</md-icon></md-icon-button
+          >
         </abbr>
-        ${this.renderAddButton()}
+        ${renderAddButton(element)}
         ${renderText(
-          this.element,
-          this.editCount,
-          this.showfunctions,
-          this.showuserdef
+          element,
+          prop.docVersion,
+          prop.showfunctions!,
+          prop.showuserdef!
         )}
         ${renderPrivate(
-          this.element,
-          this.editCount,
-          this.showfunctions,
-          this.showuserdef
+          element,
+          prop.docVersion,
+          prop.showfunctions!,
+          prop.showuserdef!
         )}
-        ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-        ${renderEqFunctions(this.element, this.editCount, this.showuserdef)}
-      </oscd-action-pane>`;
-
-    return html`<oscd-action-icon label=${this.header}>
-      <mwc-icon slot="icon">${generalConductingEquipmentIcon}</mwc-icon>
-      <mwc-fab
-        class="action edit"
-        slot="action"
-        mini
-        icon="edit"
-        @click="${() => this.openEditWizard()}"
-      ></mwc-fab>
-      <mwc-fab
-        class="action remove"
-        slot="action"
-        mini
-        icon="delete"
-        @click="${() => this.removeElement()}"
-      ></mwc-fab>
-    </oscd-action-icon>`;
-  }
-
-  static styles = css`
-    abbr {
-      text-decoration: none;
-      border-bottom: none;
-    }
-
-    .container.lnode {
-      display: grid;
-      grid-gap: 12px;
-      padding: 8px 12px 16px;
-      box-sizing: border-box;
-      grid-template-columns: repeat(auto-fit, minmax(64px, auto));
-    }
-  `;
+        ${renderLNodes(element, prop.docVersion, prop.showfunctions!)}
+        ${renderEqFunctions(element, prop)}
+      </oscd-action-pane>`
+    : html`<oscd-action-icon label=${header()}>
+        <md-icon slot="icon">${generalConductingEquipmentIcon}</md-icon>
+        <md-filled-icon-button
+          class="action edit"
+          slot="action"
+          mini
+          @click=${(evt: Event) =>
+            openEditWizard(element, evt.target as HTMLLIElement)}
+          ><md-icon>edit</md-icon></md-filled-icon-button
+        >
+        <md-filled-icon-button
+          class="action remove"
+          slot="action"
+          mini
+          @click=${(evt: Event) =>
+            removeElement(element, evt.target as HTMLElement)}
+          ><md-icon>delete</md-icon></md-filled-icon-button
+        >
+      </oscd-action-icon>`;
 }
 
-export function renderGeneralEquipment(
+export function renderGeneralEquipments(
   parent: Element,
-  editCount: number,
-  showfunctions: boolean,
-  showuserdef: boolean
+  prop: Prop
 ): TemplateResult {
-  const generalEquipment = getChildElementsByTagName(
+  const generalEquipments = getChildElementsByTagName(
     parent,
     'GeneralEquipment'
   );
-
-  if (showfunctions)
-    return html`${generalEquipment.map(
-      gEquipment =>
-        html`<general-equipment-editor
-          .editCount=${editCount}
-          .element=${gEquipment}
-          ?showfunctions=${showfunctions}
-          ?showuserdef=${showuserdef}
-        ></general-equipment-editor>`
-    )}`;
-
-  return generalEquipment.length
-    ? html` <div class="content actionicon">
-        ${generalEquipment.map(
-          gEquipment =>
-            html`<general-equipment-editor
-              .editCount=${editCount}
-              .element=${gEquipment}
-              ?showfunctions=${showfunctions}
-              ?showuserdef=${showuserdef}
-            ></general-equipment-editor>`
-        )}
-      </div>`
-    : html``;
+  return html`${generalEquipments.map(generalEquipment =>
+    renderGeneralEquipment(generalEquipment, prop)
+  )}`;
 }
