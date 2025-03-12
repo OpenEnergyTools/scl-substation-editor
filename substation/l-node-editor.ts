@@ -1,6 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, html } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { state } from 'lit/decorators.js';
+
+import { OscdActionIcon } from '@openenergytools/oscd-action-icon';
+import { MdFilledIconButton } from '@scopedelement/material-web/iconbutton/MdFilledIconButton.js';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
+import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
+import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
 
 import {
   automationLogicalNode,
@@ -20,6 +27,7 @@ import {
   systemLogicalNode,
   transformerLogicalNode,
 } from './lnode.js';
+
 import { getChildElementsByTagName } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
@@ -48,8 +56,16 @@ export function getLNodeIcon(lNode: Element): TemplateResult {
 }
 
 /** Pane rendering `LNode` element with its children */
-@customElement('l-node-editor')
 export class LNodeEditor extends BaseSubstationElementEditor {
+  static scopedElements = {
+    'oscd-action-icon': OscdActionIcon,
+    'md-filled-icon-button': MdFilledIconButton,
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+  };
+
   @state()
   private get header(): string {
     const prefix = this.element.getAttribute('prefix') ?? '';

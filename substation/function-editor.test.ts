@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { fixture, html } from '@open-wc/testing';
+import { fixture } from '@open-wc/testing';
 
 import { sendMouse, setViewport } from '@web/test-runner-commands';
 
@@ -11,8 +11,8 @@ import { baseStyle } from './base-visual.js';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './function-editor.js';
-import type { FunctionEditor } from './function-editor.js';
+import './test-utils.js';
+import { renderFunction } from './function-editor.js';
 
 if (!window.customElements.get('oscd-action-pane'))
   window.customElements.define('oscd-action-pane', OscdActionPane);
@@ -31,18 +31,13 @@ document.body.prepend(style);
 
 describe('Component for SCL element Function ', () => {
   describe('with add menu open', () => {
-    let editor: FunctionEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
       const func = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`Function[name="func1"]`)!;
 
-      editor = await fixture(
-        html`<function-editor
-          .element=${func}
-          ?showfunctions=${true}
-        ></function-editor>`
-      );
+      editor = await fixture(renderFunction(func, { docVersion: 1 }));
       document.body.style.width = '400';
       document.body.style.height = '400';
       editor.style.position = 'absolute';
@@ -59,22 +54,19 @@ describe('Component for SCL element Function ', () => {
       await setViewport({ width: 400, height: 400 });
       await sendMouse({ type: 'click', position: [380, 30] });
 
-      await editor.updateComplete;
       await timeout(800);
       await visualDiff(document.body, `function-editor/#1 add menu visible`);
     });
   });
 
   describe('with showfunction false', () => {
-    let editor: FunctionEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
-      const subFunc = new DOMParser()
+      const func = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`Function[name="func2"]`)!;
 
-      editor = await fixture(
-        html`<function-editor .element=${subFunc}></function-editor>`
-      );
+      editor = await fixture(renderFunction(func, { docVersion: 1 }));
       document.body.style.width = '600';
       document.body.style.height = '600';
       editor.style.position = 'absolute';
@@ -91,7 +83,6 @@ describe('Component for SCL element Function ', () => {
       await setViewport({ width: 600, height: 600 });
       await sendMouse({ type: 'click', position: [50, 80] });
 
-      await editor.updateComplete;
       await timeout(800);
       await visualDiff(
         document.body,
@@ -101,17 +92,14 @@ describe('Component for SCL element Function ', () => {
   });
 
   describe('with showfunction true', () => {
-    let editor: FunctionEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
-      const lNode = new DOMParser()
+      const func = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`Function[name="func2"]`)!;
 
       editor = await fixture(
-        html`<function-editor
-          .element=${lNode}
-          ?showfunctions=${true}
-        ></function-editor>`
+        renderFunction(func, { docVersion: 1, showfunctions: true })
       );
       document.body.style.width = '600';
       document.body.style.height = '1000';

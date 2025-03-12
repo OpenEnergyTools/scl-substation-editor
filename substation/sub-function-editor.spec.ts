@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-unused-expressions */
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { expect, fixture, html } from '@open-wc/testing';
+import { expect, fixture } from '@open-wc/testing';
 
 import { SinonSpy, spy } from 'sinon';
 
@@ -9,22 +9,25 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './sub-function-editor.js';
-import type { SubFunctionEditor } from './sub-function-editor.js';
+import {
+  addActionable,
+  editActionable,
+  removeActionable,
+} from './test-utils.js';
+
+import { renderSubFunction } from './sub-function-editor.js';
 
 const subFunc = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')
   .querySelector('SubFunction')!;
 
 describe('Component for SCL element SubFunction', () => {
-  let editor: SubFunctionEditor;
+  let editor: HTMLElement;
 
   let eventSpy: SinonSpy;
 
   beforeEach(async () => {
-    editor = await fixture(
-      html`<sub-function-editor .element="${subFunc}"></sub-function-editor>`
-    );
+    editor = await fixture(renderSubFunction(subFunc, { docVersion: 1 }));
 
     eventSpy = spy();
     window.addEventListener('oscd-edit-v2', eventSpy);
@@ -33,7 +36,7 @@ describe('Component for SCL element SubFunction', () => {
   });
 
   it('sends a wizard edit request', () => {
-    editor.editActionable?.click();
+    editActionable(editor)?.click();
 
     expect(eventSpy).to.have.been.calledOnce;
 
@@ -43,7 +46,7 @@ describe('Component for SCL element SubFunction', () => {
   });
 
   it('sends a wizard create request', () => {
-    editor.addActionable?.forEach(add => {
+    addActionable(editor).forEach(add => {
       add.click();
 
       expect(eventSpy).to.have.been.calledOnce;
@@ -58,7 +61,7 @@ describe('Component for SCL element SubFunction', () => {
   });
 
   it('allows to remove an existing SubFunction element', () => {
-    editor.removeActionable?.click();
+    removeActionable(editor)?.click();
 
     expect(eventSpy).to.have.been.calledOnce;
 

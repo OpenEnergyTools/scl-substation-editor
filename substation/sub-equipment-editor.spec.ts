@@ -9,8 +9,9 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './sub-equipment-editor.js';
-import type { SubEquipmentEditor } from './sub-equipment-editor.js';
+import { SubEquipmentEditor } from './sub-equipment-editor.js';
+
+window.customElements.define('sub-equipment-editor', SubEquipmentEditor);
 
 const subEquip = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')

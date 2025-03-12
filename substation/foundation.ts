@@ -46,7 +46,13 @@ export function renderAddButtons(element: Element): TemplateResult[] {
     .filter(child => child !== 'Text' || (child === 'Text' && !alreadyHasText))
     .map(
       child =>
-        html`<md-menu-item class="action add" value="${child}">
+        html`<md-menu-item
+          value="${child}"
+          @click="${(evt: Event) => {
+            const dispatcher = evt.target as HTMLElement;
+            openCreateWizard(element, dispatcher, child);
+          }}"
+          >>
           <div slot="headline">${child}</div>
         </md-menu-item>`
     );

@@ -9,8 +9,9 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './voltage-level-editor.js';
-import type { VoltageLevelEditor } from './voltage-level-editor.js';
+import { VoltageLevelEditor } from './voltage-level-editor.js';
+
+window.customElements.define('voltage-level-editor', VoltageLevelEditor);
 
 const voltLv = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')

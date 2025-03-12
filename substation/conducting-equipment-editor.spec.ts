@@ -9,8 +9,12 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './conducting-equipment-editor.js';
-import type { ConductingEquipmentEditor } from './conducting-equipment-editor.js';
+import { ConductingEquipmentEditor } from './conducting-equipment-editor.js';
+
+window.customElements.define(
+  'conducting-equipment-editor',
+  ConductingEquipmentEditor
+);
 
 const condEq = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')

@@ -9,8 +9,12 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './power-transformer-editor.js';
-import type { PowerTransformerEditor } from './power-transformer-editor.js';
+import { PowerTransformerEditor } from './power-transformer-editor.js';
+
+window.customElements.define(
+  'power-transformer-editor',
+  PowerTransformerEditor
+);
 
 const pTrans = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')

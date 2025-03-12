@@ -11,8 +11,9 @@ import { baseStyle } from './base-visual.js';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './line-editor.js';
-import type { LineEditor } from './line-editor.js';
+import { LineEditor } from './line-editor.js';
+
+window.customElements.define('line-editor', LineEditor);
 
 if (!window.customElements.get('oscd-action-pane'))
   window.customElements.define('oscd-action-pane', OscdActionPane);

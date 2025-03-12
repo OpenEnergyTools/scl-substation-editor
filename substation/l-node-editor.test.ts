@@ -11,8 +11,9 @@ import { baseStyle } from './base-visual.js';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './l-node-editor.js';
-import type { LNodeEditor } from './l-node-editor.js';
+import { LNodeEditor } from './l-node-editor.js';
+
+window.customElements.define('l-node-editor', LNodeEditor);
 
 if (!window.customElements.get('oscd-action-pane'))
   window.customElements.define('oscd-action-pane', OscdActionPane);

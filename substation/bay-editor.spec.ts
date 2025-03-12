@@ -9,8 +9,9 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './bay-editor.js';
-import type { BayEditor } from './bay-editor.js';
+import { BayEditor } from './bay-editor.js';
+
+window.customElements.define('bay-editor', BayEditor);
 
 const bay = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')

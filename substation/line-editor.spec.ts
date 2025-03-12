@@ -9,8 +9,9 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './line-editor.js';
-import type { LineEditor } from './line-editor.js';
+import { LineEditor } from './line-editor.js';
+
+window.customElements.define('line-editor', LineEditor);
 
 const subFunc = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')

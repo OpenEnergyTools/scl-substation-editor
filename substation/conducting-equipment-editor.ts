@@ -1,19 +1,43 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 
-import { renderLNodes } from './l-node-editor.js';
+import { OscdActionIcon } from '@openenergytools/oscd-action-icon';
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
+import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
+import { MdFilledIconButton } from '@scopedelement/material-web/iconbutton/MdFilledIconButton.js';
+
+import { LNodeEditor, renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
-import { renderText } from './text-editor.js';
-import { renderPrivate } from './private-editor.js';
+import { renderText, TextEditor } from './text-editor.js';
+import { PrivateEditor, renderPrivate } from './private-editor.js';
 
 import { getChildElementsByTagName, getIcon, styles } from '../foundation.js';
-import { renderSubEquipments } from './sub-equipment-editor.js';
+import {
+  renderSubEquipments,
+  SubEquipmentEditor,
+} from './sub-equipment-editor.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** [[`SubstationEditor`]] subeditor for a `ConductingEquipment` element. */
-@customElement('conducting-equipment-editor')
 export class ConductingEquipmentEditor extends BaseSubstationElementEditor {
+  static scopedElements = {
+    'private-editor': PrivateEditor,
+    'text-editor': TextEditor,
+    'l-node-editor': LNodeEditor,
+    'sub-equipment-editor': SubEquipmentEditor,
+    'oscd-action-icon': OscdActionIcon,
+    'oscd-action-pane': OscdActionPane,
+    'md-filled-icon-button': MdFilledIconButton,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+  };
+
   /** ConductingEquipment name attribute */
   @property({ type: String })
   get name(): string {

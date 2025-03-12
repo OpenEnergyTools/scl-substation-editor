@@ -11,8 +11,12 @@ import { substationDoc } from '../substation.testfiles.js';
 
 import { baseStyle } from './base-visual.js';
 
-import './conducting-equipment-editor.js';
-import type { ConductingEquipmentEditor } from './conducting-equipment-editor.js';
+import { ConductingEquipmentEditor } from './conducting-equipment-editor.js';
+
+window.customElements.define(
+  'conducting-equipment-editor',
+  ConductingEquipmentEditor
+);
 
 if (!window.customElements.get('oscd-action-pane'))
   window.customElements.define('oscd-action-pane', OscdActionPane);

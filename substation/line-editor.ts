@@ -1,19 +1,39 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, css, html } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { state } from 'lit/decorators.js';
 
-import { renderConductingEquipments } from './conducting-equipment-editor.js';
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
+import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
+
+import {
+  ConductingEquipmentEditor,
+  renderConductingEquipments,
+} from './conducting-equipment-editor.js';
 import { renderFunctions } from './function-editor.js';
 import { renderGeneralEquipments } from './general-equipment-editor.js';
-import { renderLNodes } from './l-node-editor.js';
-import { renderText } from './text-editor.js';
-import { renderPrivate } from './private-editor.js';
+import { LNodeEditor, renderLNodes } from './l-node-editor.js';
+import { renderText, TextEditor } from './text-editor.js';
+import { PrivateEditor, renderPrivate } from './private-editor.js';
 
 import { getChildElementsByTagName, styles } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
-@customElement('line-editor')
 export class LineEditor extends BaseSubstationElementEditor {
+  static scopedElements = {
+    'private-editor': PrivateEditor,
+    'text-editor': TextEditor,
+    'l-node-editor': LNodeEditor,
+    'conducting-equipment-editor': ConductingEquipmentEditor,
+    'oscd-action-pane': OscdActionPane,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+  };
+
   get voltage(): string | null {
     const V = this.element.querySelector(`:scope > Voltage`);
     if (V === null) return null;

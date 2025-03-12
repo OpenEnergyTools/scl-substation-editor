@@ -9,8 +9,9 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './private-editor.js';
-import type { PrivateEditor } from './private-editor.js';
+import { PrivateEditor } from './private-editor.js';
+
+window.customElements.define('private-editor', PrivateEditor);
 
 const eqFun = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')

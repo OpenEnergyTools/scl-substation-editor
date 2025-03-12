@@ -9,8 +9,12 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './transformer-winding-editor.js';
-import type { TransformerWindingEditor } from './transformer-winding-editor.js';
+import { TransformerWindingEditor } from './transformer-winding-editor.js';
+
+window.customElements.define(
+  'transformer-winding-editor',
+  TransformerWindingEditor
+);
 
 const tapCh = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')

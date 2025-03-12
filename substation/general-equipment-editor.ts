@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { TemplateResult, css, html } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { TemplateResult, html } from 'lit';
 
 import { renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
@@ -11,7 +10,6 @@ import {
   generalConductingEquipmentIcon,
   getChildElementsByTagName,
 } from '../foundation.js';
-import BaseSubstationElementEditor from './base-substation-element-editor.js';
 import {
   openEditWizard,
   Prop,
@@ -19,91 +17,10 @@ import {
   renderAddButton,
 } from './foundation.js';
 
-@customElement('general-equipment-editor')
-export class GeneralEquipmentEditor extends BaseSubstationElementEditor {
-  @state()
-  get header(): string {
-    const name = this.element.getAttribute('name');
-    const desc = this.element.getAttribute('desc');
-
-    if (!this.showfunctions) return `${name}`;
-
-    return `${name} ${desc ? `—  ${desc}` : ''}`;
-  }
-
-  render(): TemplateResult {
-    if (this.showfunctions)
-      return html`<oscd-action-pane label=${this.header}>
-        <abbr slot="action" title="Edit">
-          <md-icon-button
-            class="action edit"
-            @click=${() => this.openEditWizard()}
-            ><md-icon>edit</md-icon></md-icon-button
-          >
-        </abbr>
-        <abbr slot="action" title="Remove">
-          <md-icon-button
-            class="action remove"
-            @click=${() => this.removeElement()}
-            ><md-icon>delete</md-icon></md-icon-button
-          >
-        </abbr>
-        ${this.renderAddButton()}
-        ${renderText(
-          this.element,
-          this.editCount,
-          this.showfunctions,
-          this.showuserdef
-        )}
-        ${renderPrivate(
-          this.element,
-          this.editCount,
-          this.showfunctions,
-          this.showuserdef
-        )}
-        ${renderLNodes(this.element, this.editCount, this.showfunctions)}
-        ${renderEqFunctions(this.element, {
-          docVersion: this.editCount,
-          showuserdef: this.showuserdef,
-        })}
-      </oscd-action-pane>`;
-
-    return html`<oscd-action-icon label=${this.header}>
-      <md-icon slot="icon">${generalConductingEquipmentIcon}</md-icon>
-      <md-filled-icon-button
-        class="action edit"
-        slot="action"
-        mini
-        @click="${() => this.openEditWizard()}"
-        ><md-icon>edit</md-icon></md-filled-icon-button
-      >
-      <md-filled-icon-button
-        class="action remove"
-        slot="action"
-        mini
-        @click="${() => this.removeElement()}"
-        ><md-icon>delete</md-icon></md-filled-icon-button
-      >
-    </oscd-action-icon>`;
-  }
-
-  static styles = css`
-    abbr {
-      text-decoration: none;
-      border-bottom: none;
-    }
-
-    .container.lnode {
-      display: grid;
-      grid-gap: 12px;
-      padding: 8px 12px 16px;
-      box-sizing: border-box;
-      grid-template-columns: repeat(auto-fit, minmax(64px, auto));
-    }
-  `;
-}
-
-function renderGeneralEquipment(element: Element, prop: Prop): TemplateResult {
+export function renderGeneralEquipment(
+  element: Element,
+  prop: Prop
+): TemplateResult {
   function header(): string {
     const name = element.getAttribute('name');
     const desc = element.getAttribute('desc');
@@ -167,44 +84,6 @@ function renderGeneralEquipment(element: Element, prop: Prop): TemplateResult {
         >
       </oscd-action-icon>`;
 }
-
-/* 
-export function renderGeneralEquipments(
-  parent: Element,
-  editCount: number,
-  showfunctions: boolean,
-  showuserdef: boolean
-): TemplateResult {
-  const generalEquipment = getChildElementsByTagName(
-    parent,
-    'GeneralEquipment'
-  );
-
-  if (showfunctions)
-    return html`${generalEquipment.map(
-      gEquipment =>
-        html`<general-equipment-editor
-          .editCount=${editCount}
-          .element=${gEquipment}
-          ?showfunctions=${showfunctions}
-          ?showuserdef=${showuserdef}
-        ></general-equipment-editor>`
-    )}`;
-
-  return generalEquipment.length
-    ? html` <div class="content actionicon">
-        ${generalEquipment.map(
-          gEquipment =>
-            html`<general-equipment-editor
-              .editCount=${editCount}
-              .element=${gEquipment}
-              ?showfunctions=${showfunctions}
-              ?showuserdef=${showuserdef}
-            ></general-equipment-editor>`
-        )}
-      </div>`
-    : html``;
-} */
 
 export function renderGeneralEquipments(
   parent: Element,

@@ -9,8 +9,9 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './text-editor.js';
-import type { TextEditor } from './text-editor.js';
+import { TextEditor } from './text-editor.js';
+
+window.customElements.define('text-editor', TextEditor);
 
 const eqFun = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')

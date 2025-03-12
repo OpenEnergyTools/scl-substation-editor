@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { fixture, html } from '@open-wc/testing';
+import { fixture } from '@open-wc/testing';
 
 import { sendMouse, setViewport } from '@web/test-runner-commands';
 
@@ -11,8 +11,8 @@ import { baseStyle } from './base-visual.js';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './process-editor.js';
-import type { ProcessEditor } from './process-editor.js';
+import './test-utils.js';
+import { renderProcess } from './process-editor.js';
 
 if (!window.customElements.get('oscd-action-pane'))
   window.customElements.define('oscd-action-pane', OscdActionPane);
@@ -31,17 +31,14 @@ document.body.prepend(style);
 
 describe('Component for SCL element Process ', () => {
   describe('with add menu open', () => {
-    let editor: ProcessEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
       const proc = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`Process[name="proc1"]`)!;
 
       editor = await fixture(
-        html`<process-editor
-          .element=${proc}
-          ?showfunctions=${true}
-        ></process-editor>`
+        renderProcess(proc, { docVersion: 1, showfunctions: true })
       );
       document.body.style.width = '270';
       document.body.style.height = '500';
@@ -59,22 +56,19 @@ describe('Component for SCL element Process ', () => {
       await setViewport({ width: 270, height: 500 });
       await sendMouse({ type: 'click', position: [230, 20] });
 
-      await editor.updateComplete;
       await timeout(600);
       await visualDiff(document.body, `process-editor/#1 add menu visible`);
     });
   });
 
   describe('with showfunction false', () => {
-    let editor: ProcessEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
-      const line = new DOMParser()
+      const proc = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`Process[name="proc2"]`)!;
 
-      editor = await fixture(
-        html`<process-editor .element=${line}></process-editor>`
-      );
+      editor = await fixture(renderProcess(proc, { docVersion: 1 }));
       document.body.style.width = '800';
       document.body.style.height = '1000';
       document.body.prepend(editor);
@@ -87,7 +81,6 @@ describe('Component for SCL element Process ', () => {
     it('looks like the latest snapshot', async () => {
       await setViewport({ width: 800, height: 1000 });
 
-      await editor.updateComplete;
       await timeout(600);
       await visualDiff(
         document.body,
@@ -97,17 +90,14 @@ describe('Component for SCL element Process ', () => {
   });
 
   describe('with showfunction true', () => {
-    let editor: ProcessEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
-      const line = new DOMParser()
+      const proc = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`Process[name="proc2"]`)!;
 
       editor = await fixture(
-        html`<process-editor
-          .element=${line}
-          ?showfunctions=${true}
-        ></process-editor>`
+        renderProcess(proc, { docVersion: 1, showfunctions: true })
       );
       document.body.style.width = '800';
       document.body.style.height = '1400';

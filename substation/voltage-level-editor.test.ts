@@ -11,8 +11,9 @@ import { baseStyle } from './base-visual.js';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './voltage-level-editor.js';
-import type { VoltageLevelEditor } from './voltage-level-editor.js';
+import { VoltageLevelEditor } from './voltage-level-editor.js';
+
+window.customElements.define('voltage-level-editor', VoltageLevelEditor);
 
 if (!window.customElements.get('oscd-action-pane'))
   if (!window.customElements.get('oscd-action-pane'))

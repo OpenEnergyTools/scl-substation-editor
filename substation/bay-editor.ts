@@ -1,21 +1,45 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 
-import { renderConductingEquipments } from './conducting-equipment-editor.js';
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
+import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
+import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+
+import {
+  ConductingEquipmentEditor,
+  renderConductingEquipments,
+} from './conducting-equipment-editor.js';
 import { renderFunctions } from './function-editor.js';
 import { renderGeneralEquipments } from './general-equipment-editor.js';
-import { renderPowerTransformerContainer } from './power-transformer-editor.js';
-import { renderLNodes } from './l-node-editor.js';
-import { renderText } from './text-editor.js';
-import { renderPrivate } from './private-editor.js';
+import {
+  PowerTransformerEditor,
+  renderPowerTransformerContainer,
+} from './power-transformer-editor.js';
+import { LNodeEditor, renderLNodes } from './l-node-editor.js';
+import { renderText, TextEditor } from './text-editor.js';
+import { PrivateEditor, renderPrivate } from './private-editor.js';
 
 import { styles } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** [[`SubstationEditor`]] subeditor for a `Bay` element. */
-@customElement('bay-editor')
 export class BayEditor extends BaseSubstationElementEditor {
+  static scopedElements = {
+    'conducting-equipment-editor': ConductingEquipmentEditor,
+    'power-transformer-editor': PowerTransformerEditor,
+    'text-editor': TextEditor,
+    'private-editor': PrivateEditor,
+    'l-node-editor': LNodeEditor,
+    'oscd-action-pane': OscdActionPane,
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+  };
+
   @property({ type: String })
   get header(): string {
     const name = this.element.getAttribute('name');

@@ -11,8 +11,9 @@ import { substationDoc } from '../substation.testfiles.js';
 
 import { baseStyle } from './base-visual.js';
 
-import './substation-editor.js';
-import type { SubstationEditor } from './substation-editor.js';
+import { TextEditor } from './text-editor.js';
+
+window.customElements.define('text-editor', TextEditor);
 
 if (!window.customElements.get('oscd-action-pane'))
   window.customElements.define('oscd-action-pane', OscdActionPane);
@@ -31,7 +32,7 @@ document.body.prepend(style);
 
 describe('Component for SCL element Text ', () => {
   describe('with showfunction false', () => {
-    let editor: SubstationEditor;
+    let editor: TextEditor;
     beforeEach(async () => {
       const subst = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
@@ -67,7 +68,7 @@ describe('Component for SCL element Text ', () => {
   });
 
   describe('with showfunction true and showuserdef true', () => {
-    let editor: SubstationEditor;
+    let editor: TextEditor;
     beforeEach(async () => {
       const subst = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
@@ -104,7 +105,7 @@ describe('Component for SCL element Text ', () => {
   });
 
   describe('with showfunction true and showuserdef false', () => {
-    let editor: SubstationEditor;
+    let editor: TextEditor;
     beforeEach(async () => {
       const subst = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')

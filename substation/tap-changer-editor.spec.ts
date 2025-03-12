@@ -9,8 +9,9 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './tap-changer-editor.js';
-import type { TapChangerEditor } from './tap-changer-editor.js';
+import { TapChangerEditor } from './tap-changer-editor.js';
+
+window.customElements.define('tap-changer-editor', TapChangerEditor);
 
 const tapCh = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')

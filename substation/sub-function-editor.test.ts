@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { fixture, html } from '@open-wc/testing';
+import { fixture } from '@open-wc/testing';
 
 import { sendMouse, setViewport } from '@web/test-runner-commands';
 
@@ -11,8 +11,8 @@ import { baseStyle } from './base-visual.js';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './sub-function-editor.js';
-import type { SubFunctionEditor } from './sub-function-editor.js';
+import './test-utils.js';
+import { renderSubFunction } from './sub-function-editor.js';
 
 if (!window.customElements.get('oscd-action-pane'))
   window.customElements.define('oscd-action-pane', OscdActionPane);
@@ -31,17 +31,14 @@ document.body.prepend(style);
 
 describe('Component for SCL element SubFunction ', () => {
   describe('with add menu open', () => {
-    let editor: SubFunctionEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
       const subFunc = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`SubFunction[name="subFunc1"]`)!;
 
       editor = await fixture(
-        html`<sub-function-editor
-          .element=${subFunc}
-          ?showfunctions=${true}
-        ></sub-function-editor>`
+        renderSubFunction(subFunc, { docVersion: 1, showfunctions: true })
       );
       document.body.style.width = '540';
       document.body.style.height = '400';
@@ -59,7 +56,6 @@ describe('Component for SCL element SubFunction ', () => {
       await setViewport({ width: 800, height: 900 });
       await sendMouse({ type: 'click', position: [530, 20] });
 
-      await editor.updateComplete;
       await timeout(600);
       await visualDiff(
         document.body,
@@ -69,15 +65,13 @@ describe('Component for SCL element SubFunction ', () => {
   });
 
   describe('with showfunction false', () => {
-    let editor: SubFunctionEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
       const subFunc = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`SubFunction[name="subFunc1"]`)!;
 
-      editor = await fixture(
-        html`<sub-function-editor .element=${subFunc}></sub-function-editor>`
-      );
+      editor = await fixture(renderSubFunction(subFunc, { docVersion: 1 }));
       document.body.style.width = '600';
       document.body.style.height = '600';
       editor.style.position = 'absolute';
@@ -94,7 +88,6 @@ describe('Component for SCL element SubFunction ', () => {
       await setViewport({ width: 600, height: 600 });
       await sendMouse({ type: 'click', position: [50, 80] });
 
-      await editor.updateComplete;
       await timeout(600);
       await visualDiff(
         document.body,
@@ -104,17 +97,14 @@ describe('Component for SCL element SubFunction ', () => {
   });
 
   describe('with showfunction true', () => {
-    let editor: SubFunctionEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
-      const lNode = new DOMParser()
+      const subFunc = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`SubFunction[name="subFunc1"]`)!;
 
       editor = await fixture(
-        html`<sub-function-editor
-          .element=${lNode}
-          ?showfunctions=${true}
-        ></sub-function-editor>`
+        renderSubFunction(subFunc, { docVersion: 1, showfunctions: true })
       );
       document.body.style.width = '600';
       document.body.style.height = '1000';

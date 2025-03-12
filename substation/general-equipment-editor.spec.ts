@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-unused-expressions */
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { expect, fixture, html } from '@open-wc/testing';
+import { expect, fixture } from '@open-wc/testing';
 
 import { SinonSpy, spy } from 'sinon';
 
@@ -9,8 +9,13 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './general-equipment-editor.js';
-import type { GeneralEquipmentEditor } from './general-equipment-editor.js';
+import {
+  addActionable,
+  editActionable,
+  removeActionable,
+} from './test-utils.js';
+
+import { renderGeneralEquipment } from './general-equipment-editor.js';
 
 const eqFun = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')
@@ -18,16 +23,13 @@ const eqFun = new DOMParser()
 
 describe('Component for SCL element GeneralEquipment ', () => {
   describe('with showfunctions = true', () => {
-    let editor: GeneralEquipmentEditor;
+    let editor: HTMLElement;
 
     let eventSpy: SinonSpy;
 
     beforeEach(async () => {
       editor = await fixture(
-        html`<general-equipment-editor
-          .element="${eqFun}"
-          ?showfunctions=${true}
-        ></general-equipment-editor>`
+        renderGeneralEquipment(eqFun, { docVersion: 1, showfunctions: true })
       );
 
       eventSpy = spy();
@@ -37,7 +39,7 @@ describe('Component for SCL element GeneralEquipment ', () => {
     });
 
     it('sends a wizard edit request', () => {
-      editor.editActionable?.click();
+      editActionable(editor)?.click();
 
       expect(eventSpy).to.have.been.calledOnce;
 
@@ -47,7 +49,7 @@ describe('Component for SCL element GeneralEquipment ', () => {
     });
 
     it('sends a wizard create request', () => {
-      editor.addActionable?.forEach(add => {
+      addActionable(editor).forEach(add => {
         add.click();
 
         expect(eventSpy).to.have.been.calledOnce;
@@ -62,7 +64,7 @@ describe('Component for SCL element GeneralEquipment ', () => {
     });
 
     it('allows to remove an existing EqFunction element', () => {
-      editor.removeActionable?.click();
+      removeActionable(editor)?.click();
 
       expect(eventSpy).to.have.been.calledOnce;
 
@@ -75,16 +77,12 @@ describe('Component for SCL element GeneralEquipment ', () => {
   });
 
   describe('with showfunctions = false', () => {
-    let editor: GeneralEquipmentEditor;
+    let editor: HTMLElement;
 
     let eventSpy: SinonSpy;
 
     beforeEach(async () => {
-      editor = await fixture(
-        html`<general-equipment-editor
-          .element="${eqFun}"
-        ></general-equipment-editor>`
-      );
+      editor = await fixture(renderGeneralEquipment(eqFun, { docVersion: 1 }));
 
       eventSpy = spy();
       window.addEventListener('oscd-edit-v2', eventSpy);
@@ -93,7 +91,7 @@ describe('Component for SCL element GeneralEquipment ', () => {
     });
 
     it('sends a wizard edit request', () => {
-      editor.editActionable?.click();
+      editActionable(editor)?.click();
 
       expect(eventSpy).to.have.been.calledOnce;
 
@@ -103,7 +101,7 @@ describe('Component for SCL element GeneralEquipment ', () => {
     });
 
     it('allows to remove an existing EqFunction element', () => {
-      editor.removeActionable?.click();
+      removeActionable(editor)?.click();
 
       expect(eventSpy).to.have.been.calledOnce;
 

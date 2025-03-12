@@ -1,21 +1,41 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 
-import './voltage-level-editor.js';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
+import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
+import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+
+import { VoltageLevelEditor } from './voltage-level-editor.js';
 import { renderFunctions } from './function-editor.js';
 import { renderGeneralEquipments } from './general-equipment-editor.js';
-import { renderLNodes } from './l-node-editor.js';
-import { renderPowerTransformerContainer } from './power-transformer-editor.js';
-import { renderText } from './text-editor.js';
-import { renderPrivate } from './private-editor.js';
+import { LNodeEditor, renderLNodes } from './l-node-editor.js';
+import {
+  PowerTransformerEditor,
+  renderPowerTransformerContainer,
+} from './power-transformer-editor.js';
+import { renderText, TextEditor } from './text-editor.js';
+import { PrivateEditor, renderPrivate } from './private-editor.js';
 
 import { getChildElementsByTagName, styles } from '../foundation.js';
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** [[`Substation`]] plugin subeditor for editing `Substation` sections. */
-@customElement('substation-editor')
 export class SubstationEditor extends BaseSubstationElementEditor {
+  static scopedElements = {
+    'voltage-level-editor': VoltageLevelEditor,
+    'power-transformer-editor': PowerTransformerEditor,
+    'text-editor': TextEditor,
+    'private-editor': PrivateEditor,
+    'l-node-editor': LNodeEditor,
+    'oscd-action-pane': OscdActionPane,
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+  };
+
   @property({ type: String })
   get header(): string {
     const name = this.element.getAttribute('name');

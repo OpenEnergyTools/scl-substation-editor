@@ -1,21 +1,16 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { fixture, html } from '@open-wc/testing';
+import { fixture } from '@open-wc/testing';
 
 import { sendMouse, setViewport } from '@web/test-runner-commands';
 
 import { visualDiff } from '@web/test-runner-visual-regression';
 
-import { OscdActionPane } from '@openenergytools/oscd-action-pane';
-
 import { substationDoc } from '../substation.testfiles.js';
 
 import { baseStyle } from './base-visual.js';
 
-import './eq-function-editor.js';
-import type { EqFunctionEditor } from './eq-function-editor.js';
-
-if (!window.customElements.get('oscd-action-pane'))
-  window.customElements.define('oscd-action-pane', OscdActionPane);
+import './test-utils.js';
+import { renderEqFunction } from './eq-function-editor.js';
 
 const factor = window.process && process.env.CI ? 4 : 2;
 function timeout(ms: number) {
@@ -31,15 +26,13 @@ document.body.prepend(style);
 
 describe('Component for SCL element EqSubFunction ', () => {
   describe('with add menu open', () => {
-    let editor: EqFunctionEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
-      const subFunc = new DOMParser()
+      const eqFunc = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`EqFunction[name="eqFunc1"]`)!;
 
-      editor = await fixture(
-        html`<eq-function-editor .element=${subFunc}></eq-function-editor>`
-      );
+      editor = await fixture(renderEqFunction(eqFunc, { docVersion: 1 }));
       document.body.style.width = '800';
       document.body.style.height = '900';
       document.body.prepend(editor);
@@ -53,22 +46,19 @@ describe('Component for SCL element EqSubFunction ', () => {
       await setViewport({ width: 800, height: 900 });
       await sendMouse({ type: 'click', position: [780, 20] });
 
-      await editor.updateComplete;
       await timeout(400);
       await visualDiff(document.body, `eq-function-editor/#1 add menu visible`);
     });
   });
 
   describe('with showfunction false', () => {
-    let editor: EqFunctionEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
-      const subFunc = new DOMParser()
+      const eqFunc = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`EqFunction[name="eqFunc2"]`)!;
 
-      editor = await fixture(
-        html`<eq-function-editor .element=${subFunc}></eq-function-editor>`
-      );
+      editor = await fixture(renderEqFunction(eqFunc, { docVersion: 1 }));
       document.body.style.width = '800';
       document.body.style.height = '900';
       document.body.prepend(editor);
@@ -82,7 +72,6 @@ describe('Component for SCL element EqSubFunction ', () => {
       await setViewport({ width: 800, height: 900 });
       await sendMouse({ type: 'click', position: [30, 30] });
 
-      await editor.updateComplete;
       await timeout(400);
       await visualDiff(
         document.body,
@@ -92,17 +81,14 @@ describe('Component for SCL element EqSubFunction ', () => {
   });
 
   describe('with showfunction true', () => {
-    let editor: EqFunctionEditor;
+    let editor: HTMLElement;
     beforeEach(async () => {
-      const lNode = new DOMParser()
+      const eqFunc = new DOMParser()
         .parseFromString(substationDoc, 'application/xml')
         .querySelector(`EqFunction[name="eqFunc2"]`)!;
 
       editor = await fixture(
-        html`<eq-function-editor
-          .element=${lNode}
-          ?showfunctions=${true}
-        ></eq-function-editor>`
+        renderEqFunction(eqFunc, { docVersion: 1, showfunctions: true })
       );
       document.body.style.width = '800';
       document.body.style.height = '900';

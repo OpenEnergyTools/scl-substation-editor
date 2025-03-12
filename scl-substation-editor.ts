@@ -1,42 +1,27 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { LitElement, html, TemplateResult, css } from 'lit';
 import { property, state } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements/lit-element.js';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { OscdActionIcon } from '@openenergytools/oscd-action-icon';
 import { OscdActionPane } from '@openenergytools/oscd-action-pane';
 
 import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
-import { MdFilledIconButton } from '@scopedelement/material-web/iconbutton/MdFilledIconButton.js';
 import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
 import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
 import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
 
-import { renderSubstations } from './substation/substation-editor.js';
-import { renderLines } from './substation/line-editor.js';
+import {
+  renderSubstations,
+  SubstationEditor,
+} from './substation/substation-editor.js';
+import { LineEditor, renderLines } from './substation/line-editor.js';
 import { renderProcesses } from './substation/process-editor.js';
 import { getChildElementsByTagName } from './foundation.js';
-
-if (!window.customElements.get('oscd-action-pane'))
-  window.customElements.define('oscd-action-pane', OscdActionPane);
-
-if (!window.customElements.get('oscd-action-icon'))
-  window.customElements.define('oscd-action-icon', OscdActionIcon);
-
-if (!window.customElements.get('md-icon'))
-  window.customElements.define('md-icon', MdIcon);
-
-if (!window.customElements.get('md-icon-button'))
-  window.customElements.define('md-icon-button', MdIconButton);
-
-if (!window.customElements.get('md-menu'))
-  window.customElements.define('md-menu', MdMenu);
-
-if (!window.customElements.get('md-menu-item'))
-  window.customElements.define('md-menu-item', MdMenuItem);
-
-if (!window.customElements.get('md-filled-icon-button'))
-  window.customElements.define('md-filled-icon-button', MdFilledIconButton);
+import { TextEditor } from './substation/text-editor.js';
+import { PrivateEditor } from './substation/private-editor.js';
+import { LNodeEditor } from './substation/l-node-editor.js';
+import { ConductingEquipmentEditor } from './substation/conducting-equipment-editor.js';
 
 function shouldShowFunctions(): boolean {
   return localStorage.getItem('showfunctions') === 'on';
@@ -55,7 +40,23 @@ function setShowUserDef(value: 'on' | 'off') {
 }
 
 /** An editor [[`plugin`]] for editing the `Substation` section. */
-export default class SclSubstationEditorPlugin extends LitElement {
+export default class SclSubstationEditorPlugin extends ScopedElementsMixin(
+  LitElement
+) {
+  static scopedElements = {
+    'substation-editor': SubstationEditor,
+    'private-editor': PrivateEditor,
+    'text-editor': TextEditor,
+    'l-node-editor': LNodeEditor,
+    'line-editor': LineEditor,
+    'conducting-equipment-editor': ConductingEquipmentEditor,
+    'oscd-action-pane': OscdActionPane,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+  };
+
   /** The document being edited as provided to plugins by [[`OpenSCD`]]. */
   @property({ attribute: false })
   doc?: XMLDocument;

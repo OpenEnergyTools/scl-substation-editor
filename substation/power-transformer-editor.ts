@@ -1,14 +1,24 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { TemplateResult, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 
-import './transformer-winding-editor.js';
+import { OscdActionIcon } from '@openenergytools/oscd-action-icon';
+import { OscdActionPane } from '@openenergytools/oscd-action-pane';
+import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
+import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
+import { MdFilledIconButton } from '@scopedelement/material-web/iconbutton/MdFilledIconButton.js';
 
-import { renderLNodes } from './l-node-editor.js';
+import { LNodeEditor, renderLNodes } from './l-node-editor.js';
 import { renderEqFunctions } from './eq-function-editor.js';
-import { renderSubEquipments } from './sub-equipment-editor.js';
-import { renderText } from './text-editor.js';
-import { renderPrivate } from './private-editor.js';
+import {
+  renderSubEquipments,
+  SubEquipmentEditor,
+} from './sub-equipment-editor.js';
+import { renderText, TextEditor } from './text-editor.js';
+import { PrivateEditor, renderPrivate } from './private-editor.js';
+import { TransformerWindingEditor } from './transformer-winding-editor.js';
 
 import {
   getChildElementsByTagName,
@@ -18,8 +28,22 @@ import {
 import BaseSubstationElementEditor from './base-substation-element-editor.js';
 
 /** [[`SubstationEditor`]] subeditor for a child-less `PowerTransformer` element. */
-@customElement('power-transformer-editor')
 export class PowerTransformerEditor extends BaseSubstationElementEditor {
+  static scopedElements = {
+    'private-editor': PrivateEditor,
+    'text-editor': TextEditor,
+    'l-node-editor': LNodeEditor,
+    'transformer-winding-editor': TransformerWindingEditor,
+    'sub-equipment-editor': SubEquipmentEditor,
+    'oscd-action-icon': OscdActionIcon,
+    'oscd-action-pane': OscdActionPane,
+    'md-filled-icon-button': MdFilledIconButton,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+  };
+
   /** PowerTransformer name attribute */
   @property({ type: String })
   get name(): string {
@@ -52,20 +76,25 @@ export class PowerTransformerEditor extends BaseSubstationElementEditor {
 
   // eslint-disable-next-line class-methods-use-this
   renderContentIcon(): TemplateResult {
-    return html`<md-icon slot="icon"
-        >${powerTransformerTwoWindingIcon}</mwc-icon
-      ><md-filled-icon-button
+    return html`
+      <md-icon slot="icon">${powerTransformerTwoWindingIcon}</md-icon>
+      <md-filled-icon-button
         class="action edit"
         slot="action"
         mini
         @click="${() => this.openEditWizard()}"
-      ><md-icon>edit</md-icon></md-filled-icon-button>
+      >
+        <md-icon>edit</md-icon>
+      </md-filled-icon-button>
       <md-filled-icon-button
         class="action remove"
         slot="action"
         mini
         @click="${() => this.removeElement()}"
-      ><md-icon>delete</md-icon></md-filled-icon-button> `;
+      >
+        <md-icon>delete</md-icon>
+      </md-filled-icon-button>
+    `;
   }
 
   render(): TemplateResult {

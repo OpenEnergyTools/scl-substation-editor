@@ -11,8 +11,9 @@ import { baseStyle } from './base-visual.js';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './substation-editor.js';
-import type { SubstationEditor } from './substation-editor.js';
+import { SubstationEditor } from './substation-editor.js';
+
+window.customElements.define('substation-editor', SubstationEditor);
 
 if (!window.customElements.get('oscd-action-pane'))
   window.customElements.define('oscd-action-pane', OscdActionPane);

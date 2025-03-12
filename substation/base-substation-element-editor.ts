@@ -2,12 +2,12 @@
 import { LitElement, TemplateResult, html } from 'lit';
 import { property, query, queryAll } from 'lit/decorators.js';
 
+import { ScopedElementsMixin } from '@open-wc/scoped-elements/lit-element.js';
+
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
 import { MdIconButton } from '@scopedelement/material-web/iconbutton/MdIconButton.js';
-import {
-  CloseMenuEvent,
-  MdMenu,
-} from '@scopedelement/material-web/menu/MdMenu.js';
 import { MdMenuItem } from '@scopedelement/material-web/menu/MdMenuItem.js';
+import { MdMenu } from '@scopedelement/material-web/menu/MdMenu.js';
 
 import { newEditEvent } from '@openenergytools/open-scd-core';
 import { getChildren } from '@openenergytools/scl-lib';
@@ -15,7 +15,16 @@ import { getChildren } from '@openenergytools/scl-lib';
 import { newCreateWizardEvent, newEditWizardEvent } from '../foundation.js';
 
 /** base class hosting global properties and the remove method */
-export default class BaseSubstationElementEditor extends LitElement {
+export default class BaseSubstationElementEditor extends ScopedElementsMixin(
+  LitElement
+) {
+  static scopedElements = {
+    'md-menu': MdMenu,
+    'md-menu-item': MdMenuItem,
+    'md-icon-button': MdIconButton,
+    'md-icon': MdIcon,
+  };
+
   /** The edited `Function` element */
   @property({ attribute: false })
   element!: Element;
@@ -69,7 +78,11 @@ export default class BaseSubstationElementEditor extends LitElement {
       )
       .map(
         child =>
-          html`<md-menu-item class="action add" value="${child}">
+          html`<md-menu-item
+            class="action add"
+            value="${child}"
+            @click="${() => this.openCreateWizard(child)}"
+          >
             <div slot="headline">${child}</div>
           </md-menu-item>`
       );
@@ -93,10 +106,6 @@ export default class BaseSubstationElementEditor extends LitElement {
           anchor-corner="end-end"
           menu-corner="start-end"
           no-horizontal-flip
-          @close-menu="${(evt: CloseMenuEvent) => {
-            const tagName = evt.detail.initiator.getAttribute('value');
-            if (tagName) this.openCreateWizard(tagName);
-          }}"
           >${this.renderAddButtons()}</md-menu
         >
       </span>

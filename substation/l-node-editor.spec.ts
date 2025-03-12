@@ -9,8 +9,9 @@ import { isRemove } from '@openenergytools/open-scd-core';
 
 import { substationDoc } from '../substation.testfiles.js';
 
-import './l-node-editor.js';
-import type { LNodeEditor } from './l-node-editor.js';
+import { LNodeEditor } from './l-node-editor.js';
+
+window.customElements.define('l-node-editor', LNodeEditor);
 
 const lNode = new DOMParser()
   .parseFromString(substationDoc, 'application/xml')
